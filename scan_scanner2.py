@@ -9,6 +9,7 @@
           결과에 "확인 못함"으로 표시한다)
       (6) 정배열: 20일선 > 50일선 > 200일선
       (7) 기울기: 오늘 50일선 > 5거래일 전 50일선
+      (8) 현재가 > 오늘 VWAP(거래량가중평균가, 정규장 09:30 이후 1분봉 기준)
 입력: scanner1_result.json의 matches (당일 스캐너1-미가 찾은 후보, 오래된 파일이면 무시)
 결과: scanner2_result.json으로 저장 (깃허브 액션이 커밋 후 진입신호가 있을 때만 카카오로 전송)
 """
@@ -105,6 +106,24 @@ def compute_premarket_high(intraday):
     return float(premarket["High"].max())
 
 
+def compute_vwap(intraday):
+    """오늘 정규장(09:30 NY~) 1분봉 기준 VWAP. 정규장 데이터 없으면 None(확인불가)."""
+    if intraday is None:
+        return None
+    try:
+        idx_ny = intraday.index.tz_convert(NY_TZ)
+    except Exception:
+        return None
+    regular = intraday[idx_ny.time >= dtime(9, 30)]
+    if regular.empty:
+        return None
+    typical_price = (regular["High"] + regular["Low"] + regular["Close"]) / 3
+    total_volume = float(regular["Volume"].sum())
+    if not total_volume or total_volume <= 0:
+        return None
+    return float((typical_price * regular["Volume"]).sum() / total_volume)
+
+
 def check_volume_confirmation(intraday):
     """최근 1분봉 거래량이 직전 20분 평균 대비 3배 이상인지. 데이터 부족/실패시 None(확인불가)."""
     if intraday is None or len(intraday) < VOLUME_LOOKBACK_MIN + 1:
@@ -137,6 +156,7 @@ def evaluate_symbol(symbol):
     intraday = get_intraday_frame(ticker)
     premarket_high = compute_premarket_high(intraday)
     volume_ok = check_volume_confirmation(intraday)  # True/False/None(확인불가)
+    vwap = compute_vwap(intraday)
 
     cond1 = price > metrics["prev_day_high"]
     cond2 = metrics["prev_close"] > metrics["ma200"]
@@ -144,8 +164,9 @@ def evaluate_symbol(symbol):
     cond4 = price > day_high
     cond6 = metrics["ma20"] > metrics["ma50"] > metrics["ma200"]
     cond7 = metrics["ma50_prev"] is not None and metrics["ma50"] > metrics["ma50_prev"]
+    cond8 = vwap is not None and price > vwap
 
-    price_conditions_met = cond1 and cond2 and cond3 and cond4 and cond6 and cond7
+    price_conditions_met = cond1 and cond2 and cond3 and cond4 and cond6 and cond7 and cond8
     volume_checked = volume_ok is not None
     volume_confirmed = bool(volume_ok) if volume_checked else None
 
@@ -157,6 +178,7 @@ def evaluate_symbol(symbol):
         "entry_signal": entry_signal,
         "price_conditions_met": price_conditions_met,
         "volume_confirmed": volume_confirmed,
+        "vwap": vwap,
         "conditions": {
             "1_prev_day_high_break": cond1,
             "2_prev_close_above_200ma": cond2,
@@ -164,6 +186,7 @@ def evaluate_symbol(symbol):
             "4_today_high_break": cond4,
             "6_ma_alignment_20_50_200": cond6,
             "7_ma50_slope_up": cond7,
+            "8_vwap_break": cond8,
         },
     }
 
@@ -204,4 +227,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
