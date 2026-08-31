@@ -23,7 +23,7 @@ def build_message(result):
         lines.append(f"{len(matches)}건 매칭")
         for m in matches:
             tag = "" if m.get("is_premarket_data") else " (정규장가)"
-            lines.append(f"{m['symbol']} {m['change_pct']:+.1f}%{tag}")
+            lines.append(f"{m['symbol']} ${m['price']:.2f} {m['change_pct']:+.1f}%{tag}")
     return "\n".join(lines)
 
 
@@ -51,4 +51,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
