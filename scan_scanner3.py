@@ -1,0 +1,260 @@
+"""
+스캐너3-미: 매도/손절 신호 체크 (스캐너2-미가 낸 진입신호를 가상 포지션으로 추적)
+
+청산 조건 (OR, 하나라도 걸리면 매도신호):
+  (1) 돌파 캔들 저점 이탈: 진입신호가 발생한 그 1분봉의 저가 아래로 현재가 하락
+  (2) VWAP/20일선 이탈: 진입 당일이면 오늘 VWAP, 다음날부터는 20일 이동평균선
+  (3) 하드스탑: 진입가 대비 -5% (구조적 조건이 이상하게 나올 때 대비한 안전장치)
+  (4) 직선급락 서킷브레이커: 최근 5분(1분봉 5개) 사이 -3% 이상 급락 시 "긴급" 태그로 즉시 청산
+      (참고: 5분 폴링 주기 안에서의 최선의 감지이며, 호가창이 통째로 증발하는 진짜 유동성
+       붕괴 상황에서의 체결까지 보장하지는 못한다 - 그런 종목은 실제 계좌에 시장가 스탑주문을
+       병행할 것)
+
+입력: scanner2_result.json의 entries (당일 스캐너2-미가 낸 진입신호, 오래된 파일이면 무시)
+상태: positions.json (오픈/청산 포지션 영속 기록, 깃허브 액션이 커밋해서 유지)
+결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션들, 있을 때만 카카오로 전송)
+"""
+import json
+from datetime import datetime, timezone, time as dtime
+from zoneinfo import ZoneInfo
+
+import yfinance as yf
+
+HARD_STOP_PCT = -0.05
+CIRCUIT_BREAKER_PCT = -0.03
+CIRCUIT_BREAKER_LOOKBACK_MIN = 5
+MA_SHORT = 20
+CANDIDATE_MAX_AGE_HOURS = 12
+NY_TZ = ZoneInfo("America/New_York")
+
+POSITIONS_FILE = "positions.json"
+SCANNER2_RESULT_FILE = "scanner2_result.json"
+RESULT_FILE = "scanner3_result.json"
+
+
+def load_positions():
+    try:
+        with open(POSITIONS_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return []
+    return data.get("positions", [])
+
+
+def load_scanner2_entries():
+    try:
+        with open(SCANNER2_RESULT_FILE, encoding="utf-8") as f:
+            result = json.load(f)
+    except FileNotFoundError:
+        return [], None
+
+    updated_at = result.get("updated_at_utc", "")
+    try:
+        updated_dt = datetime.fromisoformat(updated_at.replace("Z", "+00:00"))
+    except ValueError:
+        return [], None
+
+    age_hours = (datetime.now(timezone.utc) - updated_dt).total_seconds() / 3600
+    if age_hours > CANDIDATE_MAX_AGE_HOURS:
+        return [], None  # 오래된 결과는 새 진입으로 안 씀
+
+    return result.get("entries", []), updated_at
+
+
+def get_intraday_frame(ticker):
+    try:
+        intraday = ticker.history(period="1d", interval="1m", prepost=True)
+    except Exception:
+        return None
+    return intraday if not intraday.empty else None
+
+
+def get_daily_frame(ticker):
+    hist = ticker.history(period="6mo", interval="1d", auto_adjust=False)
+    if hist.empty:
+        return None
+    today_ny = datetime.now(NY_TZ).date()
+    hist = hist[hist.index.date < today_ny]
+    return hist if not hist.empty else None
+
+
+def compute_vwap(intraday):
+    """오늘 정규장(09:30 NY~) 1분봉 기준 VWAP. 정규장 데이터 없으면 None(확인불가)."""
+    if intraday is None:
+        return None
+    try:
+        idx_ny = intraday.index.tz_convert(NY_TZ)
+    except Exception:
+        return None
+    regular = intraday[idx_ny.time >= dtime(9, 30)]
+    if regular.empty:
+        return None
+    typical_price = (regular["High"] + regular["Low"] + regular["Close"]) / 3
+    total_volume = float(regular["Volume"].sum())
+    if not total_volume or total_volume <= 0:
+        return None
+    return float((typical_price * regular["Volume"]).sum() / total_volume)
+
+
+def compute_recent_drop_pct(intraday):
+    """최근 CIRCUIT_BREAKER_LOOKBACK_MIN분 사이 종가 기준 등락률. 데이터 부족시 None."""
+    if intraday is None or len(intraday) < CIRCUIT_BREAKER_LOOKBACK_MIN + 1:
+        return None
+    recent = intraday["Close"].iloc[-(CIRCUIT_BREAKER_LOOKBACK_MIN + 1):]
+    ref_price = float(recent.iloc[0])
+    cur_price = float(recent.iloc[-1])
+    if ref_price <= 0:
+        return None
+    return (cur_price - ref_price) / ref_price
+
+
+def find_breakout_candle_low(intraday, entry_time_utc):
+    """진입신호 시점과 가장 가까운 1분봉의 저가. 못 찾으면 None(하드스탑/VWAP만으로 판단)."""
+    if intraday is None or not entry_time_utc:
+        return None
+    try:
+        entry_dt = datetime.fromisoformat(entry_time_utc.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    try:
+        idx_utc = intraday.index.tz_convert("UTC")
+    except Exception:
+        return None
+    on_or_after = intraday[idx_utc >= entry_dt]
+    bar = on_or_after.iloc[0] if not on_or_after.empty else intraday.iloc[-1]
+    return float(bar["Low"])
+
+
+def open_new_positions(positions, entries, entry_time_utc):
+    open_symbols = {p["symbol"] for p in positions if p["status"] == "open"}
+    today_ny = str(datetime.now(NY_TZ).date())
+
+    for e in entries:
+        symbol = e.get("symbol")
+        price = e.get("price")
+        if not symbol or price is None or symbol in open_symbols:
+            continue
+        try:
+            ticker = yf.Ticker(symbol)
+            intraday = get_intraday_frame(ticker)
+            candle_low = find_breakout_candle_low(intraday, entry_time_utc)
+        except Exception:
+            candle_low = None
+
+        positions.append({
+            "symbol": symbol,
+            "entry_price": price,
+            "entry_time_utc": entry_time_utc,
+            "entry_date_ny": today_ny,
+            "breakout_candle_low": candle_low,
+            "status": "open",
+        })
+        open_symbols.add(symbol)
+
+    return positions
+
+
+def evaluate_position(pos):
+    symbol = pos["symbol"]
+    ticker = yf.Ticker(symbol)
+    info = ticker.get_info()
+    price = info.get("regularMarketPrice") or info.get("currentPrice")
+    if price is None:
+        return {"error": "현재가 정보 없음"}
+
+    intraday = get_intraday_frame(ticker)
+    today_ny = str(datetime.now(NY_TZ).date())
+    same_day = (today_ny == pos.get("entry_date_ny"))
+
+    reasons = []
+
+    candle_low = pos.get("breakout_candle_low")
+    if candle_low is not None and price < candle_low:
+        reasons.append("돌파캔들저점 이탈")
+
+    if same_day:
+        vwap = compute_vwap(intraday)
+        if vwap is not None and price < vwap:
+            reasons.append("VWAP 이탈")
+    else:
+        daily = get_daily_frame(ticker)
+        if daily is not None and len(daily) >= MA_SHORT:
+            ma20 = float(daily["Close"].rolling(MA_SHORT).mean().iloc[-1])
+            if price < ma20:
+                reasons.append("20일선 이탈")
+
+    entry_price = pos["entry_price"]
+    pnl_pct = (price - entry_price) / entry_price if entry_price else 0.0
+    if pnl_pct <= HARD_STOP_PCT:
+        reasons.append(f"하드스탑({pnl_pct * 100:.1f}%)")
+
+    urgent = False
+    drop = compute_recent_drop_pct(intraday)
+    if drop is not None and drop <= CIRCUIT_BREAKER_PCT:
+        reasons.append(f"직선급락(최근{CIRCUIT_BREAKER_LOOKBACK_MIN}분 {drop * 100:.1f}%)")
+        urgent = True
+
+    return {
+        "symbol": symbol,
+        "price": price,
+        "pnl_pct": pnl_pct,
+        "exit_signal": len(reasons) > 0,
+        "urgent": urgent,
+        "reasons": reasons,
+    }
+
+
+def main():
+    positions = load_positions()
+    entries, entry_time_utc = load_scanner2_entries()
+    if entries:
+        positions = open_new_positions(positions, entries, entry_time_utc)
+
+    new_exits = []
+    errors = []
+    now_utc = datetime.now(timezone.utc).isoformat()
+
+    for pos in positions:
+        if pos["status"] != "open":
+            continue
+        try:
+            r = evaluate_position(pos)
+        except Exception as e:
+            errors.append({"symbol": pos["symbol"], "error": str(e)})
+            continue
+
+        if "error" in r:
+            errors.append({"symbol": pos["symbol"], "error": r["error"]})
+            continue
+
+        if r["exit_signal"]:
+            pos["status"] = "closed"
+            pos["exit_price"] = r["price"]
+            pos["exit_time_utc"] = now_utc
+            pos["exit_reasons"] = r["reasons"]
+            pos["pnl_pct"] = r["pnl_pct"]
+            pos["urgent"] = r["urgent"]
+            new_exits.append(dict(pos))
+
+    open_count = sum(1 for p in positions if p["status"] == "open")
+
+    output = {
+        "updated_at_utc": now_utc,
+        "open_position_count": open_count,
+        "new_exits": new_exits,
+        "errors": errors[:10],
+    }
+
+    with open(POSITIONS_FILE, "w") as f:
+        json.dump({"positions": positions}, f, indent=2, ensure_ascii=False)
+
+    with open(RESULT_FILE, "w") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
+
+    print(f"오픈 포지션: {open_count}건 / 이번 청산: {len(new_exits)}건 / 에러: {len(errors)}건")
+    print(json.dumps(output, indent=2, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
+
