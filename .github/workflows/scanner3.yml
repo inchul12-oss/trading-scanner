@@ -25,7 +25,14 @@ jobs:
           git config user.email "scanner-bot@users.noreply.github.com"
           git add positions.json scanner3_result.json
           git diff --staged --quiet || git commit -m "scanner3 결과 갱신 $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push
+          for i in 1 2 3 4 5; do
+            if git push; then
+              break
+            fi
+            echo "push 실패(다른 스캐너 워크플로우와 동시 커밋 충돌 가능성) - pull --rebase 후 재시도 $i/5"
+            git pull --rebase origin main
+            sleep $((RANDOM % 5 + 1))
+          done
       - name: 텔레그램 매도신호 전송
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
