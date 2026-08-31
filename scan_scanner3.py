@@ -1,7 +1,7 @@
 """
-스캐너3-미: 매도/손절 신호 체크 (스캐너2-미가 낸 진입신호를 가상 포지션으로 추적)
+스캐너3-미: 매도/손절 신호 + 1차 익절 신호 체크 (스캐너2-미가 낸 진입신호를 가상 포지션으로 추적)
 
-청산 조건 (OR, 하나라도 걸리면 매도신호):
+청산 조건 (OR, 하나라도 걸리면 매도신호 - 포지션 종료):
   (1) 돌파 캔들 저점 이탈: 진입신호가 발생한 그 1분봉의 저가 아래로 현재가 하락
   (2) VWAP/20일선 이탈: 진입 당일이면 오늘 VWAP, 다음날부터는 20일 이동평균선
   (3) 하드스탑: 진입가 대비 -5% (구조적 조건이 이상하게 나올 때 대비한 안전장치)
@@ -10,9 +10,16 @@
        붕괴 상황에서의 체결까지 보장하지는 못한다 - 그런 종목은 실제 계좌에 시장가 스탑주문을
        병행할 것)
 
+1차 익절 신호 (포지션은 종료하지 않음, 알림만 - 하이브리드 익절 설계 8/31 추가):
+  진입가 대비 +10%(하드스탑 -5%의 2배 = 2R) 도달 시 1회만 "절반 익절 고려" 알림.
+  포지션 자체는 계속 살아있고 위 청산조건으로 계속 추적됨(나머지 절반을 트레일링으로
+  태우는 하이브리드 방식 - Qullamaggie 등 유명 브레이크아웃 트레이더들의 공통 패턴을 참고함:
+  고정목표 하나로 전량 매도 X, 트레일링만으로 전량관리도 X, 일부는 미리 챙기고 나머지는
+  추세이탈까지 태우는 방식).
+
 입력: scanner2_result.json의 entries (당일 스캐너2-미가 낸 진입신호, 오래된 파일이면 무시)
 상태: positions.json (오픈/청산 포지션 영속 기록, 깃허브 액션이 커밋해서 유지)
-결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션들, 있을 때만 카카오로 전송)
+결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션 + 새로 뜬 1차익절신호, 있을 때만 카카오로 전송)
 """
 import json
 from datetime import datetime, timezone, time as dtime
@@ -21,6 +28,7 @@ from zoneinfo import ZoneInfo
 import yfinance as yf
 
 HARD_STOP_PCT = -0.05
+PARTIAL_PROFIT_PCT = 0.10  # 1차 익절 알림 임계값(진입가 대비 +10%, 하드스탑의 2R)
 CIRCUIT_BREAKER_PCT = -0.03
 CIRCUIT_BREAKER_LOOKBACK_MIN = 5
 MA_SHORT = 20
@@ -148,6 +156,7 @@ def open_new_positions(positions, entries, entry_time_utc):
             "entry_date_ny": today_ny,
             "breakout_candle_low": candle_low,
             "status": "open",
+            "partial_profit_alerted": False,
         })
         open_symbols.add(symbol)
 
@@ -194,6 +203,11 @@ def evaluate_position(pos):
         reasons.append(f"직선급락(최근{CIRCUIT_BREAKER_LOOKBACK_MIN}분 {drop * 100:.1f}%)")
         urgent = True
 
+    partial_profit_signal = (
+        not pos.get("partial_profit_alerted")
+        and pnl_pct >= PARTIAL_PROFIT_PCT
+    )
+
     return {
         "symbol": symbol,
         "price": price,
@@ -201,6 +215,7 @@ def evaluate_position(pos):
         "exit_signal": len(reasons) > 0,
         "urgent": urgent,
         "reasons": reasons,
+        "partial_profit_signal": partial_profit_signal,
     }
 
 
@@ -211,6 +226,7 @@ def main():
         positions = open_new_positions(positions, entries, entry_time_utc)
 
     new_exits = []
+    partial_profit_alerts = []
     errors = []
     now_utc = datetime.now(timezone.utc).isoformat()
 
@@ -227,6 +243,14 @@ def main():
             errors.append({"symbol": pos["symbol"], "error": r["error"]})
             continue
 
+        if r["partial_profit_signal"]:
+            pos["partial_profit_alerted"] = True
+            partial_profit_alerts.append({
+                "symbol": pos["symbol"],
+                "price": r["price"],
+                "pnl_pct": r["pnl_pct"],
+            })
+
         if r["exit_signal"]:
             pos["status"] = "closed"
             pos["exit_price"] = r["price"]
@@ -242,6 +266,7 @@ def main():
         "updated_at_utc": now_utc,
         "open_position_count": open_count,
         "new_exits": new_exits,
+        "partial_profit_alerts": partial_profit_alerts,
         "errors": errors[:10],
     }
 
@@ -251,10 +276,12 @@ def main():
     with open(RESULT_FILE, "w") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
-    print(f"오픈 포지션: {open_count}건 / 이번 청산: {len(new_exits)}건 / 에러: {len(errors)}건")
+    print(
+        f"오픈 포지션: {open_count}건 / 이번 청산: {len(new_exits)}건 / "
+        f"1차익절신호: {len(partial_profit_alerts)}건 / 에러: {len(errors)}건"
+    )
     print(json.dumps(output, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
     main()
-
