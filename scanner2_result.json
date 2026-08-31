@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T18:33:24.781231+00:00",
+  "updated_at_utc": "2026-08-31T19:03:30.349534+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -7,11 +7,11 @@
   "all_results": [
     {
       "symbol": "CHA",
-      "price": 11.52,
+      "price": 11.605,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 11.572842318103424,
+      "vwap": 11.57303396481248,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -19,16 +19,16 @@
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
       "symbol": "ASND",
-      "price": 263.86,
+      "price": 264.01,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 263.03293403039555,
+      "vwap": 263.1014795319966,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -41,11 +41,11 @@
     },
     {
       "symbol": "RBLX",
-      "price": 40.63,
+      "price": 40.91,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 40.391453121256404,
+      "vwap": 40.40341618884322,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -58,11 +58,11 @@
     },
     {
       "symbol": "XPRO",
-      "price": 18.13,
+      "price": 18.125,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 18.338387174449558,
+      "vwap": 18.305186849689832,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -75,11 +75,11 @@
     },
     {
       "symbol": "SAIC",
-      "price": 129.41,
+      "price": 130.25,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 132.69739342206555,
+      "vwap": 132.59136293215687,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
