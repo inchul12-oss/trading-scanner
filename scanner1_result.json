@@ -1,0 +1,76 @@
+{
+  "updated_at_utc": "2026-08-31T05:38:48.836320+00:00",
+  "conditions": {
+    "min_change_pct": 5.0,
+    "min_price": 3.0,
+    "min_premarket_volume": 50000
+  },
+  "candidate_count": 144,
+  "error_count": 0,
+  "matches": [
+    {
+      "symbol": "PSQL",
+      "price": 19.11,
+      "prev_close": 9.79,
+      "change_pct": 95.2,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "ESTC",
+      "price": 99.91,
+      "prev_close": 83.74,
+      "change_pct": 19.31,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "GAP",
+      "price": 23.48,
+      "prev_close": 20.79,
+      "change_pct": 12.94,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "SOLS",
+      "price": 63.53,
+      "prev_close": 56.34,
+      "change_pct": 12.76,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "TOP",
+      "price": 16.73,
+      "prev_close": 15.42,
+      "change_pct": 8.5,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "TRLV",
+      "price": 11.82,
+      "prev_close": 11.03,
+      "change_pct": 7.16,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "FLUT",
+      "price": 101.78,
+      "prev_close": 95.01,
+      "change_pct": 7.13,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    },
+    {
+      "symbol": "WDAY",
+      "price": 204.72,
+      "prev_close": 193.57,
+      "change_pct": 5.76,
+      "premarket_volume": null,
+      "is_premarket_data": false
+    }
+  ]
+}
