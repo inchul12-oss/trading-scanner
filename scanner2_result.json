@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T14:00:17.708093+00:00",
+  "updated_at_utc": "2026-08-31T14:03:43.095208+00:00",
   "candidate_count": 8,
   "checked_count": 7,
   "error_count": 1,
@@ -7,11 +7,11 @@
   "all_results": [
     {
       "symbol": "ESTC",
-      "price": 96.7725,
+      "price": 96.5641,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 99.18062709701304,
+      "vwap": 99.07727963868291,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
@@ -24,11 +24,11 @@
     },
     {
       "symbol": "GAP",
-      "price": 22.92,
+      "price": 22.9375,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 22.65062266630669,
+      "vwap": 22.672942694177316,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": false,
@@ -41,11 +41,11 @@
     },
     {
       "symbol": "SOLS",
-      "price": 63.52,
+      "price": 63.665,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 64.1775208124447,
+      "vwap": 64.11337555522569,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": false,
@@ -58,11 +58,11 @@
     },
     {
       "symbol": "PBF",
-      "price": 73.23,
+      "price": 72.7,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 74.31259405864576,
+      "vwap": 74.27185251239159,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -79,7 +79,7 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 11.567187304419178,
+      "vwap": 11.54970569631427,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
@@ -92,11 +92,11 @@
     },
     {
       "symbol": "TOP",
-      "price": 16.9201,
+      "price": 16.995,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 16.99882967986482,
+      "vwap": 16.977517505480833,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
@@ -104,16 +104,16 @@
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": true,
         "7_ma50_slope_up": true,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
       "symbol": "CVI",
-      "price": 42.15,
+      "price": 41.72,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 42.63852646936641,
+      "vwap": 42.628805794493,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
