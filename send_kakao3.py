@@ -1,7 +1,8 @@
 """
-스캐너3-미 매도/손절 신호(scanner3_result.json의 new_exits)를 카카오톡 '나에게 보내기'로 전송한다.
-새로 청산된 포지션이 하나도 없으면 전송하지 않는다(스팸 방지).
-긴급(직선급락) 청산이 하나라도 있으면 메시지 맨 앞에 🚨 태그를 붙인다.
+스캐너3-미 매도/손절 신호(new_exits) + 1차 익절 신호(partial_profit_alerts)를
+카카오톡 '나에게 보내기'로 전송한다.
+둘 다 없으면 전송하지 않는다(스팸 방지).
+매도신호 중 긴급(직선급락) 청산이 하나라도 있으면 그 섹션 헤더에 🚨 태그를 붙인다.
 필요한 환경변수: KAKAO_REST_API_KEY, KAKAO_CLIENT_SECRET, KAKAO_REFRESH_TOKEN
 """
 import json
@@ -33,16 +34,30 @@ def refresh_access_token():
 
 def build_message(result):
     exits = result.get("new_exits", [])
+    partials = result.get("partial_profit_alerts", [])
     updated = result.get("updated_at_utc", "")
     time_label = updated[11:16] if len(updated) >= 16 else updated
     any_urgent = any(e.get("urgent") for e in exits)
-    header = "🚨 스캐너3-미 긴급 매도신호" if any_urgent else "스캐너3-미 매도/손절 신호"
-    lines = [f"{header} ({time_label} UTC)"]
-    for e in exits:
-        tag = "🚨" if e.get("urgent") else "-"
-        reasons = ", ".join(e.get("exit_reasons", []))
-        pnl = e.get("pnl_pct", 0.0) * 100
-        lines.append(f"{tag} {e['symbol']} {e['exit_price']:.2f} ({pnl:+.1f}%) - {reasons}")
+
+    lines = []
+
+    if exits:
+        header = "🚨 스캐너3-미 긴급 매도신호" if any_urgent else "스캐너3-미 매도/손절 신호"
+        lines.append(f"{header} ({time_label} UTC)")
+        for e in exits:
+            tag = "🚨" if e.get("urgent") else "-"
+            reasons = ", ".join(e.get("exit_reasons", []))
+            pnl = e.get("pnl_pct", 0.0) * 100
+            lines.append(f"{tag} {e['symbol']} {e['exit_price']:.2f} ({pnl:+.1f}%) - {reasons}")
+
+    if partials:
+        if lines:
+            lines.append("")
+        lines.append(f"💰 스캐너3-미 1차 익절 고려 ({time_label} UTC)")
+        for p in partials:
+            pnl = p.get("pnl_pct", 0.0) * 100
+            lines.append(f"💰 {p['symbol']} {p['price']:.2f} ({pnl:+.1f}%) - 목표(+10%) 도달, 절반 익절 고려(나머지는 트레일링 유지)")
+
     return "\n".join(lines)
 
 
@@ -73,8 +88,9 @@ def main():
         result = json.load(f)
 
     exits = result.get("new_exits", [])
-    if not exits:
-        print("신규 청산 없음 - 카카오 전송 생략(스팸 방지)")
+    partials = result.get("partial_profit_alerts", [])
+    if not exits and not partials:
+        print("신규 청산/1차익절 신호 없음 - 카카오 전송 생략(스팸 방지)")
         return
 
     access_token = refresh_access_token()
@@ -85,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
