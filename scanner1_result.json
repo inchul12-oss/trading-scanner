@@ -1,76 +1,68 @@
 {
-  "updated_at_utc": "2026-08-31T13:03:58.154976+00:00",
+  "updated_at_utc": "2026-08-31T14:17:37.904084+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
     "min_premarket_volume": 50000
   },
-  "candidate_count": 144,
+  "candidate_count": 61,
   "error_count": 0,
   "matches": [
     {
-      "symbol": "PSQL",
-      "price": 16.27,
-      "prev_close": 9.79,
-      "change_pct": 66.19,
+      "symbol": "CHA",
+      "price": 11.7,
+      "prev_close": 10.8,
+      "change_pct": 8.33,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "ESTC",
-      "price": 97.7,
-      "prev_close": 83.74,
-      "change_pct": 16.67,
+      "symbol": "XE",
+      "price": 18.495,
+      "prev_close": 17.22,
+      "change_pct": 7.4,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "GAP",
-      "price": 23.3,
-      "prev_close": 20.79,
-      "change_pct": 12.07,
+      "symbol": "ASND",
+      "price": 265.6,
+      "prev_close": 247.91,
+      "change_pct": 7.14,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "SOLS",
-      "price": 62.9782,
-      "prev_close": 56.34,
-      "change_pct": 11.78,
+      "symbol": "RBLX",
+      "price": 41.03,
+      "prev_close": 38.53,
+      "change_pct": 6.49,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "PBF",
-      "price": 74.68,
-      "prev_close": 68.59,
-      "change_pct": 8.88,
+      "symbol": "STDN",
+      "price": 14.94,
+      "prev_close": 14.1,
+      "change_pct": 5.96,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "TRLV",
-      "price": 12.0,
-      "prev_close": 11.03,
-      "change_pct": 8.79,
+      "symbol": "XPRO",
+      "price": 18.605,
+      "prev_close": 17.61,
+      "change_pct": 5.65,
       "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     },
     {
-      "symbol": "TOP",
-      "price": 16.72,
-      "prev_close": 15.42,
-      "change_pct": 8.43,
+      "symbol": "SAIC",
+      "price": 132.27,
+      "prev_close": 125.96,
+      "change_pct": 5.01,
       "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "CVI",
-      "price": 42.9415,
-      "prev_close": 39.76,
-      "change_pct": 8.0,
-      "premarket_volume": null,
-      "is_premarket_data": true
+      "is_premarket_data": false
     }
   ]
 }
