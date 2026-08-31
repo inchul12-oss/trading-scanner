@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T12:04:05.929282+00:00",
+  "updated_at_utc": "2026-08-31T12:15:08.386081+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -10,41 +10,33 @@
   "matches": [
     {
       "symbol": "PSQL",
-      "price": 16.426,
+      "price": 16.48,
       "prev_close": 9.79,
-      "change_pct": 67.78,
+      "change_pct": 68.34,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "ESTC",
-      "price": 99.0,
+      "price": 98.29,
       "prev_close": 83.74,
-      "change_pct": 18.22,
+      "change_pct": 17.38,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "GAP",
-      "price": 23.51,
+      "price": 23.5,
       "prev_close": 20.79,
-      "change_pct": 13.08,
+      "change_pct": 13.04,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "SOLS",
-      "price": 63.7,
+      "price": 62.8,
       "prev_close": 56.34,
-      "change_pct": 13.06,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "TOP",
-      "price": 16.92,
-      "prev_close": 15.42,
-      "change_pct": 9.73,
+      "change_pct": 11.47,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -57,18 +49,26 @@
       "is_premarket_data": true
     },
     {
-      "symbol": "CVI",
-      "price": 42.75,
-      "prev_close": 39.76,
-      "change_pct": 7.52,
+      "symbol": "TOP",
+      "price": 16.72,
+      "prev_close": 15.42,
+      "change_pct": 8.43,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "FLUT",
-      "price": 101.67,
-      "prev_close": 95.01,
-      "change_pct": 7.01,
+      "symbol": "CVI",
+      "price": 42.67,
+      "prev_close": 39.76,
+      "change_pct": 7.32,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "DAR",
+      "price": 65.55,
+      "prev_close": 61.39,
+      "change_pct": 6.78,
       "premarket_volume": null,
       "is_premarket_data": true
     }
