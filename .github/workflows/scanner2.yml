@@ -27,10 +27,7 @@ jobs:
           git add scanner2_result.json
           git diff --staged --quiet || git commit -m "scanner2 결과 갱신 $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push
-      - name: 카카오톡 진입신호 전송
+      - name: 텔레그램 진입신호 전송
         env:
-          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
-          KAKAO_REFRESH_TOKEN: ${{ secrets.KAKAO_REFRESH_TOKEN }}
-        run: python send_kakao2.py
-
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: python send_telegram2.py
