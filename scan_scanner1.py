@@ -18,7 +18,6 @@ MIN_PREMARKET_VOLUME = 50000
 
 SCREENER_QUERIES = ["day_gainers", "most_actives"]
 
-
 def get_candidate_symbols():
     symbols = set()
     for query in SCREENER_QUERIES:
@@ -33,7 +32,6 @@ def get_candidate_symbols():
         except Exception as e:
             print(f"[warn] screener '{query}' 실패: {e}")
     return list(symbols)
-
 
 def passes_filters(symbol, info):
     price = info.get("regularMarketPrice")
@@ -62,7 +60,6 @@ def passes_filters(symbol, info):
         "is_premarket_data": pre_price is not None,
     }
 
-
 def main():
     symbols = get_candidate_symbols()
     print(f"후보 종목 수: {len(symbols)}")
@@ -80,7 +77,6 @@ def main():
         time.sleep(0.3)  # 과도한 연속 호출 방지
 
     matches.sort(key=lambda x: x["change_pct"], reverse=True)
-    matches = matches[:8]  # 상위 8개만
 
     result = {
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -101,7 +97,6 @@ def main():
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if errors:
         print(f"[info] 에러난 종목 {len(errors)}개 (일부만 표시):", errors[:5])
-
 
 if __name__ == "__main__":
     main()
