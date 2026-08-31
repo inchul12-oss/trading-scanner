@@ -1,38 +1,21 @@
 {
-  "updated_at_utc": "2026-08-31T14:17:36.324147+00:00",
-  "candidate_count": 8,
-  "checked_count": 7,
-  "error_count": 1,
+  "updated_at_utc": "2026-08-31T14:33:20.483322+00:00",
+  "candidate_count": 7,
+  "checked_count": 5,
+  "error_count": 2,
   "entries": [],
   "all_results": [
     {
-      "symbol": "ESTC",
-      "price": 95.99,
+      "symbol": "CHA",
+      "price": 11.87,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 98.7644282154793,
+      "vwap": 11.537461121605993,
       "conditions": {
-        "1_prev_day_high_break": false,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": false,
-        "4_today_high_break": false,
-        "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": false
-      }
-    },
-    {
-      "symbol": "GAP",
-      "price": 22.82,
-      "entry_signal": false,
-      "price_conditions_met": false,
-      "volume_confirmed": false,
-      "vwap": 22.695656311409298,
-      "conditions": {
-        "1_prev_day_high_break": false,
+        "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
-        "3_premarket_high_break": false,
+        "3_premarket_high_break": true,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
@@ -40,80 +23,63 @@
       }
     },
     {
-      "symbol": "SOLS",
-      "price": 63.67,
+      "symbol": "ASND",
+      "price": 263.63,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 64.0134873514576,
+      "vwap": 262.9241457385449,
       "conditions": {
-        "1_prev_day_high_break": false,
+        "1_prev_day_high_break": true,
+        "2_prev_close_above_200ma": true,
+        "3_premarket_high_break": true,
+        "4_today_high_break": false,
+        "6_ma_alignment_20_50_200": false,
+        "7_ma50_slope_up": true,
+        "8_vwap_break": true
+      }
+    },
+    {
+      "symbol": "RBLX",
+      "price": 40.87,
+      "entry_signal": false,
+      "price_conditions_met": false,
+      "volume_confirmed": false,
+      "vwap": 40.23681520609092,
+      "conditions": {
+        "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
-        "3_premarket_high_break": false,
+        "3_premarket_high_break": true,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
-      "symbol": "PBF",
-      "price": 71.68,
+      "symbol": "XPRO",
+      "price": 18.655,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 73.883065406157,
+      "vwap": 18.474777803972554,
       "conditions": {
-        "1_prev_day_high_break": false,
+        "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
         "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": true,
         "7_ma50_slope_up": true,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
-      "symbol": "TRLV",
-      "price": 11.285,
+      "symbol": "SAIC",
+      "price": 129.955,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 11.457982014283688,
-      "conditions": {
-        "1_prev_day_high_break": false,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": false,
-        "4_today_high_break": false,
-        "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": false
-      }
-    },
-    {
-      "symbol": "TOP",
-      "price": 16.76,
-      "entry_signal": false,
-      "price_conditions_met": false,
-      "volume_confirmed": false,
-      "vwap": 16.965408462452423,
-      "conditions": {
-        "1_prev_day_high_break": false,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": false,
-        "4_today_high_break": false,
-        "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": false
-      }
-    },
-    {
-      "symbol": "CVI",
-      "price": 41.165,
-      "entry_signal": false,
-      "price_conditions_met": false,
-      "volume_confirmed": false,
-      "vwap": 42.44260829935882,
+      "vwap": 134.4918948023231,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
@@ -127,7 +93,11 @@
   ],
   "errors": [
     {
-      "symbol": "PSQL",
+      "symbol": "XE",
+      "error": "일봉 히스토리 부족(200일 미만)"
+    },
+    {
+      "symbol": "STDN",
       "error": "일봉 히스토리 부족(200일 미만)"
     }
   ]
