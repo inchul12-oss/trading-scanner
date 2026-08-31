@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T12:15:08.386081+00:00",
+  "updated_at_utc": "2026-08-31T12:33:42.094032+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -10,41 +10,41 @@
   "matches": [
     {
       "symbol": "PSQL",
-      "price": 16.48,
+      "price": 16.4,
       "prev_close": 9.79,
-      "change_pct": 68.34,
+      "change_pct": 67.52,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "ESTC",
-      "price": 98.29,
+      "price": 97.8,
       "prev_close": 83.74,
-      "change_pct": 17.38,
+      "change_pct": 16.79,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "GAP",
-      "price": 23.5,
+      "price": 23.44,
       "prev_close": 20.79,
-      "change_pct": 13.04,
+      "change_pct": 12.75,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "SOLS",
-      "price": 62.8,
+      "price": 63.4,
       "prev_close": 56.34,
-      "change_pct": 11.47,
+      "change_pct": 12.53,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "TRLV",
-      "price": 12.0,
+      "price": 11.97,
       "prev_close": 11.03,
-      "change_pct": 8.79,
+      "change_pct": 8.52,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -57,18 +57,18 @@
       "is_premarket_data": true
     },
     {
-      "symbol": "CVI",
-      "price": 42.67,
-      "prev_close": 39.76,
-      "change_pct": 7.32,
+      "symbol": "PBF",
+      "price": 73.86,
+      "prev_close": 68.59,
+      "change_pct": 7.68,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "DAR",
-      "price": 65.55,
-      "prev_close": 61.39,
-      "change_pct": 6.78,
+      "symbol": "CVI",
+      "price": 42.74,
+      "prev_close": 39.76,
+      "change_pct": 7.49,
       "premarket_volume": null,
       "is_premarket_data": true
     }
