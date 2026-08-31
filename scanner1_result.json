@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T06:57:41.750932+00:00",
+  "updated_at_utc": "2026-08-31T11:35:03.816724+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -10,67 +10,67 @@
   "matches": [
     {
       "symbol": "PSQL",
-      "price": 19.11,
+      "price": 17.0,
       "prev_close": 9.79,
-      "change_pct": 95.2,
+      "change_pct": 73.65,
       "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
     },
     {
       "symbol": "ESTC",
-      "price": 99.91,
+      "price": 99.25,
       "prev_close": 83.74,
-      "change_pct": 19.31,
+      "change_pct": 18.52,
       "premarket_volume": null,
-      "is_premarket_data": false
-    },
-    {
-      "symbol": "GAP",
-      "price": 23.48,
-      "prev_close": 20.79,
-      "change_pct": 12.94,
-      "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
     },
     {
       "symbol": "SOLS",
-      "price": 63.53,
+      "price": 63.9,
       "prev_close": 56.34,
-      "change_pct": 12.76,
+      "change_pct": 13.42,
       "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "GAP",
+      "price": 23.4552,
+      "prev_close": 20.79,
+      "change_pct": 12.82,
+      "premarket_volume": null,
+      "is_premarket_data": true
     },
     {
       "symbol": "TOP",
-      "price": 16.73,
+      "price": 16.92,
       "prev_close": 15.42,
-      "change_pct": 8.5,
+      "change_pct": 9.73,
       "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
     },
     {
       "symbol": "TRLV",
-      "price": 11.82,
+      "price": 11.8718,
       "prev_close": 11.03,
-      "change_pct": 7.16,
+      "change_pct": 7.63,
       "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "CVI",
+      "price": 42.7846,
+      "prev_close": 39.76,
+      "change_pct": 7.61,
+      "premarket_volume": null,
+      "is_premarket_data": true
     },
     {
       "symbol": "FLUT",
-      "price": 101.78,
+      "price": 101.67,
       "prev_close": 95.01,
-      "change_pct": 7.13,
+      "change_pct": 7.01,
       "premarket_volume": null,
-      "is_premarket_data": false
-    },
-    {
-      "symbol": "WDAY",
-      "price": 204.72,
-      "prev_close": 193.57,
-      "change_pct": 5.76,
-      "premarket_volume": null,
-      "is_premarket_data": false
+      "is_premarket_data": true
     }
   ]
 }
