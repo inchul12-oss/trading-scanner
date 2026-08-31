@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T17:33:16.575198+00:00",
+  "updated_at_utc": "2026-08-31T18:03:34.951794+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -7,11 +7,11 @@
   "all_results": [
     {
       "symbol": "CHA",
-      "price": 11.62,
+      "price": 11.475,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 11.566150934327185,
+      "vwap": 11.57368193275058,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -19,16 +19,16 @@
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
-        "8_vwap_break": true
+        "8_vwap_break": false
       }
     },
     {
       "symbol": "ASND",
-      "price": 265.56,
+      "price": 265.275,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 262.78299871632623,
+      "vwap": 262.97103424487403,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -41,11 +41,11 @@
     },
     {
       "symbol": "RBLX",
-      "price": 40.28,
+      "price": 40.59,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 40.371262491282664,
+      "vwap": 40.37631604540811,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -53,16 +53,16 @@
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
       "symbol": "XPRO",
-      "price": 18.1,
+      "price": 18.18,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 18.38347841136255,
+      "vwap": 18.371993812804387,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -75,11 +75,11 @@
     },
     {
       "symbol": "SAIC",
-      "price": 132.57,
+      "price": 131.24,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 132.90681218746278,
+      "vwap": 132.86649250527606,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
