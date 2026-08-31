@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T07:48:22.930258+00:00",
+  "updated_at_utc": "2026-08-31T09:05:32.538449+00:00",
   "candidate_count": 8,
   "checked_count": 7,
   "error_count": 1,
@@ -11,13 +11,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
         "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true
+        "7_ma50_slope_up": true,
+        "8_vwap_break": false
       }
     },
     {
@@ -26,13 +28,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": false,
         "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": false
+        "7_ma50_slope_up": false,
+        "8_vwap_break": false
       }
     },
     {
@@ -41,13 +45,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": false,
         "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": false
+        "7_ma50_slope_up": false,
+        "8_vwap_break": false
       }
     },
     {
@@ -55,14 +61,16 @@
       "price": 16.73,
       "entry_signal": false,
       "price_conditions_met": false,
-      "volume_confirmed": false,
+      "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
         "3_premarket_high_break": true,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true
+        "7_ma50_slope_up": true,
+        "8_vwap_break": false
       }
     },
     {
@@ -71,13 +79,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": true,
+        "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true
+        "7_ma50_slope_up": true,
+        "8_vwap_break": false
       }
     },
     {
@@ -86,13 +96,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": false,
-        "3_premarket_high_break": true,
+        "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": false
+        "7_ma50_slope_up": false,
+        "8_vwap_break": false
       }
     },
     {
@@ -101,13 +113,15 @@
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
+      "vwap": null,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": true,
+        "3_premarket_high_break": false,
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": true
+        "7_ma50_slope_up": true,
+        "8_vwap_break": false
       }
     }
   ],
