@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-08-31T20:03:33.308008+00:00",
+  "updated_at_utc": "2026-08-31T20:33:24.225976+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -27,8 +27,8 @@
       "price": 263.04,
       "entry_signal": false,
       "price_conditions_met": false,
-      "volume_confirmed": true,
-      "vwap": 263.2308728867746,
+      "volume_confirmed": false,
+      "vwap": 263.23060995448617,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -41,11 +41,11 @@
     },
     {
       "symbol": "RBLX",
-      "price": 41.275,
+      "price": 41.29,
       "entry_signal": false,
       "price_conditions_met": false,
-      "volume_confirmed": false,
-      "vwap": 40.6082512462415,
+      "volume_confirmed": null,
+      "vwap": 40.750149326252135,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -58,11 +58,11 @@
     },
     {
       "symbol": "XPRO",
-      "price": 18.13,
+      "price": 18.12,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 18.20849046327221,
+      "vwap": 18.183404593323726,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
