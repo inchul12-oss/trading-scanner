@@ -4,22 +4,28 @@
 청산 조건 (OR, 하나라도 걸리면 매도신호 - 포지션 종료):
   (1) 돌파 캔들 저점 이탈: 진입신호가 발생한 그 1분봉의 저가 아래로 현재가 하락
   (2) VWAP/20일선 이탈: 진입 당일이면 오늘 VWAP, 다음날부터는 20일 이동평균선
-  (3) 하드스탑: 진입가 대비 -5% (구조적 조건이 이상하게 나올 때 대비한 안전장치)
+  (3) 스탑: +10%(2R) 도달 전까지는 진입가 대비 -5% 고정 하드스탑. +10%를 한 번이라도
+      찍으면 그 순간부터 "최고가 대비 -7%" 트레일링스탑으로 전환되고(9/2 추가),
+      본절(진입가) 밑으로는 절대 안 내려감 — 급등 후 되돌림으로 이익을 다 반납하는 걸
+      막기 위함. 최고가는 매 체크마다 갱신되는 값이라 신고가를 계속 찍는 한 스탑도
+      같이 따라 올라감(체이스는 안 하고 딱 한 번 -7%p만 유지). 20일선 조건은 며칠에
+      걸쳐 이어지는 종목엔 유효하지만, 당일 급등주(예: 하루 만에 +70%대까지 간 사례도
+      실제로 있었음)엔 20일선이 너무 느려서 못 따라오므로 별도 방어선으로 둠.
   (4) 직선급락 서킷브레이커: 최근 5분(1분봉 5개) 사이 -3% 이상 급락 시 "긴급" 태그로 즉시 청산
       (참고: 5분 폴링 주기 안에서의 최선의 감지이며, 호가창이 통째로 증발하는 진짜 유동성
        붕괴 상황에서의 체결까지 보장하지는 못한다 - 그런 종목은 실제 계좌에 시장가 스탑주문을
        병행할 것)
 
-1차 익절 신호 (포지션은 종료하지 않음, 알림만 - 하이브리드 익절 설계 8/31 추가):
+1차 익절 신호 (포지션은 종료하지 않음, 알림만 - 하이브리드 익절 설계 8/31 추가, 9/2 트레일링 연동):
   진입가 대비 +10%(하드스탑 -5%의 2배 = 2R) 도달 시 1회만 "절반 익절 고려" 알림.
-  포지션 자체는 계속 살아있고 위 청산조건으로 계속 추적됨(나머지 절반을 트레일링으로
-  태우는 하이브리드 방식 - Qullamaggie 등 유명 브레이크아웃 트레이더들의 공통 패턴을 참고함:
-  고정목표 하나로 전량 매도 X, 트레일링만으로 전량관리도 X, 일부는 미리 챙기고 나머지는
-  추세이탈까지 태우는 방식).
+  동시에 이 시점부터 위 (3)의 하드스탑이 트레일링스탑으로 전환됨. 포지션 자체는 계속
+  살아있고 나머지 절반을 트레일링으로 태우는 하이브리드 방식(Qullamaggie 등 유명
+  브레이크아웃 트레이더들의 공통 패턴을 참고함 - 고정목표 전량매도도, 트레일링만으로
+  전량관리도 아닌, 일부는 미리 챙기고 나머지는 추세이탈까지 태우는 방식).
 
 입력: scanner2_result.json의 entries (당일 스캐너2-미가 낸 진입신호, 오래된 파일이면 무시)
 상태: positions.json (오픈/청산 포지션 영속 기록, 깃허브 액션이 커밋해서 유지)
-결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션 + 새로 뜬 1차익절신호, 있을 때만 카카오로 전송)
+결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션 + 새로 뜬 1차익절신호, 있을 때만 텔레그램으로 전송)
 """
 import json
 from datetime import datetime, timezone, time as dtime
@@ -28,7 +34,8 @@ from zoneinfo import ZoneInfo
 import yfinance as yf
 
 HARD_STOP_PCT = -0.05
-PARTIAL_PROFIT_PCT = 0.10  # 1차 익절 알림 임계값(진입가 대비 +10%, 하드스탑의 2R)
+PARTIAL_PROFIT_PCT = 0.10  # 1차 익절 알림 임계값(진입가 대비 +10%, 하드스탑의 2R) - 트레일링스탑 발동 기준도 겸함
+TRAIL_STOP_PCT = 0.07  # PARTIAL_PROFIT_PCT 도달 이후: 최고가 대비 -7% 트레일링(본절 밑으로는 안 내려감)
 CIRCUIT_BREAKER_PCT = -0.03
 CIRCUIT_BREAKER_LOOKBACK_MIN = 5
 MA_SHORT = 20
@@ -155,6 +162,7 @@ def open_new_positions(positions, entries, entry_time_utc):
             "entry_time_utc": entry_time_utc,
             "entry_date_ny": today_ny,
             "breakout_candle_low": candle_low,
+            "peak_price": price,  # 9/2 추가: 트레일링스탑 계산용 최고가 추적(시작값=진입가)
             "status": "open",
             "partial_profit_alerted": False,
         })
@@ -194,8 +202,23 @@ def evaluate_position(pos):
 
     entry_price = pos["entry_price"]
     pnl_pct = (price - entry_price) / entry_price if entry_price else 0.0
-    if pnl_pct <= HARD_STOP_PCT:
-        reasons.append(f"하드스탑({pnl_pct * 100:.1f}%)")
+
+    # 9/2 추가: 최고가 갱신 + 트레일링스탑. +10%(PARTIAL_PROFIT_PCT)를 한 번이라도
+    # 찍으면(이번 체크 포함) 그 순간부터 고정 하드스탑 대신 "최고가 대비 -TRAIL_STOP_PCT%"
+    # 트레일링스탑으로 전환하고, 스탑이 본절(진입가) 밑으로는 절대 안 내려가게 max()로 고정.
+    peak_price = max(pos.get("peak_price", entry_price), price)
+    trail_active = bool(pos.get("partial_profit_alerted")) or pnl_pct >= PARTIAL_PROFIT_PCT
+
+    if trail_active:
+        trail_stop_price = max(entry_price, peak_price * (1 - TRAIL_STOP_PCT))
+        if price <= trail_stop_price:
+            reasons.append(
+                f"트레일링스탑(최고가 {peak_price:.2f} 대비 -{TRAIL_STOP_PCT * 100:.0f}%, "
+                f"손익 {pnl_pct * 100:.1f}%)"
+            )
+    else:
+        if pnl_pct <= HARD_STOP_PCT:
+            reasons.append(f"하드스탑({pnl_pct * 100:.1f}%)")
 
     urgent = False
     drop = compute_recent_drop_pct(intraday)
@@ -212,6 +235,7 @@ def evaluate_position(pos):
         "symbol": symbol,
         "price": price,
         "pnl_pct": pnl_pct,
+        "peak_price": peak_price,
         "exit_signal": len(reasons) > 0,
         "urgent": urgent,
         "reasons": reasons,
@@ -242,6 +266,8 @@ def main():
         if "error" in r:
             errors.append({"symbol": pos["symbol"], "error": r["error"]})
             continue
+
+        pos["peak_price"] = r["peak_price"]  # 9/2 추가: 트레일링스탑 기준 최고가 매번 갱신
 
         if r["partial_profit_signal"]:
             pos["partial_profit_alerted"] = True
