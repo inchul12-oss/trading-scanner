@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T17:05:37.777678+00:00",
+  "updated_at_utc": "2026-09-01T17:31:17.941251+00:00",
   "candidate_count": 5,
   "checked_count": 3,
   "error_count": 2,
@@ -7,33 +7,35 @@
   "all_results": [
     {
       "symbol": "EGIEY",
-      "price": 5.78,
+      "price": 5.84,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 5.811879630879454,
+      "vwap": 5.812122732716836,
+      "orb_high": 5.840000152587891,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
         "3_premarket_high_break": false,
-        "4_today_high_break": false,
+        "4_orb_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": false,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
       "symbol": "CRK",
-      "price": 15.684,
+      "price": 15.77,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 15.655154019637852,
+      "vwap": 15.657697114105035,
+      "orb_high": 16.1200008392334,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
         "3_premarket_high_break": false,
-        "4_today_high_break": false,
+        "4_orb_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": true,
         "8_vwap_break": true
@@ -41,16 +43,17 @@
     },
     {
       "symbol": "NVS",
-      "price": 160.925,
+      "price": 161.13,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 161.84984448521246,
+      "vwap": 161.79609203692127,
+      "orb_high": 163.57000732421875,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
         "3_premarket_high_break": false,
-        "4_today_high_break": false,
+        "4_orb_high_break": false,
         "6_ma_alignment_20_50_200": true,
         "7_ma50_slope_up": true,
         "8_vwap_break": false
