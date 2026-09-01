@@ -19,11 +19,22 @@
       (8) 현재가 > 오늘 VWAP(거래량가중평균가, 정규장 09:30 이후 1분봉 기준)
 입력: scanner1_result.json의 matches (당일 스캐너1-미가 찾은 후보, 오래된 파일이면 무시)
 결과: scanner2_result.json으로 저장 (깃허브 액션이 커밋 후 진입신호가 있을 때만 텔레그램으로 전송)
+
+9/2 수정(API 요청 최적화): 후보 종목마다 개별적으로 yf.Ticker().history()/get_info()를 호출하던
+방식(종목당 최대 3회 요청) 대신, 전체 후보 목록을 yf.download()로 한 번에 배치 조회하도록 변경.
+깃허브 액션 러너는 공용 IP를 쓰기 때문에 종목 수가 많아지면(예전엔 8개로 캡이 걸려 있었지만
+지금은 무제한) 순차적으로 개별 요청을 쏟아낼 경우 야후파이낸스 쪽 요청제한(429)에 걸릴 위험이
+커진다는 지적을 받아, 배치 조회 + 짧은 재시도(백오프)로 방어함. 부수효과로 종목별 get_info()
+호출 자체가 없어져서(현재가를 1분봉 마지막 종가로 대체) 필요없어진 "오늘 일봉고가" 필드 요구조건도
+같이 제거함(ORB 도입 이후로 이 값 자체를 안 씀 — 예전엔 이 값이 없으면 후보가 그냥 에러 처리되던
+잠재 버그였음).
 """
 import json
+import time
 from datetime import datetime, timezone, time as dtime, timedelta
 from zoneinfo import ZoneInfo
 
+import pandas as pd
 import yfinance as yf
 
 VOLUME_MULTIPLIER = 3.0
@@ -36,6 +47,10 @@ CANDIDATE_MAX_AGE_HOURS = 12
 NY_TZ = ZoneInfo("America/New_York")
 MARKET_OPEN = dtime(9, 30)
 ORB_WINDOW_MIN = 30  # 오프닝레인지 = 정규장 시작 후 첫 30분
+
+BATCH_RETRY_COUNT = 2
+BATCH_RETRY_BACKOFF_SEC = 2.0
+BATCH_GAP_SEC = 0.5  # 일봉 배치 조회와 분봉 배치 조회 사이 최소한의 텀
 
 
 def load_candidates():
@@ -58,13 +73,60 @@ def load_candidates():
     return [m["symbol"] for m in result.get("matches", [])]
 
 
-def get_daily_frame(ticker):
-    hist = ticker.history(period="1y", interval="1d", auto_adjust=False)
-    if hist.empty:
-        return None
-    today_ny = datetime.now(NY_TZ).date()
-    hist = hist[hist.index.date < today_ny]  # 오늘 진행중인 봉은 제외, 완성된 일봉만 사용
-    return hist if not hist.empty else None
+def _download_with_retry(symbols, **kwargs):
+    """yf.download 배치 호출 + 실패시 짧은 재시도(429 등 일시적 요청제한 대비)."""
+    last_exc = None
+    for attempt in range(BATCH_RETRY_COUNT + 1):
+        try:
+            return yf.download(
+                symbols, threads=True, progress=False, group_by="ticker", **kwargs
+            )
+        except Exception as e:
+            last_exc = e
+            if attempt < BATCH_RETRY_COUNT:
+                time.sleep(BATCH_RETRY_BACKOFF_SEC * (attempt + 1))
+    print(f"배치 다운로드 실패(재시도 소진): {last_exc}")
+    return None
+
+
+def _split_by_symbol(data, symbols):
+    """yf.download 결과(멀티종목이면 컬럼이 종목별로 중첩됨)를 종목별 DataFrame 딕셔너리로 분리.
+    종목이 1개뿐이어도 yfinance 버전에 따라 중첩될 수도/안 될 수도 있어서, symbols 개수가 아니라
+    실제 반환된 컬럼이 MultiIndex인지(=종목별로 중첩됐는지)를 보고 판단한다."""
+    out = {}
+    if data is None or data.empty:
+        return out
+    is_multi = isinstance(data.columns, pd.MultiIndex)
+    for sym in symbols:
+        try:
+            if is_multi:
+                if sym not in data.columns.get_level_values(0):
+                    continue
+                df = data[sym]
+            else:
+                df = data
+        except Exception:
+            continue
+        if df is None:
+            continue
+        df = df.dropna(how="all")
+        if not df.empty:
+            out[sym] = df
+    return out
+
+
+def fetch_daily_batch(symbols):
+    if not symbols:
+        return {}
+    data = _download_with_retry(symbols, period="1y", interval="1d", auto_adjust=False)
+    return _split_by_symbol(data, symbols)
+
+
+def fetch_intraday_batch(symbols):
+    if not symbols:
+        return {}
+    data = _download_with_retry(symbols, period="1d", interval="1m", prepost=True)
+    return _split_by_symbol(data, symbols)
 
 
 def compute_daily_metrics(daily):
@@ -92,14 +154,6 @@ def compute_daily_metrics(daily):
         "ma200": float(ma200_series.iloc[-1]),
         "ma50_prev": ma50_prev,
     }
-
-
-def get_intraday_frame(ticker):
-    try:
-        intraday = ticker.history(period="1d", interval="1m", prepost=True)
-    except Exception:
-        return None
-    return intraday if not intraday.empty else None
 
 
 def compute_premarket_high(intraday):
@@ -167,24 +221,27 @@ def check_volume_confirmation(intraday):
     return latest_vol >= avg_vol * VOLUME_MULTIPLIER
 
 
-def evaluate_symbol(symbol):
-    ticker = yf.Ticker(symbol)
-    info = ticker.get_info()
+def evaluate_symbol(symbol, daily_raw, intraday):
+    if intraday is None or intraday.empty or "Close" not in intraday:
+        return {"symbol": symbol, "error": "1분봉 데이터 없음"}
 
-    price = info.get("regularMarketPrice") or info.get("currentPrice")
-    day_high = info.get("regularMarketDayHigh") or info.get("dayHigh")
-    if price is None or day_high is None:
-        return {"symbol": symbol, "error": "현재가/오늘고가 정보 없음"}
+    close_series = intraday["Close"].dropna()
+    if close_series.empty:
+        return {"symbol": symbol, "error": "현재가 정보 없음"}
+    price = float(close_series.iloc[-1])
 
-    daily = get_daily_frame(ticker)
-    if daily is None:
+    if daily_raw is None or daily_raw.empty:
+        return {"symbol": symbol, "error": "일봉 히스토리 없음"}
+
+    today_ny = datetime.now(NY_TZ).date()
+    daily = daily_raw[daily_raw.index.date < today_ny]  # 오늘 진행중인 봉은 제외, 완성된 일봉만 사용
+    if daily.empty:
         return {"symbol": symbol, "error": "일봉 히스토리 없음"}
 
     metrics = compute_daily_metrics(daily)
     if metrics is None:
         return {"symbol": symbol, "error": "일봉 히스토리 부족(200일 미만)"}
 
-    intraday = get_intraday_frame(ticker)
     premarket_high = compute_premarket_high(intraday)
     orb_high = compute_orb_high(intraday)
     volume_ok = check_volume_confirmation(intraday)  # True/False/None(확인불가)
@@ -227,11 +284,16 @@ def evaluate_symbol(symbol):
 def main():
     symbols = load_candidates()
 
+    daily_batch = fetch_daily_batch(symbols)
+    if symbols:
+        time.sleep(BATCH_GAP_SEC)
+    intraday_batch = fetch_intraday_batch(symbols)
+
     results = []
     errors = []
     for sym in symbols:
         try:
-            r = evaluate_symbol(sym)
+            r = evaluate_symbol(sym, daily_batch.get(sym), intraday_batch.get(sym))
             if "error" in r:
                 errors.append(r)
             else:
