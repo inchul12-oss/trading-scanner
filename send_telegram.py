@@ -16,7 +16,7 @@ def build_message(result):
     matches = result.get("matches", [])
     updated = result.get("updated_at_utc", "")
     time_label = updated[11:16] if len(updated) >= 16 else updated
-    lines = [f"스캐너1-미 결과 ({time_label} UTC)"]
+    lines = [f"탐지신호-미 결과 ({time_label} UTC)"]
     if not matches:
         lines.append("조건에 맞는 종목 없음")
     else:
