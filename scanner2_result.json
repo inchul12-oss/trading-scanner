@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T15:04:55.418514+00:00",
+  "updated_at_utc": "2026-09-01T15:52:51.089517+00:00",
   "candidate_count": 5,
   "checked_count": 3,
   "error_count": 2,
@@ -7,11 +7,11 @@
   "all_results": [
     {
       "symbol": "EGIEY",
-      "price": 5.8,
+      "price": 5.79,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": null,
-      "vwap": 5.811807961569653,
+      "vwap": 5.811123697693141,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
@@ -24,11 +24,11 @@
     },
     {
       "symbol": "CRK",
-      "price": 15.535,
+      "price": 15.77,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 15.644252939337383,
+      "vwap": 15.641540734788814,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
@@ -36,16 +36,16 @@
         "4_today_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": true,
-        "8_vwap_break": false
+        "8_vwap_break": true
       }
     },
     {
       "symbol": "NVS",
-      "price": 161.08,
+      "price": 161.23,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 162.081029022948,
+      "vwap": 161.9367472746672,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
