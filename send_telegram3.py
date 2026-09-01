@@ -25,7 +25,7 @@ def build_message(result):
     lines = []
 
     if exits:
-        header = "🚨 스캐너3-미 긴급 매도신호" if any_urgent else "스캐너3-미 매도/손절 신호"
+        header = "🚨 청산신호-미 긴급 매도신호" if any_urgent else "청산신호-미 매도/손절 신호"
         lines.append(f"{header} ({time_label} UTC)")
         for e in exits:
             tag = "🚨" if e.get("urgent") else "-"
@@ -36,7 +36,7 @@ def build_message(result):
     if partials:
         if lines:
             lines.append("")
-        lines.append(f"💰 스캐너3-미 1차 익절 고려 ({time_label} UTC)")
+        lines.append(f"💰 청산신호-미 1차 익절 고려 ({time_label} UTC)")
         for p in partials:
             pnl = p.get("pnl_pct", 0.0) * 100
             lines.append(f"💰 {p['symbol']} {p['price']:.2f} ({pnl:+.1f}%) - 목표(+10%) 도달, 절반 익절 고려(나머지는 트레일링 유지)")
@@ -74,4 +74,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
