@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T18:30:19.955358+00:00",
+  "updated_at_utc": "2026-09-01T18:39:00.987896+00:00",
   "candidate_count": 5,
   "checked_count": 3,
   "error_count": 2,
@@ -25,11 +25,11 @@
     },
     {
       "symbol": "CRK",
-      "price": 15.755900382995605,
+      "price": 15.800000190734863,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 15.673408701186574,
+      "vwap": 15.674145296624555,
       "orb_high": 16.1200008392334,
       "conditions": {
         "1_prev_day_high_break": true,
@@ -43,11 +43,11 @@
     },
     {
       "symbol": "NVS",
-      "price": 161.60499572753906,
+      "price": 161.3699951171875,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 161.77620037376263,
+      "vwap": 161.77305022769102,
       "orb_high": 163.57000732421875,
       "conditions": {
         "1_prev_day_high_break": true,
@@ -67,7 +67,7 @@
     },
     {
       "symbol": "MMED",
-      "error": "일봉 히스토리 없음"
+      "error": "일봉 히스토리 부족(200일 미만)"
     }
   ]
 }
