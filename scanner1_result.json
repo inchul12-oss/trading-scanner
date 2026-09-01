@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T12:41:56.786992+00:00",
+  "updated_at_utc": "2026-09-01T13:05:58.561824+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -9,14 +9,6 @@
   "error_count": 0,
   "matches": [
     {
-      "symbol": "FRVO",
-      "price": 17.48,
-      "prev_close": 14.77,
-      "change_pct": 18.35,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
       "symbol": "EGIEY",
       "price": 6.42,
       "prev_close": 5.45,
@@ -25,50 +17,58 @@
       "is_premarket_data": false
     },
     {
+      "symbol": "FRVO",
+      "price": 16.8613,
+      "prev_close": 14.77,
+      "change_pct": 14.16,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
       "symbol": "STDN",
-      "price": 15.924,
+      "price": 16.0,
       "prev_close": 14.1,
-      "change_pct": 12.94,
+      "change_pct": 13.48,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "ASST",
-      "price": 23.7283,
+      "price": 23.816,
       "prev_close": 21.74,
-      "change_pct": 9.15,
+      "change_pct": 9.55,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "CHA",
-      "price": 11.64,
+      "price": 11.6384,
       "prev_close": 10.8,
-      "change_pct": 7.78,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "HTFL",
-      "price": 50.9205,
-      "prev_close": 47.78,
-      "change_pct": 6.57,
+      "change_pct": 7.76,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "CLMT",
-      "price": 50.75,
+      "price": 51.32,
       "prev_close": 47.75,
-      "change_pct": 6.28,
+      "change_pct": 7.48,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "AGCO",
-      "price": 120.33,
-      "prev_close": 113.39,
-      "change_pct": 6.12,
+      "symbol": "NGL",
+      "price": 19.15,
+      "prev_close": 18.02,
+      "change_pct": 6.27,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "PBR",
+      "price": 19.68,
+      "prev_close": 18.53,
+      "change_pct": 6.21,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -89,18 +89,18 @@
       "is_premarket_data": true
     },
     {
-      "symbol": "NGL",
-      "price": 19.1,
-      "prev_close": 18.02,
-      "change_pct": 5.99,
+      "symbol": "TALO",
+      "price": 17.6639,
+      "prev_close": 16.67,
+      "change_pct": 5.96,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "PBR",
-      "price": 19.6,
-      "prev_close": 18.53,
-      "change_pct": 5.77,
+      "symbol": "AGCO",
+      "price": 119.86,
+      "prev_close": 113.39,
+      "change_pct": 5.71,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -114,25 +114,33 @@
     },
     {
       "symbol": "CRCL",
-      "price": 91.984,
+      "price": 91.89,
       "prev_close": 87.14,
-      "change_pct": 5.56,
+      "change_pct": 5.45,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "SLB",
-      "price": 60.3,
-      "prev_close": 57.33,
-      "change_pct": 5.18,
+      "symbol": "PBR-A",
+      "price": 17.68,
+      "prev_close": 16.77,
+      "change_pct": 5.43,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "VG",
-      "price": 14.9,
+      "price": 14.9348,
       "prev_close": 14.18,
-      "change_pct": 5.08,
+      "change_pct": 5.32,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "SLB",
+      "price": 60.299,
+      "prev_close": 57.33,
+      "change_pct": 5.18,
       "premarket_volume": null,
       "is_premarket_data": true
     }
