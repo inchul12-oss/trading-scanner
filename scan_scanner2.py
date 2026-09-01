@@ -74,12 +74,16 @@ def load_candidates():
 
 
 def _download_with_retry(symbols, **kwargs):
-    """yf.download 배치 호출 + 실패시 짧은 재시도(429 등 일시적 요청제한 대비)."""
+    """yf.download 배치 호출 + 실패시 짧은 재시도(429 등 일시적 요청제한 대비).
+    threads=False: 병렬(threads=True)로 돌리면 yfinance 내부 SQLite 캐시에 동시접근하면서
+    가끔 "database is locked"로 개별 종목이 실패하는 걸 실측으로 확인함(9/2) — 배치 자체가
+    이미 충분히 빠르고(수 초), 어차피 목표가 "동시 요청 줄이기"라 순차(threads=False)로 바꿔서
+    이 충돌 자체를 없앰."""
     last_exc = None
     for attempt in range(BATCH_RETRY_COUNT + 1):
         try:
             return yf.download(
-                symbols, threads=True, progress=False, group_by="ticker", **kwargs
+                symbols, threads=False, progress=False, group_by="ticker", **kwargs
             )
         except Exception as e:
             last_exc = e
