@@ -17,7 +17,7 @@ def build_message(result):
     entries = result.get("entries", [])
     updated = result.get("updated_at_utc", "")
     time_label = updated[11:16] if len(updated) >= 16 else updated
-    lines = [f"스캐너2-미 진입신호 ({time_label} UTC)"]
+    lines = [f"진입신호-미 ({time_label} UTC)"]
     for e in entries:
         vol = e.get("volume_confirmed")
         if vol is True:
@@ -60,4 +60,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
