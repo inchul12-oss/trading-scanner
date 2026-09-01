@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T18:06:27.258144+00:00",
+  "updated_at_utc": "2026-09-01T18:30:19.955358+00:00",
   "candidate_count": 5,
   "checked_count": 3,
   "error_count": 2,
@@ -7,11 +7,11 @@
   "all_results": [
     {
       "symbol": "EGIEY",
-      "price": 5.84,
+      "price": 5.840000152587891,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 5.8177874386901705,
+      "vwap": 5.818934577716319,
       "orb_high": 5.840000152587891,
       "conditions": {
         "1_prev_day_high_break": false,
@@ -25,11 +25,11 @@
     },
     {
       "symbol": "CRK",
-      "price": 15.79,
+      "price": 15.755900382995605,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 15.668756684425343,
+      "vwap": 15.673408701186574,
       "orb_high": 16.1200008392334,
       "conditions": {
         "1_prev_day_high_break": true,
@@ -43,11 +43,11 @@
     },
     {
       "symbol": "NVS",
-      "price": 161.5801,
+      "price": 161.60499572753906,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 161.77867188734683,
+      "vwap": 161.77620037376263,
       "orb_high": 163.57000732421875,
       "conditions": {
         "1_prev_day_high_break": true,
@@ -67,7 +67,7 @@
     },
     {
       "symbol": "MMED",
-      "error": "일봉 히스토리 부족(200일 미만)"
+      "error": "일봉 히스토리 없음"
     }
   ]
 }
