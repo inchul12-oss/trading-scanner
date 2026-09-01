@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-01T19:14:09.401193+00:00",
+  "updated_at_utc": "2026-09-01T19:40:02.025282+00:00",
   "candidate_count": 5,
   "checked_count": 3,
   "error_count": 2,
@@ -25,16 +25,16 @@
     },
     {
       "symbol": "CRK",
-      "price": 15.9399995803833,
+      "price": 16.040000915527344,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 15.686581930166358,
+      "vwap": 15.710284958903587,
       "orb_high": 16.1200008392334,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": false,
-        "3_premarket_high_break": false,
+        "3_premarket_high_break": true,
         "4_orb_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": true,
@@ -43,11 +43,11 @@
     },
     {
       "symbol": "NVS",
-      "price": 161.51499938964844,
+      "price": 161.3800048828125,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 161.7555478182636,
+      "vwap": 161.74150066433933,
       "orb_high": 163.57000732421875,
       "conditions": {
         "1_prev_day_high_break": true,
