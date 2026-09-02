@@ -1,51 +1,76 @@
 {
-  "updated_at_utc": "2026-09-02T14:26:50.283168+00:00",
+  "updated_at_utc": "2026-09-02T14:37:22.982287+00:00",
   "candidate_count": 3,
-  "checked_count": 2,
-  "error_count": 1,
+  "checked_count": 3,
+  "error_count": 0,
   "entries": [],
   "all_results": [
     {
       "symbol": "CLMT",
-      "price": 53.07600021362305,
+      "price": 52.91569900512695,
       "entry_signal": false,
-      "price_conditions_met": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 53.26812849279773,
+      "vwap": 53.24359336272651,
       "orb_high": 54.61000061035156,
-      "conditions": {
-        "1_prev_day_high_break": true,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": true,
-        "4_orb_high_break": false,
-        "6_ma_alignment_20_50_200": true,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": false
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": false,
+        "4_volume_confirmed": false
+      },
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
       }
     },
     {
       "symbol": "BHVN",
-      "price": 15.65999984741211,
+      "price": 15.460000038146973,
       "entry_signal": false,
-      "price_conditions_met": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 0,
+      "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 15.839901232287083,
+      "vwap": 15.800848804308657,
       "orb_high": 16.65999984741211,
-      "conditions": {
-        "1_prev_day_high_break": false,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": false,
-        "4_orb_high_break": false,
-        "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": false
+      "hard_gate": {
+        "1_ma20_above_ma50": false,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": false,
+        "4_volume_confirmed": false
+      },
+      "action_trigger": {
+        "A_prev_day_high_break": false,
+        "B_premarket_high_break": false,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "MMED",
+      "price": 24.06999969482422,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": false,
+      "vwap": 23.911112720764713,
+      "orb_high": 24.43000030517578,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": false
+      },
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
       }
     }
   ],
-  "errors": [
-    {
-      "symbol": "MMED",
-      "error": "일봉 히스토리 부족(200일 미만)"
-    }
-  ]
+  "errors": []
 }
