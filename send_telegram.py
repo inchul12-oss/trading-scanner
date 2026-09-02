@@ -23,7 +23,8 @@ def build_message(result):
         lines.append(f"{len(matches)}건 매칭")
         for m in matches:
             tag = "" if m.get("is_premarket_data") else " (정규장가)"
-            lines.append(f"{m['symbol']} ${m['price']:.2f} {m['change_pct']:+.1f}%{tag}")
+            gap_tag = " ⚠️설거지리스크(갭+100%↑)" if m.get("extreme_gap") else ""
+            lines.append(f"{m['symbol']} ${m['price']:.2f} {m['change_pct']:+.1f}%{tag}{gap_tag}")
     return "\n".join(lines)
 
 
