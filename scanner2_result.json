@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-02T17:15:31.641888+00:00",
+  "updated_at_utc": "2026-09-02T17:41:36.531525+00:00",
   "candidate_count": 3,
   "checked_count": 3,
   "error_count": 0,
@@ -7,13 +7,13 @@
   "all_results": [
     {
       "symbol": "CLMT",
-      "price": 53.099998474121094,
+      "price": 53.3849983215332,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 52.951111689864284,
+      "vwap": 52.96432522671433,
       "orb_high": 54.61000061035156,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -29,13 +29,13 @@
     },
     {
       "symbol": "BHVN",
-      "price": 15.779999732971191,
+      "price": 15.75,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 15.524296422809751,
+      "vwap": 15.533784045843024,
       "orb_high": 16.65999984741211,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -51,13 +51,13 @@
     },
     {
       "symbol": "MMED",
-      "price": 24.030000686645508,
+      "price": 24.100000381469727,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 23.86000264265917,
+      "vwap": 23.87410379055707,
       "orb_high": 24.43000030517578,
       "hard_gate": {
         "1_ma20_above_ma50": true,
