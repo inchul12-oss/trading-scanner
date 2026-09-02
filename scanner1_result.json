@@ -1,90 +1,82 @@
 {
-  "updated_at_utc": "2026-09-02T12:42:16.850777+00:00",
+  "updated_at_utc": "2026-09-02T13:05:27.621860+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
     "min_premarket_volume": 50000
   },
-  "candidate_count": 164,
+  "candidate_count": 163,
   "error_count": 0,
   "matches": [
     {
       "symbol": "FRVO",
-      "price": 19.08,
+      "price": 19.0376,
       "prev_close": 15.38,
-      "change_pct": 24.06,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "MMED",
-      "price": 22.6165,
-      "prev_close": 20.26,
-      "change_pct": 11.63,
+      "change_pct": 23.78,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "CRK",
-      "price": 16.02,
+      "price": 16.14,
       "prev_close": 14.43,
-      "change_pct": 11.02,
+      "change_pct": 11.85,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "MMED",
+      "price": 22.5,
+      "prev_close": 20.26,
+      "change_pct": 11.06,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "EIX",
-      "price": 58.6958,
+      "price": 58.46,
       "prev_close": 53.98,
-      "change_pct": 8.74,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "KLRA",
-      "price": 16.61,
-      "prev_close": 15.4,
-      "change_pct": 7.86,
+      "change_pct": 8.3,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "MRNA",
-      "price": 150.27,
+      "price": 150.99,
       "prev_close": 140.34,
-      "change_pct": 7.08,
+      "change_pct": 7.59,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "DUOL",
-      "price": 158.04,
-      "prev_close": 148.36,
-      "change_pct": 6.52,
+      "symbol": "KLRA",
+      "price": 16.53,
+      "prev_close": 15.4,
+      "change_pct": 7.34,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "BWXT",
-      "price": 162.0,
+      "price": 162.8,
       "prev_close": 152.29,
-      "change_pct": 6.38,
+      "change_pct": 6.9,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "DUOL",
+      "price": 157.9,
+      "prev_close": 148.36,
+      "change_pct": 6.43,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "HP",
-      "price": 46.35,
+      "price": 46.23,
       "prev_close": 43.58,
-      "change_pct": 6.36,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "ORA",
-      "price": 108.3517,
-      "prev_close": 102.0,
-      "change_pct": 6.23,
+      "change_pct": 6.08,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -97,26 +89,50 @@
       "is_premarket_data": true
     },
     {
-      "symbol": "SEB",
-      "price": 4123.38,
-      "prev_close": 3910.25,
-      "change_pct": 5.45,
-      "premarket_volume": null,
-      "is_premarket_data": false
-    },
-    {
-      "symbol": "NVS",
-      "price": 160.19,
-      "prev_close": 152.06,
-      "change_pct": 5.35,
+      "symbol": "ORA",
+      "price": 107.83,
+      "prev_close": 102.0,
+      "change_pct": 5.72,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "PCG",
-      "price": 13.97,
+      "price": 14.0,
       "prev_close": 13.27,
-      "change_pct": 5.28,
+      "change_pct": 5.5,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "SEB",
+      "price": 4123.38,
+      "prev_close": 3910.25,
+      "change_pct": 5.45,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "HRMY",
+      "price": 41.5,
+      "prev_close": 39.38,
+      "change_pct": 5.38,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "NVS",
+      "price": 160.13,
+      "prev_close": 152.06,
+      "change_pct": 5.31,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "UGP",
+      "price": 7.0,
+      "prev_close": 6.66,
+      "change_pct": 5.11,
       "premarket_volume": null,
       "is_premarket_data": true
     }
