@@ -1,54 +1,18 @@
 {
-  "updated_at_utc": "2026-09-01T20:42:30.583667+00:00",
-  "candidate_count": 5,
-  "checked_count": 3,
-  "error_count": 2,
+  "updated_at_utc": "2026-09-02T13:45:55.103280+00:00",
+  "candidate_count": 3,
+  "checked_count": 2,
+  "error_count": 1,
   "entries": [],
   "all_results": [
     {
-      "symbol": "EGIEY",
-      "price": 5.760000228881836,
+      "symbol": "CLMT",
+      "price": 52.82820129394531,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 5.8153021904436555,
-      "orb_high": 5.840000152587891,
-      "conditions": {
-        "1_prev_day_high_break": false,
-        "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": false,
-        "4_orb_high_break": false,
-        "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": false,
-        "8_vwap_break": false
-      }
-    },
-    {
-      "symbol": "CRK",
-      "price": 15.97,
-      "entry_signal": false,
-      "price_conditions_met": false,
-      "volume_confirmed": null,
-      "vwap": 15.773154928909415,
-      "orb_high": 16.1200008392334,
-      "conditions": {
-        "1_prev_day_high_break": true,
-        "2_prev_close_above_200ma": false,
-        "3_premarket_high_break": true,
-        "4_orb_high_break": false,
-        "6_ma_alignment_20_50_200": false,
-        "7_ma50_slope_up": true,
-        "8_vwap_break": true
-      }
-    },
-    {
-      "symbol": "NVS",
-      "price": 160.59,
-      "entry_signal": false,
-      "price_conditions_met": false,
-      "volume_confirmed": false,
-      "vwap": 161.6585088939947,
-      "orb_high": 163.57000732421875,
+      "vwap": 53.56275367726843,
+      "orb_high": null,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -58,13 +22,27 @@
         "7_ma50_slope_up": true,
         "8_vwap_break": false
       }
+    },
+    {
+      "symbol": "BHVN",
+      "price": 16.024999618530273,
+      "entry_signal": false,
+      "price_conditions_met": false,
+      "volume_confirmed": false,
+      "vwap": 16.32534418351422,
+      "orb_high": null,
+      "conditions": {
+        "1_prev_day_high_break": false,
+        "2_prev_close_above_200ma": true,
+        "3_premarket_high_break": true,
+        "4_orb_high_break": false,
+        "6_ma_alignment_20_50_200": false,
+        "7_ma50_slope_up": true,
+        "8_vwap_break": false
+      }
     }
   ],
   "errors": [
-    {
-      "symbol": "FRVO",
-      "error": "일봉 히스토리 부족(200일 미만)"
-    },
     {
       "symbol": "MMED",
       "error": "일봉 히스토리 부족(200일 미만)"
