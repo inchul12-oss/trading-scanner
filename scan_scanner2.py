@@ -1,22 +1,43 @@
 """
 스캐너2-미: 미국장 진입 타이밍 필터 (스캐너1-미가 찾은 후보 대상)
-조건: (1) 현재가 > 전일 일봉 고가
-      (2) 전일 종가 > 200일 이동평균선
-      (3) 현재가 > 오늘 프리마켓 고가
-      (4) 현재가 > 오늘 오프닝레인지(ORB, 정규장 시작 후 첫 30분) 고가
-          (9/1 수정: 원래 "현재가>오늘 일봉고가"였는데, 이 둘이 같은 API 스냅샷에서 동시에 계산되는 값이라
-          신고가를 찍는 바로 그 순간엔 현재가==오늘고가가 되어 버려 논리적으로 ">"가 성립할 수 없는 구조적
-          버그였음(실측 결과 84건 중 83건, 99% 실패). 대신 "장 시작~첫 30분 동안의 고가"를 오프닝레인지로
-          한 번 확정(고정)시켜두고, 그 이후 현재가가 이 고정값을 실제로 돌파하는지 비교하도록 수정 —
-          이렇게 하면 비교 기준과 현재가 사이에 실제 시간차가 생겨서 ">"가 의미를 가짐(ORB 브레이크아웃 기법).
-          오프닝레인지가 아직 완성 안 됐으면(정규장 시작 후 30분 이내) 이 조건은 미확정으로 처리하고
-          조건3/8과 동일하게 하드블록(그 시간대엔 진입신호 자체가 안 남 — 초반 변동성 구간이라 의도된 동작).
-      (5) 거래량 확인: 조건3/4가 충족된 상태에서 최근 1분봉 거래량이 직전 20분 평균 거래량 대비 3배 이상
-          (휩소/가짜돌파 필터링용. 1분봉 데이터를 못 받아오면 이 조건은 건너뛰고 가격조건만으로 판단하되
-          결과에 "확인 못함"으로 표시한다)
-      (6) 정배열: 20일선 > 50일선 > 200일선
-      (7) 기울기: 오늘 50일선 > 5거래일 전 50일선
-      (8) 현재가 > 오늘 VWAP(거래량가중평균가, 정규장 09:30 이후 1분봉 기준)
+
+9/2 조건 재설계(하드게이트+액션트리거 구조로 전면 개편):
+예전엔 조건 8개를 전부 AND로 걸었는데(200일선 포함), 조건 하나하나가 개별적으로는
+합리적이어도 8개를 다 곱하면 통과율이 지나치게 낮아지고(예: 조건당 65% 통과율이면
+0.65^7 ≈ 5%), 특히 200일선 조건은 신규상장주(200거래일 미만)를 원천적으로 평가
+대상에서 제외시켜버리는 구조적 문제가 있었음(실측: MMED 등). 조건들을 역할별로
+분리해서 "추세/유동성 필수조건(하드게이트)"과 "돌파 시그널(액션트리거, 3개중 2개)"로
+재구성함. 하락 방어는 이미 포지션 진입 후 -5% 하드스탑/-3% 서킷브레이커(scan_scanner3.py)가
+따로 담당하고 있어서, 200일선을 진입 전 필터로 또 거는 건 중복이라고 판단해 제거함.
+
+■ 하드게이트 (4개, 전부 필수 — 하나라도 스킵되면 진입신호 안 냄)
+  (1) 20일 이동평균 > 50일 이동평균 (단기 추세가 살아있는가)
+  (2) 오늘 50일선 > 5거래일 전 50일선 (추세가 유지/상승 중인가, 기울기)
+  (3) 현재가 > 오늘 VWAP(거래량가중평균가, 정규장 09:30 이후 1분봉 기준)
+  (4) 거래량 확인: 최근 1분봉 거래량이 "지금까지 쌓인 1분봉(최대 20개) 평균" 대비
+      3배 이상. 예전엔 1분봉 데이터가 20개 미만이면 그냥 스킵(가격조건만으로 판단)
+      했는데, 이제는 필수 조건으로 바꾸되 장 시작 직후처럼 쌓인 1분봉이 적을 땐
+      "동적 윈도우"(있는 만큼, 최대 20개)로 평균을 내서 항상 확인 가능하게 함
+      (휩소/가짜돌파 필터링 역할은 그대로 유지하면서 스킵을 없앰).
+
+■ 액션 트리거 (3개 중 2개 이상 충족하면 통과)
+  (A) 현재가 > 전일 일봉 고가
+  (B) 현재가 > 오늘 프리마켓 고가
+  (C) 현재가 > 오늘 오프닝레인지(ORB, 정규장 시작 후 첫 30분) 고가
+      (9/1 수정: 원래 "현재가>오늘 일봉고가"였는데, 이 둘이 같은 API 스냅샷에서 동시에 계산되는 값이라
+      신고가를 찍는 바로 그 순간엔 현재가==오늘고가가 되어 버려 논리적으로 ">"가 성립할 수 없는 구조적
+      버그였음(실측 결과 84건 중 83건, 99% 실패). 대신 "장 시작~첫 30분 동안의 고가"를 오프닝레인지로
+      한 번 확정(고정)시켜두고, 그 이후 현재가가 이 고정값을 실제로 돌파하는지 비교하도록 수정 —
+      이렇게 하면 비교 기준과 현재가 사이에 실제 시간차가 생겨서 ">"가 의미를 가짐(ORB 브레이크아웃 기법).
+      오프닝레인지가 아직 완성 안 됐으면(정규장 시작 후 30분 이내) 이 조건은 미확정으로 처리함.)
+
+진입신호 = 하드게이트 전부 통과 AND 액션트리거 2개 이상 충족
+
+9/2 조건 재설계 이전에는 200일선 조건(전일 종가>200일선) + 정배열(20>50>200일선)의
+200일선 다리가 있었지만 전부 삭제. 이에 따라 필요한 최소 일봉 데이터 요구량도
+200일치→약 55일치(50일선+5일 기울기 계산분)로 줄어들어, 신규상장주도 정상적으로
+평가 테이블에 오르게 됨.
+
 입력: scanner1_result.json의 matches (당일 스캐너1-미가 찾은 후보, 오래된 파일이면 무시)
 결과: scanner2_result.json으로 저장 (깃허브 액션이 커밋 후 진입신호가 있을 때만 텔레그램으로 전송)
 
@@ -38,15 +59,16 @@ import pandas as pd
 import yfinance as yf
 
 VOLUME_MULTIPLIER = 3.0
-VOLUME_LOOKBACK_MIN = 20
+VOLUME_LOOKBACK_MIN = 20  # 거래량 확인용 동적 윈도우의 최대 크기(그 이하로 쌓였으면 쌓인 만큼만 사용)
 MA_SHORT = 20
 MA_MID = 50
-MA_LONG = 200
 SLOPE_LOOKBACK_DAYS = 5
+MIN_DAILY_BARS = MA_MID + SLOPE_LOOKBACK_DAYS  # 50일선 + 5일 기울기 계산에 필요한 최소 일봉 수(55일)
 CANDIDATE_MAX_AGE_HOURS = 12
 NY_TZ = ZoneInfo("America/New_York")
 MARKET_OPEN = dtime(9, 30)
 ORB_WINDOW_MIN = 30  # 오프닝레인지 = 정규장 시작 후 첫 30분
+ACTION_TRIGGER_MIN_COUNT = 2  # 액션 트리거 3개 중 최소 몇 개 이상 충족해야 하는지
 
 BATCH_RETRY_COUNT = 2
 BATCH_RETRY_BACKOFF_SEC = 2.0
@@ -134,7 +156,7 @@ def fetch_intraday_batch(symbols):
 
 
 def compute_daily_metrics(daily):
-    if len(daily) < MA_LONG:
+    if len(daily) < MIN_DAILY_BARS:
         return None
 
     prev_high = float(daily["High"].iloc[-1])
@@ -142,7 +164,6 @@ def compute_daily_metrics(daily):
 
     ma20_series = daily["Close"].rolling(MA_SHORT).mean()
     ma50_series = daily["Close"].rolling(MA_MID).mean()
-    ma200_series = daily["Close"].rolling(MA_LONG).mean()
 
     ma50_valid = ma50_series.dropna()
     if len(ma50_valid) <= SLOPE_LOOKBACK_DAYS:
@@ -155,7 +176,6 @@ def compute_daily_metrics(daily):
         "prev_close": prev_close,
         "ma20": float(ma20_series.iloc[-1]),
         "ma50": float(ma50_series.iloc[-1]),
-        "ma200": float(ma200_series.iloc[-1]),
         "ma50_prev": ma50_prev,
     }
 
@@ -214,11 +234,17 @@ def compute_vwap(intraday):
 
 
 def check_volume_confirmation(intraday):
-    """최근 1분봉 거래량이 직전 20분 평균 대비 3배 이상인지. 데이터 부족/실패시 None(확인불가)."""
-    if intraday is None or len(intraday) < VOLUME_LOOKBACK_MIN + 1:
+    """최근 1분봉 거래량이 "지금까지 쌓인 1분봉(직전, 최대 20개) 평균" 대비 3배 이상인지.
+    9/2 수정: 예전엔 1분봉이 21개(20개+최신1개) 미만이면 그냥 None(확인불가)으로 스킵했는데,
+    이제 거래량 확인이 하드게이트 필수조건이 되면서 장 시작 직후처럼 쌓인 데이터가 적어도
+    항상 판단 가능해야 함. 그래서 비교 윈도우 크기를 "지금까지 쌓인 만큼(최소 1개)"으로 동적으로
+    잡되 최대 20개로 캡을 씌움 — 데이터가 아예 없는 극초반(1분봉 1개뿐)만 여전히 None."""
+    if intraday is None or len(intraday) < 2:
         return None
+    available_prior = len(intraday) - 1  # 최신 1분봉을 뺀 나머지(비교 기준 삼을 과거 봉 개수)
+    window_size = min(available_prior, VOLUME_LOOKBACK_MIN)
     latest_vol = float(intraday["Volume"].iloc[-1])
-    window = intraday["Volume"].iloc[-(VOLUME_LOOKBACK_MIN + 1):-1]
+    window = intraday["Volume"].iloc[-(window_size + 1):-1]
     avg_vol = float(window.mean())
     if not avg_vol or avg_vol <= 0:
         return None
@@ -244,43 +270,50 @@ def evaluate_symbol(symbol, daily_raw, intraday):
 
     metrics = compute_daily_metrics(daily)
     if metrics is None:
-        return {"symbol": symbol, "error": "일봉 히스토리 부족(200일 미만)"}
+        return {"symbol": symbol, "error": f"일봉 히스토리 부족({MIN_DAILY_BARS}일 미만)"}
 
     premarket_high = compute_premarket_high(intraday)
     orb_high = compute_orb_high(intraday)
     volume_ok = check_volume_confirmation(intraday)  # True/False/None(확인불가)
     vwap = compute_vwap(intraday)
 
-    cond1 = price > metrics["prev_day_high"]
-    cond2 = metrics["prev_close"] > metrics["ma200"]
-    cond3 = premarket_high is not None and price > premarket_high
-    cond4 = orb_high is not None and price > orb_high
-    cond6 = metrics["ma20"] > metrics["ma50"] > metrics["ma200"]
-    cond7 = metrics["ma50_prev"] is not None and metrics["ma50"] > metrics["ma50_prev"]
-    cond8 = vwap is not None and price > vwap
+    # 하드게이트 (4개, 전부 필수 — 미확정(None)이면 통과 실패로 처리)
+    gate_ma_alignment = metrics["ma20"] > metrics["ma50"]
+    gate_ma_slope = metrics["ma50_prev"] is not None and metrics["ma50"] > metrics["ma50_prev"]
+    gate_vwap = vwap is not None and price > vwap
+    gate_volume = volume_ok is True
+    hard_gate_passed = gate_ma_alignment and gate_ma_slope and gate_vwap and gate_volume
 
-    price_conditions_met = cond1 and cond2 and cond3 and cond4 and cond6 and cond7 and cond8
-    volume_checked = volume_ok is not None
-    volume_confirmed = bool(volume_ok) if volume_checked else None
+    # 액션 트리거 (3개 중 2개 이상)
+    trigger_prev_day_high = price > metrics["prev_day_high"]
+    trigger_premarket_high = premarket_high is not None and price > premarket_high
+    trigger_orb_high = orb_high is not None and price > orb_high
+    trigger_count = sum([trigger_prev_day_high, trigger_premarket_high, trigger_orb_high])
+    action_trigger_passed = trigger_count >= ACTION_TRIGGER_MIN_COUNT
 
-    entry_signal = price_conditions_met and (bool(volume_ok) or not volume_checked)
+    entry_signal = hard_gate_passed and action_trigger_passed
+    volume_confirmed = volume_ok  # True/False/None, 텔레그램/카카오 메시지에 그대로 사용됨
 
     return {
         "symbol": symbol,
         "price": price,
         "entry_signal": entry_signal,
-        "price_conditions_met": price_conditions_met,
+        "hard_gate_passed": hard_gate_passed,
+        "action_trigger_count": trigger_count,
+        "action_trigger_passed": action_trigger_passed,
         "volume_confirmed": volume_confirmed,
         "vwap": vwap,
         "orb_high": orb_high,
-        "conditions": {
-            "1_prev_day_high_break": cond1,
-            "2_prev_close_above_200ma": cond2,
-            "3_premarket_high_break": cond3,
-            "4_orb_high_break": cond4,
-            "6_ma_alignment_20_50_200": cond6,
-            "7_ma50_slope_up": cond7,
-            "8_vwap_break": cond8,
+        "hard_gate": {
+            "1_ma20_above_ma50": gate_ma_alignment,
+            "2_ma50_slope_up": gate_ma_slope,
+            "3_vwap_break": gate_vwap,
+            "4_volume_confirmed": gate_volume,
+        },
+        "action_trigger": {
+            "A_prev_day_high_break": trigger_prev_day_high,
+            "B_premarket_high_break": trigger_premarket_high,
+            "C_orb_high_break": trigger_orb_high,
         },
     }
 
