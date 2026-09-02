@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-02T13:45:55.103280+00:00",
+  "updated_at_utc": "2026-09-02T14:00:21.818965+00:00",
   "candidate_count": 3,
   "checked_count": 2,
   "error_count": 1,
@@ -7,12 +7,12 @@
   "all_results": [
     {
       "symbol": "CLMT",
-      "price": 52.82820129394531,
+      "price": 52.17499923706055,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 53.56275367726843,
-      "orb_high": null,
+      "vwap": 53.41053996455658,
+      "orb_high": 54.61000061035156,
       "conditions": {
         "1_prev_day_high_break": true,
         "2_prev_close_above_200ma": true,
@@ -25,16 +25,16 @@
     },
     {
       "symbol": "BHVN",
-      "price": 16.024999618530273,
+      "price": 15.619999885559082,
       "entry_signal": false,
       "price_conditions_met": false,
       "volume_confirmed": false,
-      "vwap": 16.32534418351422,
-      "orb_high": null,
+      "vwap": 16.13233269453511,
+      "orb_high": 16.65999984741211,
       "conditions": {
         "1_prev_day_high_break": false,
         "2_prev_close_above_200ma": true,
-        "3_premarket_high_break": true,
+        "3_premarket_high_break": false,
         "4_orb_high_break": false,
         "6_ma_alignment_20_50_200": false,
         "7_ma50_slope_up": true,
