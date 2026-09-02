@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-02T12:06:40.880420+00:00",
+  "updated_at_utc": "2026-09-02T12:42:16.850777+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -10,89 +10,89 @@
   "matches": [
     {
       "symbol": "FRVO",
-      "price": 19.29,
+      "price": 19.08,
       "prev_close": 15.38,
-      "change_pct": 25.42,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "KLRA",
-      "price": 17.07,
-      "prev_close": 15.4,
-      "change_pct": 10.84,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "CRK",
-      "price": 15.9605,
-      "prev_close": 14.43,
-      "change_pct": 10.61,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "EIX",
-      "price": 58.75,
-      "prev_close": 53.98,
-      "change_pct": 8.84,
+      "change_pct": 24.06,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "MMED",
-      "price": 22.03,
+      "price": 22.6165,
       "prev_close": 20.26,
+      "change_pct": 11.63,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "CRK",
+      "price": 16.02,
+      "prev_close": 14.43,
+      "change_pct": 11.02,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "EIX",
+      "price": 58.6958,
+      "prev_close": 53.98,
       "change_pct": 8.74,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
+      "symbol": "KLRA",
+      "price": 16.61,
+      "prev_close": 15.4,
+      "change_pct": 7.86,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
       "symbol": "MRNA",
-      "price": 150.8728,
+      "price": 150.27,
       "prev_close": 140.34,
-      "change_pct": 7.51,
+      "change_pct": 7.08,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "DUOL",
-      "price": 158.33,
+      "price": 158.04,
       "prev_close": 148.36,
-      "change_pct": 6.72,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "HP",
-      "price": 46.5,
-      "prev_close": 43.58,
-      "change_pct": 6.7,
-      "premarket_volume": null,
-      "is_premarket_data": true
-    },
-    {
-      "symbol": "ORA",
-      "price": 108.45,
-      "prev_close": 102.0,
-      "change_pct": 6.32,
+      "change_pct": 6.52,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "BWXT",
-      "price": 161.0,
+      "price": 162.0,
       "prev_close": 152.29,
-      "change_pct": 5.72,
+      "change_pct": 6.38,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
-      "symbol": "NVS",
-      "price": 160.52,
-      "prev_close": 152.06,
-      "change_pct": 5.56,
+      "symbol": "HP",
+      "price": 46.35,
+      "prev_close": 43.58,
+      "change_pct": 6.36,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "ORA",
+      "price": 108.3517,
+      "prev_close": 102.0,
+      "change_pct": 6.23,
+      "premarket_volume": null,
+      "is_premarket_data": true
+    },
+    {
+      "symbol": "CNH",
+      "price": 12.51,
+      "prev_close": 11.83,
+      "change_pct": 5.75,
       "premarket_volume": null,
       "is_premarket_data": true
     },
@@ -105,18 +105,18 @@
       "is_premarket_data": false
     },
     {
-      "symbol": "HRMY",
-      "price": 41.44,
-      "prev_close": 39.38,
-      "change_pct": 5.23,
+      "symbol": "NVS",
+      "price": 160.19,
+      "prev_close": 152.06,
+      "change_pct": 5.35,
       "premarket_volume": null,
       "is_premarket_data": true
     },
     {
       "symbol": "PCG",
-      "price": 13.94,
+      "price": 13.97,
       "prev_close": 13.27,
-      "change_pct": 5.05,
+      "change_pct": 5.28,
       "premarket_volume": null,
       "is_premarket_data": true
     }
