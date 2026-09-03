@@ -64,6 +64,14 @@ entries(=텔레그램 진입신호)는 그 체크가 없어서 포지션을 계�
 매번 "새 진입신호"로 잡혀 텔레그램이 중복 발송되고 있었음(9/3 실측: COMP 3회, XXI 2회, 전부
 status=open 상태로 청산 없이 중복 발생 확인). load_cooldown_symbols()의 제외 조건에
 status=="open"(오늘 날짜 상관없이 무조건)을 추가해서 수정함.
+
+9/3 밤 추가(힘겨루기 종목 배제): WPP가 하루 안에 진입→"돌파캔들저점 이탈"청산→재진입→같은
+사유로 재청산을 반복하는 사례 발견. 조사해보니 진짜 원인은 scan_scanner3.py가 "오늘 이미
+청산된" 종목을 재오픈 방지 체크에서 빼먹은 별도 버그였음(scan_scanner3.py 쪽에서 같이 수정,
+아래 참고) — 다만 그 버그와 별개로, 저점 부근에서 진짜로 힘겨루기(반복 이탈)하는 종목을
+걸러내는 안전장치도 함께 두기로 함(인철님 확정): 손절 조건(돌파캔들저점이탈) 자체를 완화하면
+가짜돌파 전체에 대한 방어가 무뎌지므로, 대신 "돌파캔들저점 이탈" 사유로 최근 5거래일 안에
+2회 이상 청산된 종목만 당분간 후보에서 제외하는 방식(load_cooldown_symbols()에 통합).
 """
 import json
 import time
@@ -112,25 +120,58 @@ def load_candidates():
     return [m["symbol"] for m in result.get("matches", [])]
 
 
+CHOP_LOOKBACK_DAYS = 5  # 9/3 밤 추가: 힘겨루기(반복 돌파캔들저점 이탈) 판정용 최근 일수
+CHOP_EXIT_REASON = "돌파캔들저점 이탈"
+CHOP_MIN_COUNT = 2  # 이 사유로 최근 CHOP_LOOKBACK_DAYS일 안에 이 횟수 이상 청산되면 당분간 배제
+
+
 def load_cooldown_symbols():
-    """9/3 추가, 9/3 저녁 수정(진입신호 중복 버그 픽스): 재진입 쿨다운 + 포지션 보유중 종목 제외용.
+    """9/3 추가, 9/3 저녁 수정(진입신호 중복 버그 픽스), 9/3 밤 수정(힘겨루기 종목 배제 추가):
+    재진입 쿨다운 + 포지션 보유중 종목 + 반복 저점이탈(힘겨루기) 종목 제외용.
     positions.json을 읽기만 하고 쓰지는 않음(쓰기는 scan_scanner3.py 담당).
     - status=="open": 오늘 날짜 상관없이 무조건 제외한다. 이미 포지션을 들고 있는 종목인데 조건을
       다시 통과할 때마다 "새 진입신호"로 잡혀서 텔레그램이 중복 발송되는 버그를 막기 위함
       (9/3 실측: COMP 3회, XXI 2회, 전부 청산 없이 open 상태에서 중복 발생 확인).
-    - status=="closed" and 오늘(NY) 청산: 재진입 쿨다운(휩소 방지, 기존 로직 유지)."""
+    - status=="closed" and 오늘(NY) 청산: 재진입 쿨다운(휩소 방지, 기존 로직 유지).
+    - 최근 CHOP_LOOKBACK_DAYS일 안에 "돌파캔들저점 이탈" 사유로 CHOP_MIN_COUNT회 이상 청산된 종목:
+      저점 부근에서 진입-이탈이 반복되는 힘겨루기 종목으로 판단해 당분간 배제한다(9/3 밤, WPP가
+      하루 안에 진입→저점이탈청산→재진입→저점이탈청산을 반복한 사례가 계기 — 이건 사실 scan_
+      scanner3.py의 재오픈 버그(아래 별도 수정)가 주원인이었지만, 손절 조건 자체를 물러지게 하는
+      대신 "반복적으로 흔들리는 종목만 걸러낸다"는 방향은 그대로 유지하기로 함)."""
     try:
         with open(POSITIONS_FILE, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         return set()
-    today_ny = str(datetime.now(NY_TZ).date())
-    return {
-        p["symbol"]
-        for p in data.get("positions", [])
-        if p.get("status") == "open"
-        or (p.get("status") == "closed" and p.get("entry_date_ny") == today_ny)
-    }
+    today_ny_date = datetime.now(NY_TZ).date()
+    today_ny = str(today_ny_date)
+    cutoff_date = today_ny_date - timedelta(days=CHOP_LOOKBACK_DAYS)
+
+    cooldown = set()
+    chop_counts = {}
+    for p in data.get("positions", []):
+        symbol = p.get("symbol")
+        status = p.get("status")
+        entry_date_ny = p.get("entry_date_ny")
+
+        if status == "open":
+            cooldown.add(symbol)
+        elif status == "closed" and entry_date_ny == today_ny:
+            cooldown.add(symbol)
+
+        if status == "closed" and CHOP_EXIT_REASON in (p.get("exit_reasons") or []):
+            try:
+                entry_date = datetime.strptime(entry_date_ny, "%Y-%m-%d").date()
+            except (ValueError, TypeError):
+                entry_date = None
+            if entry_date is not None and entry_date >= cutoff_date:
+                chop_counts[symbol] = chop_counts.get(symbol, 0) + 1
+
+    for symbol, count in chop_counts.items():
+        if count >= CHOP_MIN_COUNT:
+            cooldown.add(symbol)
+
+    return cooldown
 
 
 def _download_with_retry(symbols, **kwargs):
@@ -367,7 +408,8 @@ def evaluate_symbol(symbol, daily_raw, intraday):
 def main():
     symbols = load_candidates()
 
-    # 9/3 추가, 9/3 저녁 수정: 재진입 쿨다운 — 오늘 이미 청산됐거나 지금 보유중인 종목은 후보에서 제외
+    # 9/3 추가, 9/3 저녁 수정, 9/3 밤 수정: 재진입 쿨다운 — 오늘 이미 청산됐거나 지금 보유중이거나
+    # 최근 반복적으로 저점이탈(힘겨루기)한 종목은 후보에서 제외
     cooldown = load_cooldown_symbols()
     cooldown_excluded = [s for s in symbols if s in cooldown]
     if cooldown_excluded:
