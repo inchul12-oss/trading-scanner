@@ -32,6 +32,7 @@
       오프닝레인지가 아직 완성 안 됐으면(정규장 시작 후 30분 이내) 이 조건은 미확정으로 처리함.)
 
 진입신호 = 하드게이트 전부 통과 AND 액션트리거 2개 이상 충족
+
 9/2 조건 재설계 이전에는 200일선 조건(전일 종가>200일선) + 정배열(20>50>200일선)의
 200일선 다리가 있었지만 전부 삭제. 이에 따라 필요한 최소 일봉 데이터 요구량도
 200일치→약 55일치(50일선+5일 기울기 계산분)로 줄어들어, 신규상장주도 정상적으로
@@ -105,7 +106,8 @@ def load_candidates():
         return []
 
     age_hours = (datetime.now(timezone.utc) - updated_dt).total_seconds() / 3600
-    if age_hours > CANDIDATE_MAX_AGE_HOURS:        return []  # 전날 등 오래된 결과는 후보로 안 씀
+    if age_hours > CANDIDATE_MAX_AGE_HOURS:
+        return []  # 전날 등 오래된 결과는 후보로 안 씀
 
     return [m["symbol"] for m in result.get("matches", [])]
 
@@ -141,7 +143,8 @@ def _download_with_retry(symbols, **kwargs):
     for attempt in range(BATCH_RETRY_COUNT + 1):
         try:
             return yf.download(
-                symbols, threads=False, progress=False, group_by="ticker", **kwargs            )
+                symbols, threads=False, progress=False, group_by="ticker", **kwargs
+            )
         except Exception as e:
             last_exc = e
             if attempt < BATCH_RETRY_COUNT:
@@ -188,6 +191,7 @@ def fetch_intraday_batch(symbols):
         return {}
     data = _download_with_retry(symbols, period="1d", interval="1m", prepost=True)
     return _split_by_symbol(data, symbols)
+
 
 def compute_daily_metrics(daily):
     if len(daily) < MIN_DAILY_BARS:
@@ -238,7 +242,8 @@ def compute_orb_high(intraday):
         return None
 
     now_ny = datetime.now(NY_TZ)
-    orb_end_dt = datetime.combine(now_ny.date(), MARKET_OPEN, tzinfo=NY_TZ) + timedelta(minutes=ORB_WINDOW_MIN)    if now_ny < orb_end_dt:
+    orb_end_dt = datetime.combine(now_ny.date(), MARKET_OPEN, tzinfo=NY_TZ) + timedelta(minutes=ORB_WINDOW_MIN)
+    if now_ny < orb_end_dt:
         return None  # 오프닝레인지 아직 진행중 — 미확정
 
     orb_end_time = orb_end_dt.timetz()
@@ -274,7 +279,8 @@ def check_volume_confirmation(intraday):
     맞춰서 잡을 확률이 낮아 사실상 진입신호가 거의 안 뜨는 문제가 있었음(9/3 실측: 58회 스캔 중
     거래량 조건 통과 2회뿐). 그래서 "방금 그 순간"이 아니라 "최근 15분 사이에 스파이크가 있었나"로
     넓힘. 비교 기준(평균)은 스파이크 후보 구간보다 더 이전 데이터로만 계산해서, 스파이크 자체가
-    평균에 섞여 기준선을 흐리는 걸 방지(그러면 계속 통과가 안 될 수 있음)."""    if intraday is None or len(intraday) < 2:
+    평균에 섞여 기준선을 흐리는 걸 방지(그러면 계속 통과가 안 될 수 있음)."""
+    if intraday is None or len(intraday) < 2:
         return None
     n = len(intraday)
     recent_size = min(n - 1, VOLUME_RECENT_WINDOW_MIN)  # 스파이크 후보 구간(최근 N분)
@@ -311,6 +317,7 @@ def evaluate_symbol(symbol, daily_raw, intraday):
     metrics = compute_daily_metrics(daily)
     if metrics is None:
         return {"symbol": symbol, "error": f"일봉 히스토리 부족({MIN_DAILY_BARS}일 미만)"}
+
     premarket_high = compute_premarket_high(intraday)
     orb_high = compute_orb_high(intraday)
     volume_ok = check_volume_confirmation(intraday)  # True/False/None(확인불가)
@@ -340,7 +347,8 @@ def evaluate_symbol(symbol, daily_raw, intraday):
         "hard_gate_passed": hard_gate_passed,
         "action_trigger_count": trigger_count,
         "action_trigger_passed": action_trigger_passed,
-        "volume_confirmed": volume_confirmed,        "vwap": vwap,
+        "volume_confirmed": volume_confirmed,
+        "vwap": vwap,
         "orb_high": orb_high,
         "hard_gate": {
             "1_ma20_above_ma50": gate_ma_alignment,
@@ -384,6 +392,7 @@ def main():
             errors.append({"symbol": sym, "error": str(e)})
 
     entries = [r for r in results if r["entry_signal"]]
+
     output = {
         "updated_at_utc": datetime.now(timezone.utc).isoformat(),
         "candidate_count": len(symbols),
