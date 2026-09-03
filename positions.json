@@ -1,3 +1,101 @@
 {
-  "positions": []
+  "positions": [
+    {
+      "symbol": "HCM",
+      "entry_price": 14.119999885559082,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 14.119999885559082,
+      "peak_price": 14.12,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "HSAI",
+      "entry_price": 18.69499969482422,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 18.69499969482422,
+      "peak_price": 18.735,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "BLSH",
+      "entry_price": 36.810001373291016,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 36.56999969482422,
+      "peak_price": 36.810001373291016,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "ASST",
+      "entry_price": 26.440000534057617,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 26.3799991607666,
+      "peak_price": 26.58,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "HUBS",
+      "entry_price": 258.82000732421875,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 258.9599914550781,
+      "peak_price": 259.335,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "NOW",
+      "entry_price": 145.05999755859375,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 145.07240295410156,
+      "peak_price": 145.165,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "ZETA",
+      "entry_price": 31.8700008392334,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 31.860000610351562,
+      "peak_price": 31.8700008392334,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 31.8401,
+      "exit_time_utc": "2026-09-03T16:23:49.036279+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.0009382126904932346,
+      "urgent": false
+    },
+    {
+      "symbol": "XXI",
+      "entry_price": 6.215000152587891,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 6.195000171661377,
+      "peak_price": 6.23,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "COMP",
+      "entry_price": 11.074999809265137,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 11.074999809265137,
+      "peak_price": 11.075,
+      "status": "open",
+      "partial_profit_alerted": false
+    }
+  ]
 }

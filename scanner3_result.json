@@ -1,7 +1,25 @@
 {
-  "updated_at_utc": "2026-09-03T16:10:29.418664+00:00",
-  "open_position_count": 0,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-03T16:23:49.036279+00:00",
+  "open_position_count": 8,
+  "new_exits": [
+    {
+      "symbol": "ZETA",
+      "entry_price": 31.8700008392334,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 31.860000610351562,
+      "peak_price": 31.8700008392334,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 31.8401,
+      "exit_time_utc": "2026-09-03T16:23:49.036279+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.0009382126904932346,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }
