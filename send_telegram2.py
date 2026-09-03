@@ -8,16 +8,28 @@ import json
 import os
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone, timedelta
 
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = "-5569815780"  # 인철님+친구 텔레그램 그룹("트레이딩스캐너")
+
+KST = timezone(timedelta(hours=9))
+
+
+def to_kst_hhmm(updated_at_utc):
+    """UTC ISO 문자열을 한국시간(KST) HH:MM으로 변환한다. 9/3 추가(send_telegram.py와 동일 이유)."""
+    try:
+        dt = datetime.fromisoformat(updated_at_utc.replace("Z", "+00:00"))
+        return dt.astimezone(KST).strftime("%H:%M")
+    except (ValueError, AttributeError):
+        return updated_at_utc[11:16] if len(updated_at_utc) >= 16 else updated_at_utc
 
 
 def build_message(result):
     entries = result.get("entries", [])
     updated = result.get("updated_at_utc", "")
-    time_label = updated[11:16] if len(updated) >= 16 else updated
-    lines = [f"진입신호-미 ({time_label} UTC)"]
+    time_label = to_kst_hhmm(updated)
+    lines = [f"진입신호-미 ({time_label} KST)"]
     for e in entries:
         vol = e.get("volume_confirmed")
         if vol is True:
