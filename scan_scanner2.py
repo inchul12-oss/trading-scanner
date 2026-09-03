@@ -1,6 +1,5 @@
 """
 스캐너2-미: 미국장 진입 타이밍 필터 (스캐너1-미가 찾은 후보 대상)
-
 9/2 조건 재설계(하드게이트+액션트리거 구조로 전면 개편):
 예전엔 조건 8개를 전부 AND로 걸었는데(200일선 포함), 조건 하나하나가 개별적으로는
 합리적이어도 8개를 다 곱하면 통과율이 지나치게 낮아지고(예: 조건당 65% 통과율이면
@@ -56,6 +55,14 @@ status="closed"로 남겨두고 지우지 않으므로, 오늘(NY 날짜) 이미
 같은 종목이 바로 다시 걸려서 반복 진입/손절되는(계좌가 갈리는) 걸 막기 위함. positions.json이
 이미 매매이력 그 자체이므로 별도 history 파일은 만들지 않음(국장은 청산 시 포지션 줄을
 지우는 구조라 국장에만 별도 history-kr.md를 둠).
+
+9/3 저녁 수정(진입신호 중복 버그 픽스): 위 재진입 쿨다운이 "오늘 청산된(status=closed) 종목"만
+제외하고 "지금 보유중인(status=open) 종목"은 빼먹고 있었음. scan_scanner3.py의
+open_new_positions()는 이미 열린 종목이면 실제 포지션은 중복으로 안 만들게 막아주지만, 이 파일의
+entries(=텔레그램 진입신호)는 그 체크가 없어서 포지션을 계속 들고 있는 중에도 조건을 통과할 때마다
+매번 "새 진입신호"로 잡혀 텔레그램이 중복 발송되고 있었음(9/3 실측: COMP 3회, XXI 2회, 전부
+status=open 상태로 청산 없이 중복 발생 확인). load_cooldown_symbols()의 제외 조건에
+status=="open"(오늘 날짜 상관없이 무조건)을 추가해서 수정함.
 """
 import json
 import time
@@ -105,8 +112,12 @@ def load_candidates():
 
 
 def load_cooldown_symbols():
-    """9/3 추가: 오늘(NY 날짜) 이미 청산된 포지션의 종목코드 집합(재진입 쿨다운용).
-    positions.json을 읽기만 하고 쓰지는 않음(쓰기는 scan_scanner3.py 담당)."""
+    """9/3 추가, 9/3 저녁 수정(진입신호 중복 버그 픽스): 재진입 쿨다운 + 포지션 보유중 종목 제외용.
+    positions.json을 읽기만 하고 쓰지는 않음(쓰기는 scan_scanner3.py 담당).
+    - status=="open": 오늘 날짜 상관없이 무조건 제외한다. 이미 포지션을 들고 있는 종목인데 조건을
+      다시 통과할 때마다 "새 진입신호"로 잡혀서 텔레그램이 중복 발송되는 버그를 막기 위함
+      (9/3 실측: COMP 3회, XXI 2회, 전부 청산 없이 open 상태에서 중복 발생 확인).
+    - status=="closed" and 오늘(NY) 청산: 재진입 쿨다운(휩소 방지, 기존 로직 유지)."""
     try:
         with open(POSITIONS_FILE, encoding="utf-8") as f:
             data = json.load(f)
@@ -116,7 +127,8 @@ def load_cooldown_symbols():
     return {
         p["symbol"]
         for p in data.get("positions", [])
-        if p.get("status") == "closed" and p.get("entry_date_ny") == today_ny
+        if p.get("status") == "open"
+        or (p.get("status") == "closed" and p.get("entry_date_ny") == today_ny)
     }
 
 
@@ -316,14 +328,12 @@ def evaluate_symbol(symbol, daily_raw, intraday):
     gate_vwap = vwap is not None and price > vwap
     gate_volume = volume_ok is True
     hard_gate_passed = gate_ma_alignment and gate_ma_slope and gate_vwap and gate_volume
-
     # 액션 트리거 (3개 중 2개 이상)
     trigger_prev_day_high = price > metrics["prev_day_high"]
     trigger_premarket_high = premarket_high is not None and price > premarket_high
     trigger_orb_high = orb_high is not None and price > orb_high
     trigger_count = sum([trigger_prev_day_high, trigger_premarket_high, trigger_orb_high])
     action_trigger_passed = trigger_count >= ACTION_TRIGGER_MIN_COUNT
-
     entry_signal = hard_gate_passed and action_trigger_passed
     volume_confirmed = volume_ok  # True/False/None, 텔레그램/카카오 메시지에 그대로 사용됨
 
@@ -350,11 +360,10 @@ def evaluate_symbol(symbol, daily_raw, intraday):
         },
     }
 
-
 def main():
     symbols = load_candidates()
 
-    # 9/3 추가: 재진입 쿨다운 — 오늘 이미 청산된 종목은 후보에서 제외
+    # 9/3 추가, 9/3 저녁 수정: 재진입 쿨다운 — 오늘 이미 청산됐거나 지금 보유중인 종목은 후보에서 제외
     cooldown = load_cooldown_symbols()
     cooldown_excluded = [s for s in symbols if s in cooldown]
     if cooldown_excluded:
@@ -365,7 +374,6 @@ def main():
     if symbols:
         time.sleep(BATCH_GAP_SEC)
     intraday_batch = fetch_intraday_batch(symbols)
-
     results = []
     errors = []
     for sym in symbols:
@@ -377,7 +385,6 @@ def main():
                 results.append(r)
         except Exception as e:
             errors.append({"symbol": sym, "error": str(e)})
-
     entries = [r for r in results if r["entry_signal"]]
 
     output = {
@@ -390,7 +397,6 @@ def main():
         "all_results": results,
         "errors": errors[:10],
     }
-
     with open("scanner2_result.json", "w") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 
