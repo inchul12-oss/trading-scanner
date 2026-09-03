@@ -61,7 +61,8 @@ status="closed"로 남겨두고 지우지 않으므로, 오늘(NY 날짜) 이미
 open_new_positions()는 이미 열린 종목이면 실제 포지션은 중복으로 안 만들게 막아주지만, 이 파일의
 entries(=텔레그램 진입신호)는 그 체크가 없어서 포지션을 계속 들고 있는 중에도 조건을 통과할 때마다
 매번 "새 진입신호"로 잡혀 텔레그램이 중복 발송되고 있었음(9/3 실측: COMP 3회, XXI 2회, 전부
-status=open 상태로 청산 없이 중복 발생 확인). load_cooldown_symbols()의 제외 조건에status=="open"(오늘 날짜 상관없이 무조건)을 추가해서 수정함.
+status=open 상태로 청산 없이 중복 발생 확인). load_cooldown_symbols()의 제외 조건에
+status=="open"(오늘 날짜 상관없이 무조건)을 추가해서 수정함.
 """
 import json
 import time
