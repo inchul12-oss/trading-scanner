@@ -1,74 +1,39 @@
 {
-  "updated_at_utc": "2026-09-03T16:34:16.441902+00:00",
-  "open_position_count": 5,
+  "updated_at_utc": "2026-09-03T16:45:07.464958+00:00",
+  "open_position_count": 7,
   "new_exits": [
     {
-      "symbol": "HCM",
-      "entry_price": 14.119999885559082,
+      "symbol": "BLSH",
+      "entry_price": 36.810001373291016,
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 14.119999885559082,
-      "peak_price": 14.12,
+      "breakout_candle_low": 36.56999969482422,
+      "peak_price": 36.810001373291016,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 14.09,
-      "exit_time_utc": "2026-09-03T16:34:16.441902+00:00",
+      "exit_price": 36.53,
+      "exit_time_utc": "2026-09-03T16:45:07.464958+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.002124637804690345,
+      "pnl_pct": -0.007606665657290108,
       "urgent": false
     },
     {
-      "symbol": "HSAI",
-      "entry_price": 18.69499969482422,
-      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "symbol": "PLTR",
+      "entry_price": 183.14500427246094,
+      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
       "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 18.69499969482422,
-      "peak_price": 18.735,
+      "breakout_candle_low": 182.94500732421875,
+      "peak_price": 183.14500427246094,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 18.665,
-      "exit_time_utc": "2026-09-03T16:34:16.441902+00:00",
+      "exit_price": 182.855,
+      "exit_time_utc": "2026-09-03T16:45:07.464958+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.0016046908432164955,
-      "urgent": false
-    },
-    {
-      "symbol": "HUBS",
-      "entry_price": 258.82000732421875,
-      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 258.9599914550781,
-      "peak_price": 259.335,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 258.4893,
-      "exit_time_utc": "2026-09-03T16:34:16.441902+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈",
-        "VWAP 이탈"
-      ],
-      "pnl_pct": -0.0012777502312812516,
-      "urgent": false
-    },
-    {
-      "symbol": "NOW",
-      "entry_price": 145.05999755859375,
-      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 145.07240295410156,
-      "peak_price": 145.165,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 144.96,
-      "exit_time_utc": "2026-09-03T16:34:16.441902+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0006893530971786364,
+      "pnl_pct": -0.0015834681028455166,
       "urgent": false
     }
   ],
