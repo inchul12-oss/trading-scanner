@@ -272,7 +272,7 @@ def evaluate_position(pos):
     # 시간만 끄는 포지션(진입 후 TIME_STOP_TRADING_DAYS거래일이 지났는데 손익률이 아직
     # TIME_STOP_MIN_RETURN_PCT 미만)을 강제청산해서 계좌 자리를 비워줌. "완전 횡보(0~3%)"뿐
     # 아니라 소폭 마이너스인데 아직 하드스탑엔 안 걸린 경우도 포함(둘 다 "죽은 돈"으로 봄,
-    # 인철님 확정). 이미 익절굌도(+10%↑, 트레일링 전환)에 들어간 포지션은 pnl_pct가 이미
+    # 인철님 확정). 이미 익절궤도(+10%↑, 트레일링 전환)에 들어간 포지션은 pnl_pct가 이미
     # TIME_STOP_MIN_RETURN_PCT를 넘어 있어서 자연히 이 조건에 안 걸림.
     days_elapsed = trading_days_elapsed(pos.get("entry_date_ny"), today_ny_date)
     if (
