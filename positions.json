@@ -57,7 +57,7 @@
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 26.3799991607666,
-      "peak_price": 27.105,
+      "peak_price": 27.1097,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -119,7 +119,7 @@
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 6.195000171661377,
-      "peak_price": 6.325,
+      "peak_price": 6.34,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -149,7 +149,7 @@
       "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 140.00999450683594,
-      "peak_price": 141.905,
+      "peak_price": 142.04,
       "status": "open",
       "partial_profit_alerted": false
     },
