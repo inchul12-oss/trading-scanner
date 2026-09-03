@@ -49,6 +49,13 @@
 호출 자체가 없어져서(현재가를 1분봉 마지막 종가로 대체) 필요없어진 "오늘 일봉고가" 필드 요구조건도
 같이 제거함(ORB 도입 이후로 이 값 자체를 안 씀 — 예전엔 이 값이 없으면 후보가 그냥 에러 처리되던
 잠재 버그였음).
+
+9/3 추가(재진입 쿨다운, 휩소 방지): scan_scanner3.py의 positions.json은 청산된 포지션도
+status="closed"로 남겨두고 지우지 않으므로, 오늘(NY 날짜) 이미 청산된 이력이 있는 종목은
+청산 사유를 불문하고 오늘 안에는 다시 진입신호를 내지 않도록 후보에서 제외한다. 손절 직후
+같은 종목이 바로 다시 걸려서 반복 진입/손절되는(계좌가 갈리는) 걸 막기 위함. positions.json이
+이미 매매이력 그 자체이므로 별도 history 파일은 만들지 않음(국장은 청산 시 포지션 줄을
+지우는 구조라 국장에만 별도 history-kr.md를 둠).
 """
 import json
 import time
@@ -59,13 +66,15 @@ import pandas as pd
 import yfinance as yf
 
 VOLUME_MULTIPLIER = 3.0
-VOLUME_LOOKBACK_MIN = 20  # 거래량 확인용 동적 윈도우의 최대 크기(그 이하로 쌓였으면 쌓인 만큼만 사용)
+VOLUME_LOOKBACK_MIN = 20  # 거래량 확인용 기준(평균) 윈도우의 최대 크기(그 이하로 쌓였으면 쌓인 만큼만 사용)
+VOLUME_RECENT_WINDOW_MIN = 15  # 9/3 수정: 스캔 주기(5~15분)를 커버하기 위한 "스파이크 후보 구간" 크기(분)
 MA_SHORT = 20
 MA_MID = 50
 SLOPE_LOOKBACK_DAYS = 5
 MIN_DAILY_BARS = MA_MID + SLOPE_LOOKBACK_DAYS  # 50일선 + 5일 기울기 계산에 필요한 최소 일봉 수(55일)
 CANDIDATE_MAX_AGE_HOURS = 12
 NY_TZ = ZoneInfo("America/New_York")
+POSITIONS_FILE = "positions.json"  # 9/3 추가: 재진입 쿨다운 판단용(스캐너3-미가 커밋하는 파일 그대로 읽기만 함)
 MARKET_OPEN = dtime(9, 30)
 ORB_WINDOW_MIN = 30  # 오프닝레인지 = 정규장 시작 후 첫 30분
 ACTION_TRIGGER_MIN_COUNT = 2  # 액션 트리거 3개 중 최소 몇 개 이상 충족해야 하는지
@@ -93,6 +102,22 @@ def load_candidates():
         return []  # 전날 등 오래된 결과는 후보로 안 씀
 
     return [m["symbol"] for m in result.get("matches", [])]
+
+
+def load_cooldown_symbols():
+    """9/3 추가: 오늘(NY 날짜) 이미 청산된 포지션의 종목코드 집합(재진입 쿨다운용).
+    positions.json을 읽기만 하고 쓰지는 않음(쓰기는 scan_scanner3.py 담당)."""
+    try:
+        with open(POSITIONS_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return set()
+    today_ny = str(datetime.now(NY_TZ).date())
+    return {
+        p["symbol"]
+        for p in data.get("positions", [])
+        if p.get("status") == "closed" and p.get("entry_date_ny") == today_ny
+    }
 
 
 def _download_with_retry(symbols, **kwargs):
@@ -234,21 +259,29 @@ def compute_vwap(intraday):
 
 
 def check_volume_confirmation(intraday):
-    """최근 1분봉 거래량이 "지금까지 쌓인 1분봉(직전, 최대 20개) 평균" 대비 3배 이상인지.
-    9/2 수정: 예전엔 1분봉이 21개(20개+최신1개) 미만이면 그냥 None(확인불가)으로 스킵했는데,
-    이제 거래량 확인이 하드게이트 필수조건이 되면서 장 시작 직후처럼 쌓인 데이터가 적어도
-    항상 판단 가능해야 함. 그래서 비교 윈도우 크기를 "지금까지 쌓인 만큼(최소 1개)"으로 동적으로
-    잡되 최대 20개로 캡을 씌움 — 데이터가 아예 없는 극초반(1분봉 1개뿐)만 여전히 None."""
+    """최근 VOLUME_RECENT_WINDOW_MIN분(기본 15분) 안의 1분봉 중 어느 하나라도, 그보다 이전 구간
+    (최대 20개 1분봉) 평균 대비 VOLUME_MULTIPLIER배(기본 3배) 이상 거래량이 있었는지 확인한다.
+    9/3 수정: 예전엔 "가장 최근 1분봉 딱 하나"만 봤는데, 실제 거래량 스파이크는 보통 1분 정도만
+    반짝하고 지나가는 반면 scanner2는 5~15분 간격으로 도는 구조라, 딱 그 1분을 스캔 타이밍이
+    맞춰서 잡을 확률이 낮아 사실상 진입신호가 거의 안 뜨는 문제가 있었음(9/3 실측: 58회 스캔 중
+    거래량 조건 통과 2회뿐). 그래서 "방금 그 순간"이 아니라 "최근 15분 사이에 스파이크가 있었나"로
+    넓힘. 비교 기준(평균)은 스파이크 후보 구간보다 더 이전 데이터로만 계산해서, 스파이크 자체가
+    평균에 섞여 기준선을 흐리는 걸 방지(그러면 계속 통과가 안 될 수 있음)."""
     if intraday is None or len(intraday) < 2:
         return None
-    available_prior = len(intraday) - 1  # 최신 1분봉을 뺀 나머지(비교 기준 삼을 과거 봉 개수)
-    window_size = min(available_prior, VOLUME_LOOKBACK_MIN)
-    latest_vol = float(intraday["Volume"].iloc[-1])
-    window = intraday["Volume"].iloc[-(window_size + 1):-1]
-    avg_vol = float(window.mean())
+    n = len(intraday)
+    recent_size = min(n - 1, VOLUME_RECENT_WINDOW_MIN)  # 스파이크 후보 구간(최근 N분)
+    baseline_available = n - recent_size
+    baseline_size = min(baseline_available, VOLUME_LOOKBACK_MIN)
+    if baseline_size <= 0:
+        return None
+    baseline = intraday["Volume"].iloc[-(recent_size + baseline_size):-recent_size]
+    avg_vol = float(baseline.mean())
     if not avg_vol or avg_vol <= 0:
         return None
-    return latest_vol >= avg_vol * VOLUME_MULTIPLIER
+    recent = intraday["Volume"].iloc[-recent_size:]
+    max_recent_vol = float(recent.max())
+    return max_recent_vol >= avg_vol * VOLUME_MULTIPLIER
 
 
 def evaluate_symbol(symbol, daily_raw, intraday):
@@ -321,6 +354,13 @@ def evaluate_symbol(symbol, daily_raw, intraday):
 def main():
     symbols = load_candidates()
 
+    # 9/3 추가: 재진입 쿨다운 — 오늘 이미 청산된 종목은 후보에서 제외
+    cooldown = load_cooldown_symbols()
+    cooldown_excluded = [s for s in symbols if s in cooldown]
+    if cooldown_excluded:
+        symbols = [s for s in symbols if s not in cooldown]
+        print(f"재진입 쿨다운으로 제외된 종목({len(cooldown_excluded)}건): {cooldown_excluded}")
+
     daily_batch = fetch_daily_batch(symbols)
     if symbols:
         time.sleep(BATCH_GAP_SEC)
@@ -345,6 +385,7 @@ def main():
         "candidate_count": len(symbols),
         "checked_count": len(results),
         "error_count": len(errors),
+        "cooldown_excluded": cooldown_excluded,
         "entries": entries,
         "all_results": results,
         "errors": errors[:10],
