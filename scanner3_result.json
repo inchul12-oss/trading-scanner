@@ -1,22 +1,22 @@
 {
-  "updated_at_utc": "2026-09-03T16:45:07.464958+00:00",
-  "open_position_count": 7,
+  "updated_at_utc": "2026-09-03T16:53:51.146111+00:00",
+  "open_position_count": 6,
   "new_exits": [
     {
-      "symbol": "BLSH",
-      "entry_price": 36.810001373291016,
-      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "symbol": "INTA",
+      "entry_price": 43.439998626708984,
+      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
       "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 36.56999969482422,
-      "peak_price": 36.810001373291016,
+      "breakout_candle_low": 43.5,
+      "peak_price": 43.5,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 36.53,
-      "exit_time_utc": "2026-09-03T16:45:07.464958+00:00",
+      "exit_price": 43.49,
+      "exit_time_utc": "2026-09-03T16:53:51.146111+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.007606665657290108,
+      "pnl_pct": 0.0011510445412462418,
       "urgent": false
     },
     {
@@ -28,12 +28,12 @@
       "peak_price": 183.14500427246094,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 182.855,
-      "exit_time_utc": "2026-09-03T16:45:07.464958+00:00",
+      "exit_price": 182.55,
+      "exit_time_utc": "2026-09-03T16:53:51.146111+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.0015834681028455166,
+      "pnl_pct": -0.003248815193319447,
       "urgent": false
     }
   ],
