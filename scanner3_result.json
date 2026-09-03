@@ -1,7 +1,42 @@
 {
-  "updated_at_utc": "2026-09-03T17:43:23.181518+00:00",
-  "open_position_count": 6,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-03T17:52:28.217754+00:00",
+  "open_position_count": 8,
+  "new_exits": [
+    {
+      "symbol": "HMY",
+      "entry_price": 20.729999542236328,
+      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 20.729999542236328,
+      "peak_price": 20.729999542236328,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 20.705,
+      "exit_time_utc": "2026-09-03T17:52:28.217754+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.001205959613525052,
+      "urgent": false
+    },
+    {
+      "symbol": "GFI",
+      "entry_price": 48.058998107910156,
+      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 48.04999923706055,
+      "peak_price": 48.058998107910156,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 48.01,
+      "exit_time_utc": "2026-09-03T17:52:28.217754+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.001019540769454649,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }
