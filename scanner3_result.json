@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-03T17:52:28.217754+00:00",
+  "updated_at_utc": "2026-09-03T17:58:10.159320+00:00",
   "open_position_count": 8,
   "new_exits": [
     {
@@ -11,12 +11,12 @@
       "peak_price": 20.729999542236328,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 20.705,
-      "exit_time_utc": "2026-09-03T17:52:28.217754+00:00",
+      "exit_price": 20.69,
+      "exit_time_utc": "2026-09-03T17:58:10.159320+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.001205959613525052,
+      "pnl_pct": -0.001929548630950512,
       "urgent": false
     },
     {
@@ -28,12 +28,12 @@
       "peak_price": 48.058998107910156,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 48.01,
-      "exit_time_utc": "2026-09-03T17:52:28.217754+00:00",
+      "exit_price": 47.94,
+      "exit_time_utc": "2026-09-03T17:58:10.159320+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.001019540769454649,
+      "pnl_pct": -0.0024760838260290807,
       "urgent": false
     }
   ],
