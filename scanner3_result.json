@@ -1,56 +1,22 @@
 {
-  "updated_at_utc": "2026-09-03T17:10:14.148690+00:00",
+  "updated_at_utc": "2026-09-03T17:21:53.028258+00:00",
   "open_position_count": 5,
   "new_exits": [
     {
-      "symbol": "RNG",
-      "entry_price": 77.2300033569336,
-      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
+      "symbol": "WPP",
+      "entry_price": 25.780000686645508,
+      "entry_time_utc": "2026-09-03T17:15:16.348041+00:00",
       "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 77.13999938964844,
-      "peak_price": 77.2300033569336,
+      "breakout_candle_low": 25.787700653076172,
+      "peak_price": 25.7877,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 76.895,
-      "exit_time_utc": "2026-09-03T17:10:14.148690+00:00",
+      "exit_price": 25.7877,
+      "exit_time_utc": "2026-09-03T17:21:53.028258+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.0043377358846575995,
-      "urgent": false
-    },
-    {
-      "symbol": "PLTR",
-      "entry_price": 183.14500427246094,
-      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 182.94500732421875,
-      "peak_price": 183.14500427246094,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 182.8,
-      "exit_time_utc": "2026-09-03T17:10:14.148690+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.001883776594570227,
-      "urgent": false
-    },
-    {
-      "symbol": "INTA",
-      "entry_price": 43.439998626708984,
-      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 43.47999954223633,
-      "peak_price": 43.439998626708984,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 43.42,
-      "exit_time_utc": "2026-09-03T17:10:14.148690+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0004603735575784885,
+      "pnl_pct": 0.00029865450540819894,
       "urgent": false
     }
   ],
