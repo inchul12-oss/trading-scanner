@@ -129,7 +129,7 @@
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 11.074999809265137,
-      "peak_price": 11.1892,
+      "peak_price": 11.205,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -139,7 +139,7 @@
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 31.860000610351562,
-      "peak_price": 32.59,
+      "peak_price": 32.66,
       "status": "open",
       "partial_profit_alerted": false
     },
