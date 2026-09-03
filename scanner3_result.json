@@ -1,42 +1,7 @@
 {
-  "updated_at_utc": "2026-09-03T19:15:52.668501+00:00",
+  "updated_at_utc": "2026-09-03T19:23:54.194408+00:00",
   "open_position_count": 6,
-  "new_exits": [
-    {
-      "symbol": "W",
-      "entry_price": 98.08499908447266,
-      "entry_time_utc": "2026-09-03T19:13:48.089561+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 98.08000183105469,
-      "peak_price": 98.08499908447266,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 98.0,
-      "exit_time_utc": "2026-09-03T19:15:52.668501+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0008665859740637141,
-      "urgent": false
-    },
-    {
-      "symbol": "TRI",
-      "entry_price": 111.0999984741211,
-      "entry_time_utc": "2026-09-03T19:13:48.089561+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 111.08999633789062,
-      "peak_price": 111.0999984741211,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 110.995,
-      "exit_time_utc": "2026-09-03T19:15:52.668501+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0009450807881473271,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
