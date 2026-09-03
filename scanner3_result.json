@@ -1,59 +1,7 @@
 {
-  "updated_at_utc": "2026-09-03T18:09:04.713134+00:00",
+  "updated_at_utc": "2026-09-03T18:24:54.311262+00:00",
   "open_position_count": 7,
-  "new_exits": [
-    {
-      "symbol": "COIN",
-      "entry_price": 193.4499969482422,
-      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 193.50999450683594,
-      "peak_price": 193.66,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 193.0105,
-      "exit_time_utc": "2026-09-03T18:09:04.713134+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0022718891453886556,
-      "urgent": false
-    },
-    {
-      "symbol": "HMY",
-      "entry_price": 20.729999542236328,
-      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 20.729999542236328,
-      "peak_price": 20.729999542236328,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 20.715,
-      "exit_time_utc": "2026-09-03T18:09:04.713134+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0007235669352412409,
-      "urgent": false
-    },
-    {
-      "symbol": "GFI",
-      "entry_price": 48.058998107910156,
-      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
-      "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 48.04999923706055,
-      "peak_price": 48.058998107910156,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 47.93,
-      "exit_time_utc": "2026-09-03T18:09:04.713134+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.0026841614055396713,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
