@@ -1,7 +1,7 @@
 {
-  "updated_at_utc": "2026-09-03T19:13:48.089561+00:00",
-  "candidate_count": 12,
-  "checked_count": 12,
+  "updated_at_utc": "2026-09-03T19:39:19.502201+00:00",
+  "candidate_count": 10,
+  "checked_count": 10,
   "error_count": 0,
   "cooldown_excluded": [
     "HCM",
@@ -16,69 +16,26 @@
     "MSTR",
     "HMY",
     "RNG",
+    "W",
     "ZETA",
+    "TRI",
     "XXI",
     "GFI",
     "PLTR",
     "COMP",
     "INTA"
   ],
-  "entries": [
-    {
-      "symbol": "W",
-      "price": 98.08499908447266,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 97.58674837961445,
-      "orb_high": 101.06999969482422,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "TRI",
-      "price": 111.0999984741211,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 110.73513613949831,
-      "orb_high": 112.22000122070312,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    }
-  ],
+  "entries": [],
   "all_results": [
     {
       "symbol": "SNOW",
-      "price": 360.3450012207031,
+      "price": 361.45001220703125,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 371.74552897650636,
+      "vwap": 371.33226466251097,
       "orb_high": 384.260009765625,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -94,13 +51,13 @@
     },
     {
       "symbol": "SMMT",
-      "price": 17.15999984741211,
+      "price": 17.0408992767334,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 16.457703137491908,
+      "vwap": 16.507332248366044,
       "orb_high": 16.329999923706055,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -116,13 +73,13 @@
     },
     {
       "symbol": "HOOD",
-      "price": 122.9800033569336,
+      "price": 123.9800033569336,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 121.22718499443297,
+      "vwap": 121.33654287231246,
       "orb_high": 122.19999694824219,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -138,83 +95,17 @@
     },
     {
       "symbol": "PFG",
-      "price": 118.52999877929688,
-      "entry_signal": false,
-      "hard_gate_passed": false,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 118.99226214756096,
-      "orb_high": 121.18000030517578,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": false,
-        "3_vwap_break": false,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "CPRT",
-      "price": 33.53990173339844,
-      "entry_signal": false,
-      "hard_gate_passed": true,
-      "action_trigger_count": 1,
-      "action_trigger_passed": false,
-      "volume_confirmed": true,
-      "vwap": 33.50478284745233,
-      "orb_high": 34.43000030517578,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": false,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "W",
-      "price": 98.08499908447266,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 97.58674837961445,
-      "orb_high": 101.06999969482422,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "SNAP",
-      "price": 5.760000228881836,
+      "price": 118.37000274658203,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 5.810642741241186,
-      "orb_high": 6.039999961853027,
+      "vwap": 118.95089979191954,
+      "orb_high": 121.18000030517578,
       "hard_gate": {
         "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
+        "2_ma50_slope_up": false,
         "3_vwap_break": false,
         "4_volume_confirmed": false
       },
@@ -225,14 +116,58 @@
       }
     },
     {
+      "symbol": "CPRT",
+      "price": 33.5,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 1,
+      "action_trigger_passed": false,
+      "volume_confirmed": false,
+      "vwap": 33.50494714369371,
+      "orb_high": 34.43000030517578,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": false,
+        "4_volume_confirmed": false
+      },
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": false,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "SNAP",
+      "price": 5.761000156402588,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 5.80848379308544,
+      "orb_high": 6.039999961853027,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": false,
+        "4_volume_confirmed": true
+      },
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
       "symbol": "KVYO",
-      "price": 19.625,
+      "price": 19.674999237060547,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": true,
-      "vwap": 20.14448201855773,
+      "vwap": 20.064734772474434,
       "orb_high": 20.6299991607666,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -248,13 +183,13 @@
     },
     {
       "symbol": "MIR",
-      "price": 16.789400100708008,
+      "price": 16.829999923706055,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 2,
+      "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 16.751711472985995,
+      "vwap": 16.755911684901267,
       "orb_high": 16.809999465942383,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -265,18 +200,18 @@
       "action_trigger": {
         "A_prev_day_high_break": true,
         "B_premarket_high_break": true,
-        "C_orb_high_break": false
+        "C_orb_high_break": true
       }
     },
     {
       "symbol": "PAYP",
-      "price": 16.969999313354492,
+      "price": 16.979999542236328,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 16.728337676237125,
+      "vwap": 16.74339485481677,
       "orb_high": 16.674999237060547,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -291,41 +226,19 @@
       }
     },
     {
-      "symbol": "TRI",
-      "price": 111.0999984741211,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 110.73513613949831,
-      "orb_high": 112.22000122070312,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true
-      },
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
       "symbol": "TEAM",
-      "price": 195.55999755859375,
+      "price": 195.64999389648438,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 195.5961629430216,
+      "vwap": 195.57325740207747,
       "orb_high": 197.77000427246094,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
-        "3_vwap_break": false,
+        "3_vwap_break": true,
         "4_volume_confirmed": false
       },
       "action_trigger": {
