@@ -15,6 +15,12 @@
       (참고: 5분 폴링 주기 안에서의 최선의 감지이며, 호가창이 통째로 증발하는 진짜 유동성
        붕괴 상황에서의 체결까지 보장하지는 못한다 - 그런 종목은 실제 계좌에 시장가 스탑주문을
        병행할 것)
+  (5) 타임스탑(데드머니컷, 9/3 밤 추가): 진입 후 TIME_STOP_TRADING_DAYS(3)거래일이 지났는데도
+      손익률이 TIME_STOP_MIN_RETURN_PCT(+3%) 미만이면 강제청산. 손실도 익절도 아닌 채로 시간만
+      끄는 포지션을 잘라내 계좌 자리를 비워주는 스윙매매 기회비용 관리용 조건(인철님 요청).
+      거래일수는 월~금만 카운트하는 근사치(미국 공휴일 캘린더 없음, 다른 조건들과 동일한 수준의
+      근사). "+3% 미만"은 완전 횡보(0~3%)뿐 아니라 아직 하드스탑엔 안 걸린 소폭 마이너스도
+      포함 — 이 프로젝트에선 둘 다 "죽은 돈"으로 취급하기로 함(인철님 확정).
 
 1차 익절 신호 (포지션은 종료하지 않음, 알림만 - 하이브리드 익절 설계 8/31 추가, 9/2 트레일링 연동):
   진입가 대비 +10%(하드스탑 -5%의 2배 = 2R) 도달 시 1회만 "절반 익절 고려" 알림.
@@ -26,9 +32,17 @@
 입력: scanner2_result.json의 entries (당일 스캐너2-미가 낸 진입신호, 오래된 파일이면 무시)
 상태: positions.json (오픈/청산 포지션 영속 기록, 깃허브 액션이 커밋해서 유지)
 결과: scanner3_result.json (이번 실행에서 새로 청산된 포지션 + 새로 뜬 1차익절신호, 있을 때만 텔레그램으로 전송)
+
+9/3 밤 수정(재오픈 버그 픽스): open_new_positions()가 "지금 open인 종목"만 재오픈 방지 대상으로
+삼아서, scanner2_result.json이 아직 갱신되기 전(이 스크립트는 5분 고정주기, scan_scanner2.py는
+5~30분 가변주기라 서로 어긋나는 구간이 있음) 같은 entries로 이 스크립트가 재실행되면 "방금
+청산한 종목"을 같은 entry_price/entry_time_utc로 즉시 재오픈해버리는 버그가 있었음(실측: WPP가
+같은 entry_time_utc로 하루에 3번 열림/닫힘 반복 — 인철님이 "진입신호 자꾸 왔다갔다한다"고
+지적해서 발견). "오늘 이미 청산된(status=closed, entry_date_ny=오늘)" 종목도 재오픈 방지
+대상에 포함시켜 수정함.
 """
 import json
-from datetime import datetime, timezone, time as dtime
+from datetime import datetime, timezone, time as dtime, timedelta
 from zoneinfo import ZoneInfo
 
 import yfinance as yf
@@ -40,6 +54,8 @@ CIRCUIT_BREAKER_PCT = -0.03
 CIRCUIT_BREAKER_LOOKBACK_MIN = 5
 MA_SHORT = 20
 CANDIDATE_MAX_AGE_HOURS = 12
+TIME_STOP_TRADING_DAYS = 3  # 9/3 밤 추가: 타임스탑(데드머니컷) 기준 거래일수
+TIME_STOP_MIN_RETURN_PCT = 0.03  # 이 거래일수가 지났는데 손익률이 이 값 미만이면 강제청산
 NY_TZ = ZoneInfo("America/New_York")
 
 POSITIONS_FILE = "positions.json"
@@ -140,14 +156,45 @@ def find_breakout_candle_low(intraday, entry_time_utc):
     return float(bar["Low"])
 
 
+def trading_days_elapsed(entry_date_ny_str, today_ny_date):
+    """entry_date_ny부터 오늘까지 지난 거래일수(월~금만 카운트, 미국 공휴일 캘린더는 없음 —
+    근사치, 다른 곳들도 같은 수준으로 근사함). 진입 당일=0, 다음 거래일=1 ... 식으로 카운트.
+    파싱 실패시 None(타임스탑 판정 스킵)."""
+    try:
+        entry_date = datetime.strptime(entry_date_ny_str, "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return None
+    if today_ny_date < entry_date:
+        return None
+    count = 0
+    d = entry_date
+    while d < today_ny_date:
+        d += timedelta(days=1)
+        if d.weekday() < 5:  # 0=월 ... 4=금
+            count += 1
+    return count
+
+
 def open_new_positions(positions, entries, entry_time_utc):
-    open_symbols = {p["symbol"] for p in positions if p["status"] == "open"}
     today_ny = str(datetime.now(NY_TZ).date())
+    open_symbols = {p["symbol"] for p in positions if p["status"] == "open"}
+    # 9/3 밤 추가: 오늘 이미 청산된 종목도 재오픈 방지 대상에 포함.
+    # 예전엔 "지금 open인 종목"만 걸렀는데, scan_scanner2.py(5~30분 주기)보다 이 스크립트(5분
+    # 고정주기)가 더 자주 도는 구간에서는 scanner2_result.json이 아직 갱신 전이라 "방금 청산한
+    # 종목"이 여전히 entries에 남아있는 채로 이 함수가 다시 호출될 수 있음 — 그 경우 open_symbols
+    # 에는 이미 없으니(청산돼서 open이 아니게 됨) 같은 종목을 같은 entry_price/entry_time으로
+    # 즉시 재오픈해버리는 버그가 있었음(실측: WPP가 같은 entry_time_utc로 하루에 3번 열림/닫힘
+    # 반복 — scan_scanner2.py의 재진입 쿨다운은 다음 scanner2 실행 전까지는 이 재오픈을 못 막음).
+    closed_today_symbols = {
+        p["symbol"] for p in positions
+        if p["status"] == "closed" and p.get("entry_date_ny") == today_ny
+    }
+    blocked_symbols = open_symbols | closed_today_symbols
 
     for e in entries:
         symbol = e.get("symbol")
         price = e.get("price")
-        if not symbol or price is None or symbol in open_symbols:
+        if not symbol or price is None or symbol in blocked_symbols:
             continue
         try:
             ticker = yf.Ticker(symbol)
@@ -166,7 +213,7 @@ def open_new_positions(positions, entries, entry_time_utc):
             "status": "open",
             "partial_profit_alerted": False,
         })
-        open_symbols.add(symbol)
+        blocked_symbols.add(symbol)
 
     return positions
 
@@ -180,7 +227,8 @@ def evaluate_position(pos):
         return {"error": "현재가 정보 없음"}
 
     intraday = get_intraday_frame(ticker)
-    today_ny = str(datetime.now(NY_TZ).date())
+    today_ny_date = datetime.now(NY_TZ).date()
+    today_ny = str(today_ny_date)
     same_day = (today_ny == pos.get("entry_date_ny"))
 
     reasons = []
@@ -219,6 +267,22 @@ def evaluate_position(pos):
     else:
         if pnl_pct <= HARD_STOP_PCT:
             reasons.append(f"하드스탑({pnl_pct * 100:.1f}%)")
+
+    # 9/3 밤 추가: 타임스탑(데드머니컷) — 스윙매매 기회비용 관리용. 손실도 익절도 아닌 채로
+    # 시간만 끄는 포지션(진입 후 TIME_STOP_TRADING_DAYS거래일이 지났는데 손익률이 아직
+    # TIME_STOP_MIN_RETURN_PCT 미만)을 강제청산해서 계좌 자리를 비워줌. "완전 횡보(0~3%)"뿐
+    # 아니라 소폭 마이너스인데 아직 하드스탑엔 안 걸린 경우도 포함(둘 다 "죽은 돈"으로 봄,
+    # 인철님 확정). 이미 익절굌도(+10%↑, 트레일링 전환)에 들어간 포지션은 pnl_pct가 이미
+    # TIME_STOP_MIN_RETURN_PCT를 넘어 있어서 자연히 이 조건에 안 걸림.
+    days_elapsed = trading_days_elapsed(pos.get("entry_date_ny"), today_ny_date)
+    if (
+        days_elapsed is not None
+        and days_elapsed >= TIME_STOP_TRADING_DAYS
+        and pnl_pct < TIME_STOP_MIN_RETURN_PCT
+    ):
+        reasons.append(
+            f"타임스탑(모멘텀 소멸, 진입 후 {days_elapsed}거래일 경과, 손익 {pnl_pct * 100:.1f}%)"
+        )
 
     urgent = False
     drop = compute_recent_drop_pct(intraday)
