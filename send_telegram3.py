@@ -10,23 +10,35 @@ import json
 import os
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone, timedelta
 
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = "-5569815780"  # 인철님+친구 텔레그램 그룹("트레이딩스캐너")
+
+KST = timezone(timedelta(hours=9))
+
+
+def to_kst_hhmm(updated_at_utc):
+    """UTC ISO 문자열을 한국시간(KST) HH:MM으로 변환한다. 9/3 추가(send_telegram.py와 동일 이유)."""
+    try:
+        dt = datetime.fromisoformat(updated_at_utc.replace("Z", "+00:00"))
+        return dt.astimezone(KST).strftime("%H:%M")
+    except (ValueError, AttributeError):
+        return updated_at_utc[11:16] if len(updated_at_utc) >= 16 else updated_at_utc
 
 
 def build_message(result):
     exits = result.get("new_exits", [])
     partials = result.get("partial_profit_alerts", [])
     updated = result.get("updated_at_utc", "")
-    time_label = updated[11:16] if len(updated) >= 16 else updated
+    time_label = to_kst_hhmm(updated)
     any_urgent = any(e.get("urgent") for e in exits)
 
     lines = []
 
     if exits:
         header = "🚨 청산신호-미 긴급 매도신호" if any_urgent else "청산신호-미 매도/손절 신호"
-        lines.append(f"{header} ({time_label} UTC)")
+        lines.append(f"{header} ({time_label} KST)")
         for e in exits:
             tag = "🚨" if e.get("urgent") else "-"
             reasons = ", ".join(e.get("exit_reasons", []))
@@ -36,7 +48,7 @@ def build_message(result):
     if partials:
         if lines:
             lines.append("")
-        lines.append(f"💰 청산신호-미 1차 익절 고려 ({time_label} UTC)")
+        lines.append(f"💰 청산신호-미 1차 익절 고려 ({time_label} KST)")
         for p in partials:
             pnl = p.get("pnl_pct", 0.0) * 100
             lines.append(f"💰 {p['symbol']} {p['price']:.2f} ({pnl:+.1f}%) - 목표(+10%) 도달, 절반 익절 고려(나머지는 트레일링 유지)")
