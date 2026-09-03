@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-03T20:15:42.258969+00:00",
+  "updated_at_utc": "2026-09-03T20:42:33.371297+00:00",
   "candidate_count": 10,
   "checked_count": 10,
   "error_count": 0,
@@ -29,14 +29,14 @@
   "all_results": [
     {
       "symbol": "SNOW",
-      "price": 356.9,
+      "price": 356.96,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
-      "volume_confirmed": false,
-      "vwap": 370.0598784332912,
-      "orb_high": 384.260009765625,
+      "volume_confirmed": null,
+      "vwap": 369.6299291917643,
+      "orb_high": 384.55999755859375,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
@@ -51,19 +51,19 @@
     },
     {
       "symbol": "SMMT",
-      "price": 17.13,
+      "price": 17.11,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
-      "volume_confirmed": true,
+      "volume_confirmed": false,
       "vwap": 16.664727617354053,
       "orb_high": 16.329999923706055,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": true,
         "3_vwap_break": true,
-        "4_volume_confirmed": true
+        "4_volume_confirmed": false
       },
       "action_trigger": {
         "A_prev_day_high_break": true,
@@ -73,13 +73,13 @@
     },
     {
       "symbol": "HOOD",
-      "price": 124.6,
+      "price": 124.13,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
-      "vwap": 121.69313184794413,
+      "volume_confirmed": null,
+      "vwap": 121.6931318479441,
       "orb_high": 122.19999694824219,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -117,9 +117,9 @@
     },
     {
       "symbol": "CPRT",
-      "price": 33.58,
+      "price": 33.52,
       "entry_signal": false,
-      "hard_gate_passed": true,
+      "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": true,
@@ -128,7 +128,7 @@
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
-        "3_vwap_break": true,
+        "3_vwap_break": false,
         "4_volume_confirmed": true
       },
       "action_trigger": {
@@ -139,13 +139,13 @@
     },
     {
       "symbol": "SNAP",
-      "price": 5.71,
+      "price": 5.7169,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 5.800454667047892,
+      "vwap": 5.755431362174556,
       "orb_high": 6.039999961853027,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -167,7 +167,7 @@
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": true,
-      "vwap": 19.973720839525768,
+      "vwap": 19.938448743720738,
       "orb_high": 20.6299991607666,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -183,13 +183,13 @@
     },
     {
       "symbol": "MIR",
-      "price": 16.77,
+      "price": 17.1,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 2,
+      "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 16.755975265560803,
+      "vwap": 16.756608716923097,
       "orb_high": 16.809999465942383,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -200,12 +200,12 @@
       "action_trigger": {
         "A_prev_day_high_break": true,
         "B_premarket_high_break": true,
-        "C_orb_high_break": false
+        "C_orb_high_break": true
       }
     },
     {
       "symbol": "PAYP",
-      "price": 16.93,
+      "price": 16.91,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
@@ -227,19 +227,19 @@
     },
     {
       "symbol": "TEAM",
-      "price": 194.68,
+      "price": 194.49,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": true,
+      "volume_confirmed": false,
       "vwap": 195.26847426116996,
       "orb_high": 197.77000427246094,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
         "3_vwap_break": false,
-        "4_volume_confirmed": true
+        "4_volume_confirmed": false
       },
       "action_trigger": {
         "A_prev_day_high_break": true,
