@@ -1,7 +1,25 @@
 {
-  "updated_at_utc": "2026-09-03T18:48:56.489727+00:00",
-  "open_position_count": 7,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-03T18:56:41.891565+00:00",
+  "open_position_count": 6,
+  "new_exits": [
+    {
+      "symbol": "CRCL",
+      "entry_price": 102.4000015258789,
+      "entry_time_utc": "2026-09-03T17:43:46.377173+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 102.33499908447266,
+      "peak_price": 103.1,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 102.145,
+      "exit_time_utc": "2026-09-03T18:56:41.891565+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.0024902492390536275,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }
