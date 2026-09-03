@@ -7,16 +7,30 @@ import json
 import os
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone, timedelta
 
 BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 CHAT_ID = "-5569815780"  # 인철님+친구 텔레그램 그룹("트레이딩스캐너")
+
+KST = timezone(timedelta(hours=9))
+
+
+def to_kst_hhmm(updated_at_utc):
+    """UTC ISO 문자열을 한국시간(KST) HH:MM으로 변환한다.
+    9/3 추가: 인철님이 한국에서 보는데 메시지엔 UTC로 찍혀서 매번 +9시간 암산해야 했던 문제 수정
+    (국장/카카오는 원래부터 KST로 뜨고 있었음). 파싱 실패시 예전처럼 UTC 슬라이스로 안전하게 대체."""
+    try:
+        dt = datetime.fromisoformat(updated_at_utc.replace("Z", "+00:00"))
+        return dt.astimezone(KST).strftime("%H:%M")
+    except (ValueError, AttributeError):
+        return updated_at_utc[11:16] if len(updated_at_utc) >= 16 else updated_at_utc
 
 
 def build_message(result):
     matches = result.get("matches", [])
     updated = result.get("updated_at_utc", "")
-    time_label = updated[11:16] if len(updated) >= 16 else updated
-    lines = [f"탐지신호-미 결과 ({time_label} UTC)"]
+    time_label = to_kst_hhmm(updated)
+    lines = [f"탐지신호-미 결과 ({time_label} KST)"]
     if not matches:
         lines.append("조건에 맞는 종목 없음")
     else:
