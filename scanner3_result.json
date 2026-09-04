@@ -1,7 +1,25 @@
 {
-  "updated_at_utc": "2026-09-04T14:27:38.261469+00:00",
-  "open_position_count": 2,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-04T14:38:20.669534+00:00",
+  "open_position_count": 1,
+  "new_exits": [
+    {
+      "symbol": "BETA",
+      "entry_price": 22.31999969482422,
+      "entry_time_utc": "2026-09-04T13:45:27.468120+00:00",
+      "entry_date_ny": "2026-09-04",
+      "breakout_candle_low": 21.360000610351562,
+      "peak_price": 22.538,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 21.975,
+      "exit_time_utc": "2026-09-04T14:38:20.669534+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.015456975785901075,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }
