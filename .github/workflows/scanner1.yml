@@ -41,7 +41,3 @@ jobs:
             git pull --rebase origin main
             sleep $((RANDOM % 5 + 1))
           done
-      - name: 텔레그램 메시지 전송
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        run: python send_telegram.py
