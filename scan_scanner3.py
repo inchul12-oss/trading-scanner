@@ -2,7 +2,16 @@
 스캐너3-미: 매도/손절 신호 + 1차 익절 신호 체크 (스캐너2-미가 낸 진입신호를 가상 포지션으로 추적)
 
 청산 조건 (OR, 하나라도 걸리면 매도신호 - 포지션 종료):
-  (1) 돌파 캔들 저점 이탈: 진입신호가 발생한 그 1분봉의 저가 아래로 현재가 하락
+  (1) 돌파 캔들 저점 이탈: 진입신호가 발생한 그 1분봉의 저가 대비 BREAKOUT_LOW_BUFFER_PCT(0.7%)
+      이상 하락해야 청산(9/4밤 추가, 버퍼). 원래는 저점을 1틱이라도 깨면 바로 청산이었는데,
+      실측(9/4밤, positions.json 33건 분석) 결과 청산의 94%(31건)가 이 조건 하나로 발생했고
+      평균손익 -0.275%(대부분 -1~0% 미세손실)였음. 원인 조사 결과, entry_price(스캐너2가
+      신호낼 때 값)와 breakout_candle_low(스캐너3이 몇분 뒤 별도로 다시 조회해서 찾는 값)가
+      서로 다른 시점의 독립적인 야후파이낸스 조회라서, 애초에 둘 사이 여유가 구조적으로
+      거의 없었음(gap% 중간값 0.019%, 일부는 음수=진입가가 이미 저점 밑에서 시작). "자연스러운
+      눌림목에 어이없이 털린다"는 인철님 스트레스의 핵심 원인이 이 버퍼 부재였다고 결론,
+      완전삭제 대신 여유 버퍼를 둬서 노이즈성 눌림목은 걸러내고 진짜 무너지는 가짜돌파는
+      여전히 하드스탑(-5%)보다 훨씬 일찍 잡아내는 안전판은 유지함.
   (2) VWAP/20일선 이탈: 진입 당일이면 오늘 VWAP, 다음날부터는 20일 이동평균선
   (3) 스탑: +10%(2R) 도달 전까지는 진입가 대비 -5% 고정 하드스탑. +10%를 한 번이라도
       찍으면 그 순간부터 "최고가 대비 -7%" 트레일링스탑으로 전환되고(9/2 추가),
@@ -48,6 +57,7 @@ from zoneinfo import ZoneInfo
 import yfinance as yf
 
 HARD_STOP_PCT = -0.05
+BREAKOUT_LOW_BUFFER_PCT = 0.007  # 9/4밤 추가: 돌파캔들저점 손절에 주는 여유버퍼(0.7%) - 노이즈성 눌림목 방지
 PARTIAL_PROFIT_PCT = 0.10  # 1차 익절 알림 임계값(진입가 대비 +10%, 하드스탑의 2R) - 트레일링스탑 발동 기준도 겸함
 TRAIL_STOP_PCT = 0.07  # PARTIAL_PROFIT_PCT 도달 이후: 최고가 대비 -7% 트레일링(본절 밑으로는 안 내려감)
 CIRCUIT_BREAKER_PCT = -0.03
@@ -234,7 +244,9 @@ def evaluate_position(pos):
     reasons = []
 
     candle_low = pos.get("breakout_candle_low")
-    if candle_low is not None and price < candle_low:
+    # 9/4밤 추가: 저점을 1틱이라도 깨면 바로 청산하던 걸, 저점 대비 BREAKOUT_LOW_BUFFER_PCT(0.7%)
+    # 이상 확실히 밑으로 떨어져야 청산되도록 완화(노이즈성 눌림목 필터링, 위 문단 참고).
+    if candle_low is not None and price < candle_low * (1 - BREAKOUT_LOW_BUFFER_PCT):
         reasons.append("돌파캔들저점 이탈")
 
     if same_day:
