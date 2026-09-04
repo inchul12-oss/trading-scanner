@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-04T14:00:20.341591+00:00",
+  "updated_at_utc": "2026-09-04T14:01:43.199422+00:00",
   "candidate_count": 8,
   "checked_count": 8,
   "error_count": 0,
@@ -10,13 +10,13 @@
   "all_results": [
     {
       "symbol": "IOT",
-      "price": 41.65999984741211,
+      "price": 41.470001220703125,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 42.57285771052132,
+      "vwap": 42.547698552292424,
       "orb_high": 45.119998931884766,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -32,13 +32,13 @@
     },
     {
       "symbol": "MP",
-      "price": 55.088199615478516,
+      "price": 54.75,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 56.9518162034578,
+      "vwap": 56.93298481725609,
       "orb_high": 58.52000045776367,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -54,13 +54,13 @@
     },
     {
       "symbol": "USAR",
-      "price": 18.040000915527344,
+      "price": 17.860000610351562,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 18.601106572255446,
+      "vwap": 18.58991910829068,
       "orb_high": 19.299999237060547,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -76,13 +76,13 @@
     },
     {
       "symbol": "AEHR",
-      "price": 83.61000061035156,
+      "price": 83.69000244140625,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 81.37727097893634,
+      "vwap": 81.39626431227211,
       "orb_high": 84.51000213623047,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -98,13 +98,13 @@
     },
     {
       "symbol": "ALAB",
-      "price": 320.2799987792969,
+      "price": 317.1199951171875,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 309.1965651867039,
+      "vwap": 309.3983232693846,
       "orb_high": 321.64990234375,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -120,13 +120,13 @@
     },
     {
       "symbol": "SNDK",
-      "price": 1656.1500244140625,
+      "price": 1647.989990234375,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 1626.145790468475,
+      "vwap": 1626.6107126589357,
       "orb_high": 1661.550048828125,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -142,13 +142,13 @@
     },
     {
       "symbol": "TTMI",
-      "price": 122.625,
+      "price": 122.05000305175781,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 121.03062032206365,
+      "vwap": 121.1860565647212,
       "orb_high": 123.13999938964844,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -164,13 +164,13 @@
     },
     {
       "symbol": "ASTS",
-      "price": 65.30999755859375,
+      "price": 65.69999694824219,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 2,
+      "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 64.35899881189606,
+      "vwap": 64.37032622192609,
       "orb_high": 65.6500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -181,7 +181,7 @@
       "action_trigger": {
         "A_prev_day_high_break": true,
         "B_premarket_high_break": true,
-        "C_orb_high_break": false
+        "C_orb_high_break": true
       }
     }
   ],
