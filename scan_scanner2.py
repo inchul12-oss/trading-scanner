@@ -10,7 +10,7 @@
 재구성함. 하락 방어는 이미 포지션 진입 후 -5% 하드스탑/-3% 서킷브레이커(scan_scanner3.py)가
 따로 담당하고 있어서, 200일선을 진입 전 필터로 또 거는 건 중복이라고 판단해 제거함.
 
-■ 하드게이트 (4개, 전부 필수 — 하나라도 스킵되면 진입신호 안 냄)
+■ 하드게이트 (5개, 전부 필수 — 하나라도 스킵되면 진입신호 안 냄)
   (1) 20일 이동평균 > 50일 이동평균 (단기 추세가 살아있는가)
   (2) 오늘 50일선 > 5거래일 전 50일선 (추세가 유지/상승 중인가, 기울기)
   (3) 현재가 > 오늘 VWAP(거래량가중평균가, 정규장 09:30 이후 1분봉 기준)
@@ -19,6 +19,10 @@
       했는데, 이제는 필수 조건으로 바꾸되 장 시작 직후처럼 쌓인 1분봉이 적을 땐
       "동적 윈도우"(있는 만큼, 최대 20개)로 평균을 내서 항상 확인 가능하게 함
       (휩소/가짜돌파 필터링 역할은 그대로 유지하면서 스킵을 없앰).
+  (5) **9/4 밤 부활(동적/조건부 처리, 인철님+형배 논의):** 200일선 장기추세 확인.
+      200거래일 이상의 일봉 데이터가 있는 종목만 "현재가 > 200일선"을 추가로 검사하고,
+      200거래일 미만(신규상장주)인 종목은 이 조건 자체를 스킵(통과로 간주)한다. 아래
+      "9/4 밤 재도입" 문단 참고.
 
 ■ 액션 트리거 (3개 중 2개 이상 충족하면 통과)
   (A) 현재가 > 전일 일봉 고가
@@ -37,6 +41,16 @@
 200일선 다리가 있었지만 전부 삭제. 이에 따라 필요한 최소 일봉 데이터 요구량도
 200일치→약 55일치(50일선+5일 기울기 계산분)로 줄어들어, 신규상장주도 정상적으로
 평가 테이블에 오르게 됨.
+
+9/4 밤 재도입(동적/조건부 200일선 게이트): 200일선을 완전히 뺀 채로 두니 "장기 하락추세인
+종목이 단기(20/50일선)만 잠깐 골든크로스 낸 가짜 반등"을 걸러낼 방법이 없다는 문제가
+남아있었음. 그렇다고 200일선을 무조건 다시 필수조건으로 걸면 9/2에 고쳤던 신규상장주
+원천배제 문제가 재발함. 그래서 데이터 가용성에 따라 동적으로 적용하기로 함: 일봉이
+200거래일 이상 쌓인 종목만 "현재가>200일선"을 추가 검사하고, 200거래일 미만인 신규상장주는
+이 조건 자체를 스킵(자동 통과)한다. fetch_daily_batch가 이미 1년치(약 252거래일)를
+받아오고 있어서 별도로 조회기간을 늘릴 필요는 없었음 — compute_daily_metrics에서
+200일 이동평균 계산 가능 여부만 확인하면 됨. 신규상장주는 그대로 보호되면서, 기존
+종목들한테는 장기추세 확인이 다시 걸리는 구조(잃는 것 없이 얻기만 하는 변경).
 
 입력: scanner1_result.json의 matches (당일 스캐너1-미가 찾은 후보, 오래된 파일이면 무시)
 결과: scanner2_result.json으로 저장 (깃허브 액션이 커밋 후 진입신호가 있을 때만 텔레그램으로 전송)
@@ -86,8 +100,9 @@ VOLUME_LOOKBACK_MIN = 20  # 거래량 확인용 기준(평균) 윈도우의 최�
 VOLUME_RECENT_WINDOW_MIN = 15  # 9/3 수정: 스캔 주기(5~15분)를 커버하기 위한 "스파이크 후보 구간" 크기(분)
 MA_SHORT = 20
 MA_MID = 50
+MA_LONG = 200  # 9/4 밤 추가: 장기추세 확인용(데이터 200일 미만이면 이 게이트는 스킵)
 SLOPE_LOOKBACK_DAYS = 5
-MIN_DAILY_BARS = MA_MID + SLOPE_LOOKBACK_DAYS  # 50일선 + 5일 기울기 계산에 필요한 최소 일봉 수(55일)
+MIN_DAILY_BARS = MA_MID + SLOPE_LOOKBACK_DAYS  # 50일선 + 5일 기울기 계산에 필요한 최소 일봉 수(55일, 200일선과는 별개)
 CANDIDATE_MAX_AGE_HOURS = 12
 NY_TZ = ZoneInfo("America/New_York")
 POSITIONS_FILE = "positions.json"  # 9/3 추가: 재진입 쿨다운 판단용(스캐너3-미가 커밋하는 파일 그대로 읽기만 함)
@@ -250,12 +265,19 @@ def compute_daily_metrics(daily):
     else:
         ma50_prev = float(ma50_series.iloc[-1 - SLOPE_LOOKBACK_DAYS])
 
+    # 9/4 밤 추가: 200거래일 이상 쌓인 종목만 200일선 계산, 아니면 None(신규상장주 → 게이트 스킵)
+    if len(daily) >= MA_LONG:
+        ma200 = float(daily["Close"].rolling(MA_LONG).mean().iloc[-1])
+    else:
+        ma200 = None
+
     return {
         "prev_day_high": prev_high,
         "prev_close": prev_close,
         "ma20": float(ma20_series.iloc[-1]),
         "ma50": float(ma50_series.iloc[-1]),
         "ma50_prev": ma50_prev,
+        "ma200": ma200,
     }
 
 
@@ -364,12 +386,17 @@ def evaluate_symbol(symbol, daily_raw, intraday):
     volume_ok = check_volume_confirmation(intraday)  # True/False/None(확인불가)
     vwap = compute_vwap(intraday)
 
-    # 하드게이트 (4개, 전부 필수 — 미확정(None)이면 통과 실패로 처리)
+    # 하드게이트 (5개, 전부 필수 — 미확정(None)이면 통과 실패로 처리. 단 200일선 게이트만 예외:
+    # 데이터 자체가 없는 신규상장주는 "미확정=실패"가 아니라 "스킵=통과"로 처리한다)
     gate_ma_alignment = metrics["ma20"] > metrics["ma50"]
     gate_ma_slope = metrics["ma50_prev"] is not None and metrics["ma50"] > metrics["ma50_prev"]
     gate_vwap = vwap is not None and price > vwap
     gate_volume = volume_ok is True
-    hard_gate_passed = gate_ma_alignment and gate_ma_slope and gate_vwap and gate_volume
+    # 9/4 밤 추가: 200일선 동적 게이트. ma200이 None이면(200거래일 미만 신규상장주) 스킵(자동 통과),
+    # ma200이 있으면 현재가가 그 위에 있어야 함(장기 하락추세 중 단기 가짜반등 차단).
+    ma200 = metrics["ma200"]
+    gate_ma200 = ma200 is None or price > ma200
+    hard_gate_passed = gate_ma_alignment and gate_ma_slope and gate_vwap and gate_volume and gate_ma200
 
     # 액션 트리거 (3개 중 2개 이상)
     trigger_prev_day_high = price > metrics["prev_day_high"]
@@ -396,7 +423,9 @@ def evaluate_symbol(symbol, daily_raw, intraday):
             "2_ma50_slope_up": gate_ma_slope,
             "3_vwap_break": gate_vwap,
             "4_volume_confirmed": gate_volume,
+            "5_ma200_trend_or_skip": gate_ma200,
         },
+        "ma200_available": ma200 is not None,  # 9/4 밤 추가: 200일선 게이트가 실제로 검사됐는지(디버깅용)
         "action_trigger": {
             "A_prev_day_high_break": trigger_prev_day_high,
             "B_premarket_high_break": trigger_premarket_high,
