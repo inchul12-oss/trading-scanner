@@ -58,8 +58,15 @@
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 26.3799991607666,
       "peak_price": 27.1097,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 25.85,
+      "exit_time_utc": "2026-09-04T13:38:25.978570+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.022314694483369257,
+      "urgent": false
     },
     {
       "symbol": "HUBS",
