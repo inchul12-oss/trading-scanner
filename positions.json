@@ -338,8 +338,15 @@
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 25.780000686645508,
       "peak_price": 25.94,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 25.9,
+      "exit_time_utc": "2026-09-04T13:01:52.774406+00:00",
+      "exit_reasons": [
+        "20일선 이탈"
+      ],
+      "pnl_pct": 0.0046547443816265105,
+      "urgent": false
     },
     {
       "symbol": "CRCL",
