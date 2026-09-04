@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-04T17:48:28.154578+00:00",
+  "updated_at_utc": "2026-09-04T18:03:19.281236+00:00",
   "candidate_count": 8,
   "checked_count": 8,
   "error_count": 0,
@@ -10,13 +10,13 @@
   "all_results": [
     {
       "symbol": "IOT",
-      "price": 39.65999984741211,
+      "price": 39.58000183105469,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 41.36927860862646,
+      "vwap": 41.33245482839613,
       "orb_high": 45.119998931884766,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -40,7 +40,7 @@
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 55.88773553093014,
+      "vwap": 55.86992006477342,
       "orb_high": 58.52000045776367,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -58,19 +58,19 @@
     },
     {
       "symbol": "USAR",
-      "price": 17.34000015258789,
+      "price": 17.33989906311035,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
-      "volume_confirmed": true,
-      "vwap": 18.028989968546227,
+      "volume_confirmed": false,
+      "vwap": 18.02216889750274,
       "orb_high": 19.299999237060547,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": true,
+        "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": false
       },
       "ma200_available": true,
@@ -82,13 +82,13 @@
     },
     {
       "symbol": "AEHR",
-      "price": 84.19499969482422,
+      "price": 84.20500183105469,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 83.19173835553151,
+      "vwap": 83.21084186293615,
       "orb_high": 84.51000213623047,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -106,13 +106,13 @@
     },
     {
       "symbol": "ALAB",
-      "price": 312.17999267578125,
+      "price": 312.69000244140625,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 312.95710904960447,
+      "vwap": 312.95470064959966,
       "orb_high": 321.64990234375,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -130,13 +130,13 @@
     },
     {
       "symbol": "SNDK",
-      "price": 1718.510009765625,
+      "price": 1718.3050537109375,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 1668.998010851785,
+      "vwap": 1669.7677359352358,
       "orb_high": 1661.550048828125,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -154,13 +154,13 @@
     },
     {
       "symbol": "TTMI",
-      "price": 123.66500091552734,
+      "price": 123.93000030517578,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 122.74947079708922,
+      "vwap": 122.77368701366646,
       "orb_high": 123.13999938964844,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -178,13 +178,13 @@
     },
     {
       "symbol": "ASTS",
-      "price": 62.255001068115234,
+      "price": 62.189998626708984,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 63.35635652155993,
+      "vwap": 63.33977415637941,
       "orb_high": 65.6500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": false,
