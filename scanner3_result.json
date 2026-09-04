@@ -1,22 +1,39 @@
 {
-  "updated_at_utc": "2026-09-04T13:38:25.978570+00:00",
-  "open_position_count": 3,
+  "updated_at_utc": "2026-09-04T13:47:45.766069+00:00",
+  "open_position_count": 2,
   "new_exits": [
     {
-      "symbol": "ASST",
-      "entry_price": 26.440000534057617,
+      "symbol": "XXI",
+      "entry_price": 6.215000152587891,
       "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
       "entry_date_ny": "2026-09-03",
-      "breakout_candle_low": 26.3799991607666,
-      "peak_price": 27.1097,
+      "breakout_candle_low": 6.195000171661377,
+      "peak_price": 6.4,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 25.85,
-      "exit_time_utc": "2026-09-04T13:38:25.978570+00:00",
+      "exit_price": 6.16,
+      "exit_time_utc": "2026-09-04T13:47:45.766069+00:00",
       "exit_reasons": [
         "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.022314694483369257,
+      "pnl_pct": -0.008849581856404096,
+      "urgent": false
+    },
+    {
+      "symbol": "ZETA",
+      "entry_price": 31.8700008392334,
+      "entry_time_utc": "2026-09-03T16:17:35.113696+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 31.860000610351562,
+      "peak_price": 32.69,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 31.75,
+      "exit_time_utc": "2026-09-04T13:47:45.766069+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.0037653227509699978,
       "urgent": false
     }
   ],

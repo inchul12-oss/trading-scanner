@@ -127,8 +127,15 @@
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 6.195000171661377,
       "peak_price": 6.4,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 6.16,
+      "exit_time_utc": "2026-09-04T13:47:45.766069+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.008849581856404096,
+      "urgent": false
     },
     {
       "symbol": "COMP",
@@ -155,8 +162,15 @@
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 31.860000610351562,
       "peak_price": 32.69,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 31.75,
+      "exit_time_utc": "2026-09-04T13:47:45.766069+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.0037653227509699978,
+      "urgent": false
     },
     {
       "symbol": "MSTR",
@@ -524,6 +538,16 @@
       ],
       "pnl_pct": -0.0009450807881473271,
       "urgent": false
+    },
+    {
+      "symbol": "BETA",
+      "entry_price": 22.31999969482422,
+      "entry_time_utc": "2026-09-04T13:45:27.468120+00:00",
+      "entry_date_ny": "2026-09-04",
+      "breakout_candle_low": 21.360000610351562,
+      "peak_price": 22.538,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
