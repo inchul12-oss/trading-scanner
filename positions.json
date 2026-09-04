@@ -179,8 +179,15 @@
       "entry_date_ny": "2026-09-03",
       "breakout_candle_low": 140.00999450683594,
       "peak_price": 144.82,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 139.32,
+      "exit_time_utc": "2026-09-04T14:46:54.960968+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈"
+      ],
+      "pnl_pct": -0.005388539491861762,
+      "urgent": false
     },
     {
       "symbol": "RNG",

@@ -1,22 +1,22 @@
 {
-  "updated_at_utc": "2026-09-04T14:38:20.669534+00:00",
-  "open_position_count": 1,
+  "updated_at_utc": "2026-09-04T14:46:54.960968+00:00",
+  "open_position_count": 0,
   "new_exits": [
     {
-      "symbol": "BETA",
-      "entry_price": 22.31999969482422,
-      "entry_time_utc": "2026-09-04T13:45:27.468120+00:00",
-      "entry_date_ny": "2026-09-04",
-      "breakout_candle_low": 21.360000610351562,
-      "peak_price": 22.538,
+      "symbol": "MSTR",
+      "entry_price": 140.07479858398438,
+      "entry_time_utc": "2026-09-03T16:43:54.264921+00:00",
+      "entry_date_ny": "2026-09-03",
+      "breakout_candle_low": 140.00999450683594,
+      "peak_price": 144.82,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 21.975,
-      "exit_time_utc": "2026-09-04T14:38:20.669534+00:00",
+      "exit_price": 139.32,
+      "exit_time_utc": "2026-09-04T14:46:54.960968+00:00",
       "exit_reasons": [
-        "VWAP 이탈"
+        "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.015456975785901075,
+      "pnl_pct": -0.005388539491861762,
       "urgent": false
     }
   ],
