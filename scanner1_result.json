@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-07T13:06:33.998487+00:00",
+  "updated_at_utc": "2026-09-07T13:39:54.516411+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
@@ -297,6 +297,15 @@
       "extreme_gap": false
     },
     {
+      "symbol": "RGC",
+      "price": 6.89,
+      "prev_close": 6.48,
+      "change_pct": 6.33,
+      "premarket_volume": null,
+      "is_premarket_data": false,
+      "extreme_gap": false
+    },
+    {
       "symbol": "NVTS",
       "price": 11.8,
       "prev_close": 11.1,
@@ -387,18 +396,18 @@
       "extreme_gap": false
     },
     {
-      "symbol": "GLW",
-      "price": 154.3,
-      "prev_close": 146.0,
+      "symbol": "CRWV",
+      "price": 89.36,
+      "prev_close": 84.56,
       "change_pct": 5.68,
       "premarket_volume": null,
       "is_premarket_data": false,
       "extreme_gap": false
     },
     {
-      "symbol": "CRWV",
-      "price": 89.36,
-      "prev_close": 84.56,
+      "symbol": "GLW",
+      "price": 154.3,
+      "prev_close": 146.0,
       "change_pct": 5.68,
       "premarket_volume": null,
       "is_premarket_data": false,
