@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-07T16:17:48.157487+00:00",
+  "updated_at_utc": "2026-09-07T16:35:54.591339+00:00",
   "candidate_count": 55,
   "checked_count": 53,
   "error_count": 2,
@@ -209,7 +209,7 @@
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 88.7271441040069,
+      "vwap": 88.72714583127339,
       "orb_high": 83.30500030517578,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -521,7 +521,7 @@
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": null,
-      "vwap": 219.41650410856246,
+      "vwap": 219.45451261568604,
       "orb_high": 218.9600067138672,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -617,7 +617,7 @@
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 607.7763071881074,
+      "vwap": 607.7759644033066,
       "orb_high": 609.4500122070312,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -1145,7 +1145,7 @@
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 30.69959199343374,
+      "vwap": 30.699591869013876,
       "orb_high": 30.149999618530273,
       "hard_gate": {
         "1_ma20_above_ma50": false,
