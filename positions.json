@@ -562,6 +562,26 @@
       ],
       "pnl_pct": -0.015456975785901075,
       "urgent": false
+    },
+    {
+      "symbol": "BOBS",
+      "entry_price": 17.6,
+      "entry_time_utc": "2026-09-07T14:01:59.591589+00:00",
+      "entry_date_ny": "2026-09-07",
+      "breakout_candle_low": 17.6,
+      "peak_price": 17.64,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "PS",
+      "entry_price": 38.54,
+      "entry_time_utc": "2026-09-07T14:01:59.591589+00:00",
+      "entry_date_ny": "2026-09-07",
+      "breakout_candle_low": 38.54,
+      "peak_price": 39.08,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
