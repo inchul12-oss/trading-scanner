@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-08T20:45:58.285427+00:00",
+  "updated_at_utc": "2026-09-08T20:59:10.797144+00:00",
   "candidate_count": 22,
   "checked_count": 20,
   "error_count": 2,
@@ -16,7 +16,7 @@
   "all_results": [
     {
       "symbol": "PHVS",
-      "price": 37.9,
+      "price": 38.25,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -64,7 +64,7 @@
     },
     {
       "symbol": "ROIV",
-      "price": 41.27,
+      "price": 41.03,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -75,7 +75,7 @@
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": false,
-        "3_vwap_break": true,
+        "3_vwap_break": false,
         "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": true
       },
@@ -88,7 +88,7 @@
     },
     {
       "symbol": "RGTI",
-      "price": 15.83,
+      "price": 15.85,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -112,13 +112,13 @@
     },
     {
       "symbol": "IONQ",
-      "price": 40.33,
+      "price": 40.3499,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": null,
-      "vwap": 41.968936045471665,
+      "vwap": 41.96893604547167,
       "orb_high": 44.43000030517578,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -136,7 +136,7 @@
     },
     {
       "symbol": "QBTS",
-      "price": 17.6009,
+      "price": 17.63,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -160,7 +160,7 @@
     },
     {
       "symbol": "AEHR",
-      "price": 91.6,
+      "price": 91.601,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -184,12 +184,12 @@
     },
     {
       "symbol": "BE",
-      "price": 275.8,
+      "price": 276.37,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
+      "volume_confirmed": null,
       "vwap": 276.6158451869981,
       "orb_high": 278.989990234375,
       "hard_gate": {
@@ -208,7 +208,7 @@
     },
     {
       "symbol": "QCOM",
-      "price": 175.5,
+      "price": 175.8501,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -256,7 +256,7 @@
     },
     {
       "symbol": "ORCL",
-      "price": 163.028,
+      "price": 163.45,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -280,7 +280,7 @@
     },
     {
       "symbol": "CRWV",
-      "price": 100.0,
+      "price": 100.19,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
@@ -304,13 +304,13 @@
     },
     {
       "symbol": "INTC",
-      "price": 104.301,
+      "price": 104.2,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": null,
-      "vwap": 103.64432516505174,
+      "vwap": 103.64432516505175,
       "orb_high": 103.23999786376953,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -328,7 +328,7 @@
     },
     {
       "symbol": "SMR",
-      "price": 11.09,
+      "price": 11.1121,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
@@ -376,7 +376,7 @@
     },
     {
       "symbol": "GLW",
-      "price": 166.1924,
+      "price": 165.7142,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
@@ -387,7 +387,7 @@
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
-        "3_vwap_break": true,
+        "3_vwap_break": false,
         "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": true
       },
@@ -448,9 +448,9 @@
     },
     {
       "symbol": "ZIM",
-      "price": 29.96,
+      "price": 30.08,
       "entry_signal": false,
-      "hard_gate_passed": false,
+      "hard_gate_passed": true,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": true,
@@ -459,7 +459,7 @@
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
-        "3_vwap_break": false,
+        "3_vwap_break": true,
         "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
