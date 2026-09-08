@@ -596,6 +596,46 @@
       ],
       "pnl_pct": 0.014011416709911758,
       "urgent": false
+    },
+    {
+      "symbol": "HBM",
+      "entry_price": 29.209999084472656,
+      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 29.235000610351562,
+      "peak_price": 29.295,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "DK",
+      "entry_price": 76.7300033569336,
+      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 76.94499969482422,
+      "peak_price": 76.7300033569336,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "TGB",
+      "entry_price": 8.944999694824219,
+      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 8.944999694824219,
+      "peak_price": 9.015,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "FCX",
+      "entry_price": 77.29499816894531,
+      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 77.37999725341797,
+      "peak_price": 77.5301,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
