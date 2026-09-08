@@ -673,8 +673,15 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 13.89009952545166,
       "peak_price": 14.435,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 14.035,
+      "exit_time_utc": "2026-09-08T17:46:53.255808+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": 0.00981396536701841,
+      "urgent": false
     },
     {
       "symbol": "SSL",
