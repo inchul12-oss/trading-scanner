@@ -631,7 +631,7 @@
       "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 8.944999694824219,
-      "peak_price": 9.04,
+      "peak_price": 9.08,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -641,7 +641,27 @@
       "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 77.37999725341797,
-      "peak_price": 77.535,
+      "peak_price": 77.92,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "INFQ",
+      "entry_price": 13.898599624633789,
+      "entry_time_utc": "2026-09-08T14:18:24.964956+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 13.89009952545166,
+      "peak_price": 13.9701,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "SSL",
+      "entry_price": 13.125,
+      "entry_time_utc": "2026-09-08T14:18:24.964956+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 13.109999656677246,
+      "peak_price": 13.125,
       "status": "open",
       "partial_profit_alerted": false
     }
