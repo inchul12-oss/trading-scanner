@@ -1,25 +1,7 @@
 {
-  "updated_at_utc": "2026-09-08T17:46:53.255808+00:00",
+  "updated_at_utc": "2026-09-08T17:53:29.330009+00:00",
   "open_position_count": 0,
-  "new_exits": [
-    {
-      "symbol": "INFQ",
-      "entry_price": 13.898599624633789,
-      "entry_time_utc": "2026-09-08T14:18:24.964956+00:00",
-      "entry_date_ny": "2026-09-08",
-      "breakout_candle_low": 13.89009952545166,
-      "peak_price": 14.435,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 14.035,
-      "exit_time_utc": "2026-09-08T17:46:53.255808+00:00",
-      "exit_reasons": [
-        "VWAP 이탈"
-      ],
-      "pnl_pct": 0.00981396536701841,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
