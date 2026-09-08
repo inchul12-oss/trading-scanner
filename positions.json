@@ -614,8 +614,16 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 76.94499969482422,
       "peak_price": 76.7300033569336,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 76.09,
+      "exit_time_utc": "2026-09-08T14:06:40.482294+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈",
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.008340979133760945,
+      "urgent": false
     },
     {
       "symbol": "TGB",
@@ -623,7 +631,7 @@
       "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 8.944999694824219,
-      "peak_price": 9.015,
+      "peak_price": 9.04,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -633,7 +641,7 @@
       "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 77.37999725341797,
-      "peak_price": 77.5301,
+      "peak_price": 77.535,
       "status": "open",
       "partial_profit_alerted": false
     }

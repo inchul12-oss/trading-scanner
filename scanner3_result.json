@@ -1,7 +1,26 @@
 {
-  "updated_at_utc": "2026-09-08T13:57:04.560821+00:00",
-  "open_position_count": 4,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-08T14:06:40.482294+00:00",
+  "open_position_count": 3,
+  "new_exits": [
+    {
+      "symbol": "DK",
+      "entry_price": 76.7300033569336,
+      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 76.94499969482422,
+      "peak_price": 76.7300033569336,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 76.09,
+      "exit_time_utc": "2026-09-08T14:06:40.482294+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈",
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.008340979133760945,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }
