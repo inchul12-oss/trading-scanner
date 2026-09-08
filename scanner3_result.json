@@ -1,42 +1,7 @@
 {
-  "updated_at_utc": "2026-09-08T13:03:39.384681+00:00",
+  "updated_at_utc": "2026-09-08T13:20:25.592431+00:00",
   "open_position_count": 0,
-  "new_exits": [
-    {
-      "symbol": "BOBS",
-      "entry_price": 17.6,
-      "entry_time_utc": "2026-09-07T14:01:59.591589+00:00",
-      "entry_date_ny": "2026-09-07",
-      "breakout_candle_low": 17.6,
-      "peak_price": 17.64,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 17.64,
-      "exit_time_utc": "2026-09-08T13:03:39.384681+00:00",
-      "exit_reasons": [
-        "20일선 이탈"
-      ],
-      "pnl_pct": 0.002272727272727224,
-      "urgent": false
-    },
-    {
-      "symbol": "PS",
-      "entry_price": 38.54,
-      "entry_time_utc": "2026-09-07T14:01:59.591589+00:00",
-      "entry_date_ny": "2026-09-07",
-      "breakout_candle_low": 38.54,
-      "peak_price": 39.08,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 39.08,
-      "exit_time_utc": "2026-09-08T13:03:39.384681+00:00",
-      "exit_reasons": [
-        "20일선 이탈"
-      ],
-      "pnl_pct": 0.014011416709911758,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
