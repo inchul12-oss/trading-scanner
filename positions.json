@@ -570,8 +570,15 @@
       "entry_date_ny": "2026-09-07",
       "breakout_candle_low": 17.6,
       "peak_price": 17.64,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 17.64,
+      "exit_time_utc": "2026-09-08T13:03:39.384681+00:00",
+      "exit_reasons": [
+        "20일선 이탈"
+      ],
+      "pnl_pct": 0.002272727272727224,
+      "urgent": false
     },
     {
       "symbol": "PS",
@@ -580,8 +587,15 @@
       "entry_date_ny": "2026-09-07",
       "breakout_candle_low": 38.54,
       "peak_price": 39.08,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 39.08,
+      "exit_time_utc": "2026-09-08T13:03:39.384681+00:00",
+      "exit_reasons": [
+        "20일선 이탈"
+      ],
+      "pnl_pct": 0.014011416709911758,
+      "urgent": false
     }
   ]
 }
