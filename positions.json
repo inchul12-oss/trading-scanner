@@ -651,7 +651,7 @@
       "entry_time_utc": "2026-09-08T14:18:24.964956+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 13.89009952545166,
-      "peak_price": 14.31,
+      "peak_price": 14.3974,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -662,6 +662,16 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 13.109999656677246,
       "peak_price": 13.195,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "ERO",
+      "entry_price": 38.99409866333008,
+      "entry_time_utc": "2026-09-08T15:34:43.821979+00:00",
+      "entry_date_ny": "2026-09-08",
+      "breakout_candle_low": 38.935001373291016,
+      "peak_price": 38.99409866333008,
       "status": "open",
       "partial_profit_alerted": false
     }
