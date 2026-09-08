@@ -639,8 +639,15 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 8.944999694824219,
       "peak_price": 9.12,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 9.01,
+      "exit_time_utc": "2026-09-08T15:59:06.707957+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": 0.0072666637667289915,
+      "urgent": false
     },
     {
       "symbol": "FCX",
@@ -649,8 +656,15 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 77.37999725341797,
       "peak_price": 78.215,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 77.27,
+      "exit_time_utc": "2026-09-08T15:59:06.707957+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.0003234125045281384,
+      "urgent": false
     },
     {
       "symbol": "INFQ",
@@ -658,7 +672,7 @@
       "entry_time_utc": "2026-09-08T14:18:24.964956+00:00",
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 13.89009952545166,
-      "peak_price": 14.4,
+      "peak_price": 14.435,
       "status": "open",
       "partial_profit_alerted": false
     },
