@@ -1,39 +1,23 @@
 {
-  "updated_at_utc": "2026-09-08T15:59:06.707957+00:00",
-  "open_position_count": 2,
+  "updated_at_utc": "2026-09-08T16:10:40.836825+00:00",
+  "open_position_count": 1,
   "new_exits": [
     {
-      "symbol": "TGB",
-      "entry_price": 8.944999694824219,
-      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
+      "symbol": "ERO",
+      "entry_price": 38.99409866333008,
+      "entry_time_utc": "2026-09-08T15:34:43.821979+00:00",
       "entry_date_ny": "2026-09-08",
-      "breakout_candle_low": 8.944999694824219,
-      "peak_price": 9.12,
+      "breakout_candle_low": 38.935001373291016,
+      "peak_price": 38.99409866333008,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 9.01,
-      "exit_time_utc": "2026-09-08T15:59:06.707957+00:00",
+      "exit_price": 38.377,
+      "exit_time_utc": "2026-09-08T16:10:40.836825+00:00",
       "exit_reasons": [
+        "돌파캔들저점 이탈",
         "VWAP 이탈"
       ],
-      "pnl_pct": 0.0072666637667289915,
-      "urgent": false
-    },
-    {
-      "symbol": "FCX",
-      "entry_price": 77.29499816894531,
-      "entry_time_utc": "2026-09-08T13:47:43.803914+00:00",
-      "entry_date_ny": "2026-09-08",
-      "breakout_candle_low": 77.37999725341797,
-      "peak_price": 78.215,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 77.27,
-      "exit_time_utc": "2026-09-08T15:59:06.707957+00:00",
-      "exit_reasons": [
-        "VWAP 이탈"
-      ],
-      "pnl_pct": -0.0003234125045281384,
+      "pnl_pct": -0.015825437296500284,
       "urgent": false
     }
   ],

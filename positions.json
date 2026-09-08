@@ -700,8 +700,16 @@
       "entry_date_ny": "2026-09-08",
       "breakout_candle_low": 38.935001373291016,
       "peak_price": 38.99409866333008,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 38.377,
+      "exit_time_utc": "2026-09-08T16:10:40.836825+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈",
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.015825437296500284,
+      "urgent": false
     }
   ]
 }
