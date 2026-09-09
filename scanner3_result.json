@@ -1,25 +1,7 @@
 {
-  "updated_at_utc": "2026-09-09T14:01:46.173101+00:00",
+  "updated_at_utc": "2026-09-09T14:15:15.391332+00:00",
   "open_position_count": 0,
-  "new_exits": [
-    {
-      "symbol": "SSL",
-      "entry_price": 14.470199584960938,
-      "entry_time_utc": "2026-09-09T13:47:26.849731+00:00",
-      "entry_date_ny": "2026-09-09",
-      "breakout_candle_low": 14.441300392150879,
-      "peak_price": 14.48,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 14.37,
-      "exit_time_utc": "2026-09-09T14:01:46.173101+00:00",
-      "exit_reasons": [
-        "VWAP 이탈"
-      ],
-      "pnl_pct": -0.0069245475414918935,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
