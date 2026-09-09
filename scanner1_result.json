@@ -1,36 +1,36 @@
 {
-  "updated_at_utc": "2026-09-09T12:43:50.940383+00:00",
+  "updated_at_utc": "2026-09-09T13:06:34.916159+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
     "min_premarket_dollar_volume": 300000
   },
   "candidate_count": 181,
-  "error_count": 1,
+  "error_count": 0,
   "matches": [
     {
-      "symbol": "ROIV",
-      "price": 41.13,
-      "prev_close": 34.93,
-      "change_pct": 17.75,
+      "symbol": "SEI",
+      "price": 65.27,
+      "prev_close": 55.0,
+      "change_pct": 18.67,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "SEI",
-      "price": 64.39,
-      "prev_close": 55.0,
-      "change_pct": 17.07,
+      "symbol": "ROIV",
+      "price": 41.2289,
+      "prev_close": 34.93,
+      "change_pct": 18.03,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "SSL",
-      "price": 13.99,
+      "price": 14.0885,
       "prev_close": 12.27,
-      "change_pct": 14.02,
+      "change_pct": 14.82,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -46,9 +46,9 @@
     },
     {
       "symbol": "SMR",
-      "price": 10.95,
+      "price": 10.94,
       "prev_close": 9.7,
-      "change_pct": 12.89,
+      "change_pct": 12.78,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -63,6 +63,24 @@
       "extreme_gap": false
     },
     {
+      "symbol": "MLYS",
+      "price": 31.5,
+      "prev_close": 28.21,
+      "change_pct": 11.66,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "FIGR",
+      "price": 40.0,
+      "prev_close": 35.96,
+      "change_pct": 11.23,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
       "symbol": "ABM",
       "price": 52.33,
       "prev_close": 47.05,
@@ -72,37 +90,28 @@
       "extreme_gap": false
     },
     {
-      "symbol": "MLYS",
-      "price": 31.2,
-      "prev_close": 28.21,
-      "change_pct": 10.6,
+      "symbol": "CRWV",
+      "price": 99.1,
+      "prev_close": 89.36,
+      "change_pct": 10.9,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "CRWV",
-      "price": 98.8,
-      "prev_close": 89.36,
-      "change_pct": 10.56,
+      "symbol": "FSLY",
+      "price": 22.6991,
+      "prev_close": 20.59,
+      "change_pct": 10.24,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "LITE",
-      "price": 971.26,
+      "price": 971.0,
       "prev_close": 881.255,
-      "change_pct": 10.21,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "FIGR",
-      "price": 39.532,
-      "prev_close": 35.96,
-      "change_pct": 9.93,
+      "change_pct": 10.18,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -117,64 +126,82 @@
       "extreme_gap": false
     },
     {
-      "symbol": "AXTI",
-      "price": 67.4,
-      "prev_close": 61.64,
-      "change_pct": 9.34,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "VIAV",
-      "price": 38.11,
-      "prev_close": 34.86,
-      "change_pct": 9.32,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
       "symbol": "PHVS",
-      "price": 38.44,
+      "price": 38.65,
       "prev_close": 35.25,
-      "change_pct": 9.05,
+      "change_pct": 9.65,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "AXTI",
+      "price": 67.5,
+      "prev_close": 61.64,
+      "change_pct": 9.51,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "FRMI",
-      "price": 5.58,
+      "price": 5.6,
       "prev_close": 5.12,
-      "change_pct": 8.98,
+      "change_pct": 9.37,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "ERO",
-      "price": 37.92,
-      "prev_close": 34.9,
-      "change_pct": 8.65,
+      "symbol": "VIAV",
+      "price": 38.06,
+      "prev_close": 34.86,
+      "change_pct": 9.18,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "SMTC",
+      "price": 161.39,
+      "prev_close": 147.885,
+      "change_pct": 9.13,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "NOK",
-      "price": 10.88,
+      "price": 10.94,
       "prev_close": 10.03,
-      "change_pct": 8.47,
+      "change_pct": 9.07,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "DK",
-      "price": 77.75,
-      "prev_close": 71.86,
-      "change_pct": 8.2,
+      "symbol": "ERO",
+      "price": 37.91,
+      "prev_close": 34.9,
+      "change_pct": 8.62,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "MXL",
+      "price": 68.0,
+      "prev_close": 62.74,
+      "change_pct": 8.38,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "ALM",
+      "price": 19.0,
+      "prev_close": 17.57,
+      "change_pct": 8.14,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -189,64 +216,64 @@
       "extreme_gap": false
     },
     {
-      "symbol": "ALM",
-      "price": 18.97,
-      "prev_close": 17.57,
-      "change_pct": 7.97,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "SMTC",
-      "price": 159.5,
-      "prev_close": 147.885,
-      "change_pct": 7.85,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "FSLY",
-      "price": 22.2,
-      "prev_close": 20.59,
-      "change_pct": 7.82,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
       "symbol": "BE",
-      "price": 272.57,
+      "price": 273.0,
       "prev_close": 252.87,
-      "change_pct": 7.79,
+      "change_pct": 7.96,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "MANE",
-      "price": 105.99,
-      "prev_close": 98.51,
-      "change_pct": 7.59,
+      "symbol": "GLW",
+      "price": 166.4746,
+      "prev_close": 154.3,
+      "change_pct": 7.89,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "NBIS",
-      "price": 243.1473,
+      "price": 244.2,
       "prev_close": 226.39,
-      "change_pct": 7.4,
+      "change_pct": 7.87,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "LUNR",
-      "price": 15.89,
-      "prev_close": 14.81,
-      "change_pct": 7.29,
+      "symbol": "DK",
+      "price": 77.5,
+      "prev_close": 71.86,
+      "change_pct": 7.85,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "HPE",
+      "price": 55.9897,
+      "prev_close": 52.0,
+      "change_pct": 7.67,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "WULF",
+      "price": 17.72,
+      "prev_close": 16.51,
+      "change_pct": 7.33,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "ASX",
+      "price": 40.23,
+      "prev_close": 37.51,
+      "change_pct": 7.25,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -261,28 +288,19 @@
       "extreme_gap": false
     },
     {
-      "symbol": "CECO",
-      "price": 79.4,
-      "prev_close": 74.1,
-      "change_pct": 7.15,
+      "symbol": "LUNR",
+      "price": 15.88,
+      "prev_close": 14.81,
+      "change_pct": 7.22,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "GLW",
-      "price": 165.3,
-      "prev_close": 154.3,
-      "change_pct": 7.13,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "ASX",
-      "price": 40.16,
-      "prev_close": 37.51,
-      "change_pct": 7.06,
+      "symbol": "RDW",
+      "price": 11.29,
+      "prev_close": 10.53,
+      "change_pct": 7.22,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -297,91 +315,91 @@
       "extreme_gap": false
     },
     {
+      "symbol": "SEDG",
+      "price": 36.55,
+      "prev_close": 34.2,
+      "change_pct": 6.87,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "CECO",
+      "price": 79.15,
+      "prev_close": 74.1,
+      "change_pct": 6.82,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
       "symbol": "INTC",
-      "price": 102.42,
+      "price": 102.2961,
       "prev_close": 95.8,
-      "change_pct": 6.91,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "MXL",
-      "price": 67.0705,
-      "prev_close": 62.74,
-      "change_pct": 6.9,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "HPE",
-      "price": 55.56,
-      "prev_close": 52.0,
-      "change_pct": 6.85,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "RDW",
-      "price": 11.229,
-      "prev_close": 10.53,
-      "change_pct": 6.64,
+      "change_pct": 6.78,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "CLSK",
-      "price": 13.5278,
+      "price": 13.54,
       "prev_close": 12.69,
-      "change_pct": 6.6,
+      "change_pct": 6.7,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "WULF",
-      "price": 17.5879,
-      "prev_close": 16.51,
-      "change_pct": 6.53,
+      "symbol": "MANE",
+      "price": 104.9693,
+      "prev_close": 98.51,
+      "change_pct": 6.56,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "KEEL",
-      "price": 3.6901,
-      "prev_close": 3.47,
-      "change_pct": 6.34,
+      "symbol": "APLD",
+      "price": 28.09,
+      "prev_close": 26.37,
+      "change_pct": 6.52,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "LEU",
+      "price": 185.12,
+      "prev_close": 173.89,
+      "change_pct": 6.46,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "COHR",
-      "price": 299.53,
+      "price": 300.02,
       "prev_close": 281.86,
-      "change_pct": 6.27,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "LIFE",
-      "price": 42.33,
-      "prev_close": 39.85,
-      "change_pct": 6.22,
+      "change_pct": 6.44,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "UMC",
-      "price": 22.0602,
+      "price": 22.09,
       "prev_close": 20.77,
-      "change_pct": 6.21,
+      "change_pct": 6.36,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "ENPH",
+      "price": 38.6314,
+      "prev_close": 36.37,
+      "change_pct": 6.22,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -396,46 +414,19 @@
       "extreme_gap": false
     },
     {
-      "symbol": "APLD",
-      "price": 27.9989,
-      "prev_close": 26.37,
-      "change_pct": 6.18,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "XE",
-      "price": 18.79,
-      "prev_close": 17.71,
-      "change_pct": 6.1,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "FLY",
-      "price": 22.99,
-      "prev_close": 21.67,
+      "symbol": "CHA",
+      "price": 12.37,
+      "prev_close": 11.66,
       "change_pct": 6.09,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "CHA",
-      "price": 12.3662,
-      "prev_close": 11.66,
-      "change_pct": 6.06,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "LEU",
-      "price": 184.25,
-      "prev_close": 173.89,
-      "change_pct": 5.96,
+      "symbol": "KEEL",
+      "price": 3.679,
+      "prev_close": 3.47,
+      "change_pct": 6.02,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -450,46 +441,46 @@
       "extreme_gap": false
     },
     {
-      "symbol": "SEDG",
-      "price": 36.2169,
-      "prev_close": 34.2,
-      "change_pct": 5.9,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "ENPH",
-      "price": 38.51,
-      "prev_close": 36.37,
-      "change_pct": 5.88,
+      "symbol": "AMKR",
+      "price": 50.5,
+      "prev_close": 47.77,
+      "change_pct": 5.71,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "TGB",
-      "price": 8.92,
+      "price": 8.93,
       "prev_close": 8.45,
-      "change_pct": 5.56,
+      "change_pct": 5.68,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "PBR",
-      "price": 21.23,
-      "prev_close": 20.12,
-      "change_pct": 5.52,
+      "symbol": "STX",
+      "price": 896.63,
+      "prev_close": 849.28,
+      "change_pct": 5.58,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "FCX",
+      "price": 76.74,
+      "prev_close": 72.73,
+      "change_pct": 5.51,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "QBTS",
-      "price": 17.4899,
+      "price": 17.48,
       "prev_close": 16.58,
-      "change_pct": 5.49,
+      "change_pct": 5.43,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -504,10 +495,19 @@
       "extreme_gap": false
     },
     {
-      "symbol": "SKHY",
-      "price": 186.55,
-      "prev_close": 177.0,
+      "symbol": "FLY",
+      "price": 22.8397,
+      "prev_close": 21.67,
       "change_pct": 5.4,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "SKHY",
+      "price": 186.5199,
+      "prev_close": 177.0,
+      "change_pct": 5.38,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
@@ -522,37 +522,46 @@
       "extreme_gap": false
     },
     {
-      "symbol": "IESC",
-      "price": 339.5,
-      "prev_close": 322.57,
-      "change_pct": 5.25,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "STX",
-      "price": 893.53,
-      "prev_close": 849.28,
-      "change_pct": 5.21,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "PGNY",
-      "price": 27.29,
-      "prev_close": 25.94,
+      "symbol": "CIEN",
+      "price": 337.6942,
+      "prev_close": 321.0,
       "change_pct": 5.2,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
     },
     {
-      "symbol": "FCX",
-      "price": 76.48,
-      "prev_close": 72.73,
+      "symbol": "HUT",
+      "price": 98.38,
+      "prev_close": 93.545,
+      "change_pct": 5.17,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "EIX",
+      "price": 59.6983,
+      "prev_close": 56.77,
       "change_pct": 5.16,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "RKLB",
+      "price": 67.5654,
+      "prev_close": 64.26,
+      "change_pct": 5.14,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "ASTS",
+      "price": 65.47,
+      "prev_close": 62.31,
+      "change_pct": 5.07,
       "premarket_volume": null,
       "is_premarket_data": true,
       "extreme_gap": false
