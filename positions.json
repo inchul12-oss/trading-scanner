@@ -717,6 +717,16 @@
       ],
       "pnl_pct": -0.015825437296500284,
       "urgent": false
+    },
+    {
+      "symbol": "SSL",
+      "entry_price": 14.470199584960938,
+      "entry_time_utc": "2026-09-09T13:47:26.849731+00:00",
+      "entry_date_ny": "2026-09-09",
+      "breakout_candle_low": 14.441300392150879,
+      "peak_price": 14.48,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
