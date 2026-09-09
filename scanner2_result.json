@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-09T19:48:29.763778+00:00",
+  "updated_at_utc": "2026-09-09T20:03:56.539871+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -10,13 +10,13 @@
   "all_results": [
     {
       "symbol": "ASO",
-      "price": 50.91999816894531,
+      "price": 51.03,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 49.115411227077466,
+      "vwap": 49.46824291284608,
       "orb_high": 50.249900817871094,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -34,13 +34,13 @@
     },
     {
       "symbol": "SUNB",
-      "price": 73.84500122070312,
+      "price": 74.88,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 75.12867314735125,
+      "vwap": 75.02276345108034,
       "orb_high": 76.77999877929688,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -58,37 +58,37 @@
     },
     {
       "symbol": "TNGX",
-      "price": 23.68000030517578,
+      "price": 24.0,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 1,
-      "action_trigger_passed": false,
-      "volume_confirmed": false,
-      "vwap": 24.149312735230104,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 24.099214826587414,
       "orb_high": 25.514999389648438,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": true,
-        "B_premarket_high_break": false,
+        "B_premarket_high_break": true,
         "C_orb_high_break": false
       }
     },
     {
       "symbol": "CHYM",
-      "price": 34.790000915527344,
+      "price": 35.0,
       "entry_signal": false,
       "hard_gate_passed": true,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": true,
-      "vwap": 34.237108735831065,
+      "vwap": 34.299915456053895,
       "orb_high": 35.54999923706055,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -106,19 +106,19 @@
     },
     {
       "symbol": "META",
-      "price": 653.2449951171875,
+      "price": 652.1409,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 3,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
-      "vwap": 649.585883161249,
+      "volume_confirmed": true,
+      "vwap": 650.0617588476991,
       "orb_high": 651.6909790039062,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": true,
         "3_vwap_break": true,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
