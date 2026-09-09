@@ -725,8 +725,15 @@
       "entry_date_ny": "2026-09-09",
       "breakout_candle_low": 14.441300392150879,
       "peak_price": 14.48,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 14.37,
+      "exit_time_utc": "2026-09-09T14:01:46.173101+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.0069245475414918935,
+      "urgent": false
     }
   ]
 }
