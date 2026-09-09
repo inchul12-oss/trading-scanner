@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-09T20:55:11.595213+00:00",
+  "updated_at_utc": "2026-09-09T21:14:33.185557+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -10,7 +10,7 @@
   "all_results": [
     {
       "symbol": "ASO",
-      "price": 51.1481,
+      "price": 51.05,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
@@ -82,7 +82,7 @@
     },
     {
       "symbol": "CHYM",
-      "price": 34.61,
+      "price": 34.466,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
@@ -106,13 +106,13 @@
     },
     {
       "symbol": "META",
-      "price": 651.45,
+      "price": 651.8,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 2,
+      "action_trigger_count": 3,
       "action_trigger_passed": true,
       "volume_confirmed": null,
-      "vwap": 650.061759306856,
+      "vwap": 650.061758847699,
       "orb_high": 651.6909790039062,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -125,7 +125,7 @@
       "action_trigger": {
         "A_prev_day_high_break": true,
         "B_premarket_high_break": true,
-        "C_orb_high_break": false
+        "C_orb_high_break": true
       }
     }
   ],
