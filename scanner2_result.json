@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-09T14:00:24.335172+00:00",
+  "updated_at_utc": "2026-09-09T14:01:37.260070+00:00",
   "candidate_count": 7,
   "checked_count": 5,
   "error_count": 2,
@@ -10,13 +10,13 @@
   "all_results": [
     {
       "symbol": "ASO",
-      "price": 49.58000183105469,
+      "price": 49.66999816894531,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 48.82476749725659,
+      "vwap": 48.83424518061972,
       "orb_high": 50.249900817871094,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -34,13 +34,13 @@
     },
     {
       "symbol": "SUNB",
-      "price": 76.0199966430664,
+      "price": 76.0,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 74.42784521175427,
+      "vwap": 74.49237656895536,
       "orb_high": 76.77999877929688,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -58,13 +58,13 @@
     },
     {
       "symbol": "TNGX",
-      "price": 24.959999084472656,
+      "price": 25.094999313354492,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 24.449023517697793,
+      "vwap": 24.460804751168897,
       "orb_high": 25.514999389648438,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -82,13 +82,13 @@
     },
     {
       "symbol": "CHYM",
-      "price": 34.349998474121094,
+      "price": 34.209999084472656,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 34.52580413511075,
+      "vwap": 34.5202035492039,
       "orb_high": 35.54999923706055,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -106,13 +106,13 @@
     },
     {
       "symbol": "META",
-      "price": 646.8936157226562,
+      "price": 646.3305053710938,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 645.2121755434995,
+      "vwap": 645.2339504505908,
       "orb_high": 651.6909790039062,
       "hard_gate": {
         "1_ma20_above_ma50": false,
