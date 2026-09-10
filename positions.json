@@ -734,6 +734,16 @@
       ],
       "pnl_pct": -0.0069245475414918935,
       "urgent": false
+    },
+    {
+      "symbol": "ELV",
+      "entry_price": 417.79998779296875,
+      "entry_time_utc": "2026-09-10T16:50:08.249426+00:00",
+      "entry_date_ny": "2026-09-10",
+      "breakout_candle_low": 417.81500244140625,
+      "peak_price": 418.965,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
