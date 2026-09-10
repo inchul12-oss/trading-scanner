@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-10T19:57:03.133080+00:00",
+  "updated_at_utc": "2026-09-10T20:17:20.587802+00:00",
   "candidate_count": 2,
   "checked_count": 2,
   "error_count": 0,
@@ -10,18 +10,18 @@
   "all_results": [
     {
       "symbol": "MOH",
-      "price": 201.33999633789062,
+      "price": 200.28,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 200.68792527133186,
+      "vwap": 200.68022112050753,
       "orb_high": 207.5,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
-        "3_vwap_break": true,
+        "3_vwap_break": false,
         "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
@@ -34,19 +34,19 @@
     },
     {
       "symbol": "AVAV",
-      "price": 147.92999267578125,
+      "price": 148.078,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
-      "volume_confirmed": true,
-      "vwap": 152.55378512432128,
+      "volume_confirmed": false,
+      "vwap": 152.35132478159474,
       "orb_high": 154.5,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": true,
+        "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": false
       },
       "ma200_available": true,
