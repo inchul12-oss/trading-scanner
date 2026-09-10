@@ -1,76 +1,26 @@
 {
-  "updated_at_utc": "2026-09-09T21:14:33.185557+00:00",
-  "candidate_count": 7,
-  "checked_count": 5,
-  "error_count": 2,
-  "cooldown_excluded": [
-    "SSL"
-  ],
+  "updated_at_utc": "2026-09-10T13:45:43.935508+00:00",
+  "candidate_count": 3,
+  "checked_count": 3,
+  "error_count": 0,
+  "cooldown_excluded": [],
   "entries": [],
   "all_results": [
     {
-      "symbol": "ASO",
-      "price": 51.05,
+      "symbol": "MOH",
+      "price": 204.77999877929688,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
-      "vwap": 49.46824291284608,
-      "orb_high": 50.249900817871094,
+      "volume_confirmed": null,
+      "vwap": 203.80573936811217,
+      "orb_high": null,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
         "3_vwap_break": true,
         "4_volume_confirmed": false,
-        "5_ma200_trend_or_skip": false
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": false,
-        "C_orb_high_break": true
-      }
-    },
-    {
-      "symbol": "SUNB",
-      "price": 72.44,
-      "entry_signal": false,
-      "hard_gate_passed": false,
-      "action_trigger_count": 1,
-      "action_trigger_passed": false,
-      "volume_confirmed": true,
-      "vwap": 74.96006373936865,
-      "orb_high": 76.77999877929688,
-      "hard_gate": {
-        "1_ma20_above_ma50": false,
-        "2_ma50_slope_up": false,
-        "3_vwap_break": false,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": false,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": false,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "TNGX",
-      "price": 24.0,
-      "entry_signal": false,
-      "hard_gate_passed": false,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 24.099214826587414,
-      "orb_high": 25.514999389648438,
-      "hard_gate": {
-        "1_ma20_above_ma50": false,
-        "2_ma50_slope_up": false,
-        "3_vwap_break": false,
-        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
@@ -81,15 +31,15 @@
       }
     },
     {
-      "symbol": "CHYM",
-      "price": 34.466,
+      "symbol": "ELV",
+      "price": 419.7699890136719,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 1,
-      "action_trigger_passed": false,
-      "volume_confirmed": false,
-      "vwap": 34.299915456053895,
-      "orb_high": 35.54999923706055,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": null,
+      "vwap": 417.0909838063666,
+      "orb_high": null,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
@@ -100,43 +50,34 @@
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": true,
-        "B_premarket_high_break": false,
+        "B_premarket_high_break": true,
         "C_orb_high_break": false
       }
     },
     {
-      "symbol": "META",
-      "price": 651.8,
+      "symbol": "AVAV",
+      "price": 150.25,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 3,
-      "action_trigger_passed": true,
-      "volume_confirmed": null,
-      "vwap": 650.061758847699,
-      "orb_high": 651.6909790039062,
+      "action_trigger_count": 1,
+      "action_trigger_passed": false,
+      "volume_confirmed": true,
+      "vwap": 148.93489884007198,
+      "orb_high": null,
       "hard_gate": {
         "1_ma20_above_ma50": false,
-        "2_ma50_slope_up": true,
+        "2_ma50_slope_up": false,
         "3_vwap_break": true,
-        "4_volume_confirmed": false,
-        "5_ma200_trend_or_skip": true
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": false
       },
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": true
+        "B_premarket_high_break": false,
+        "C_orb_high_break": false
       }
     }
   ],
-  "errors": [
-    {
-      "symbol": "JMKE",
-      "error": "일봉 히스토리 부족(55일 미만)"
-    },
-    {
-      "symbol": "STDN",
-      "error": "일봉 히스토리 부족(55일 미만)"
-    }
-  ]
+  "errors": []
 }
