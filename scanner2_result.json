@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-10T20:17:20.587802+00:00",
+  "updated_at_utc": "2026-09-10T20:33:35.966129+00:00",
   "candidate_count": 2,
   "checked_count": 2,
   "error_count": 0,
@@ -16,7 +16,7 @@
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 200.68022112050753,
+      "vwap": 200.6094115830328,
       "orb_high": 207.5,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -34,7 +34,7 @@
     },
     {
       "symbol": "AVAV",
-      "price": 148.078,
+      "price": 148.1,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
