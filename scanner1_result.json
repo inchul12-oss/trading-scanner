@@ -1,146 +1,38 @@
 {
-  "updated_at_utc": "2026-09-10T13:05:29.065737+00:00",
+  "updated_at_utc": "2026-09-10T13:37:06.519429+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
     "min_premarket_dollar_volume": 300000
   },
-  "candidate_count": 144,
+  "candidate_count": 20,
   "error_count": 0,
   "matches": [
     {
-      "symbol": "ASO",
-      "price": 50.6,
-      "prev_close": 44.71,
-      "change_pct": 13.17,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "SSL",
-      "price": 14.68,
-      "prev_close": 13.3,
-      "change_pct": 10.38,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "PLSE",
-      "price": 53.1103,
-      "prev_close": 48.79,
-      "change_pct": 8.85,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "NET",
-      "price": 309.0,
-      "prev_close": 284.3,
-      "change_pct": 8.69,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "TNK",
-      "price": 98.99,
-      "prev_close": 92.33,
-      "change_pct": 7.21,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "CMPS",
-      "price": 15.05,
-      "prev_close": 14.04,
-      "change_pct": 7.19,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "VG",
-      "price": 15.7177,
-      "prev_close": 14.73,
-      "change_pct": 6.71,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "META",
-      "price": 652.36,
-      "prev_close": 613.48,
-      "change_pct": 6.34,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "SEI",
-      "price": 68.0073,
-      "prev_close": 63.96,
-      "change_pct": 6.33,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "AMBA",
-      "price": 67.48,
-      "prev_close": 63.48,
-      "change_pct": 6.3,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "DDOG",
-      "price": 223.33,
-      "prev_close": 210.23,
-      "change_pct": 6.23,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "TNGX",
-      "price": 24.0,
-      "prev_close": 22.7,
-      "change_pct": 5.73,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "JMKE",
-      "price": 22.0,
-      "prev_close": 20.82,
-      "change_pct": 5.67,
-      "premarket_volume": null,
-      "is_premarket_data": true,
-      "extreme_gap": false
-    },
-    {
-      "symbol": "MKC-V",
-      "price": 55.55,
-      "prev_close": 52.59,
-      "change_pct": 5.63,
+      "symbol": "MOH",
+      "price": 205.605,
+      "prev_close": 194.01,
+      "change_pct": 5.98,
       "premarket_volume": null,
       "is_premarket_data": false,
       "extreme_gap": false
     },
     {
-      "symbol": "GME",
-      "price": 19.9083,
-      "prev_close": 18.89,
-      "change_pct": 5.39,
+      "symbol": "ELV",
+      "price": 417.12,
+      "prev_close": 395.53,
+      "change_pct": 5.46,
       "premarket_volume": null,
-      "is_premarket_data": true,
+      "is_premarket_data": false,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "AVAV",
+      "price": 148.3,
+      "prev_close": 140.8,
+      "change_pct": 5.33,
+      "premarket_volume": null,
+      "is_premarket_data": false,
       "extreme_gap": false
     }
   ]
