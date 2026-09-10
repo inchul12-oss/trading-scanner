@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-10T14:00:12.130838+00:00",
+  "updated_at_utc": "2026-09-10T14:01:41.182189+00:00",
   "candidate_count": 3,
   "checked_count": 3,
   "error_count": 0,
@@ -8,19 +8,19 @@
   "all_results": [
     {
       "symbol": "MOH",
-      "price": 205.9949951171875,
+      "price": 203.72999572753906,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 203.55175362069087,
+      "volume_confirmed": false,
+      "vwap": 203.69544711331505,
       "orb_high": 207.5,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
         "3_vwap_break": true,
-        "4_volume_confirmed": true,
+        "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
@@ -32,13 +32,13 @@
     },
     {
       "symbol": "ELV",
-      "price": 416.44000244140625,
+      "price": 415.8299865722656,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 417.3197780243655,
+      "vwap": 417.22535654153126,
       "orb_high": 421.8999938964844,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -56,13 +56,13 @@
     },
     {
       "symbol": "AVAV",
-      "price": 152.375,
+      "price": 151.07220458984375,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
+      "action_trigger_count": 1,
+      "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 149.15664192360677,
+      "vwap": 149.21809916390976,
       "orb_high": 154.5,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -74,7 +74,7 @@
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
+        "B_premarket_high_break": false,
         "C_orb_high_break": false
       }
     }
