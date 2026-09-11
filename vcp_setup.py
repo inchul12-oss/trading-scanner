@@ -46,6 +46,12 @@ class Params:
     min_contraction_depth: float = 0.02   # 이보다 얕은 눌림은 노이즈로 무시
     min_contractions: int = 2             # 최소 수축 횟수
     contraction_ratio_max: float = 0.80   # 다음 수축 깊이 / 이전 수축 깊이
+    # 9/11 진단 결과 추가: 수축 형태를 어떻게 요구할지 고를 수 있게 함.
+    #  "every_leg"        = 매 구간이 직전 구간의 contraction_ratio_max 이하 (원래 방식)
+    #  "final_over_first" = 마지막 수축 깊이 / 첫 수축 깊이만 본다 (판호 제안)
+    # 실측: every_leg는 단독 통과율 1.83%로 병목이었고, final_over_first로 바꾸면
+    # 다른 조건 그대로인 채 READY가 148 → 335로 늘었다.
+    contraction_rule: str = "every_leg"
 
     # 타이트함 / 변동성 / 거래량
     range10_max: float = 0.10             # 최근 10일 고저폭
@@ -212,8 +218,11 @@ def evaluate_vcp(bars, i, p: Params = None):
     r["depth_first"], r["depth_final"] = round(depths[0], 4), round(depths[-1], 4)
     r["depth_final_over_first"] = round(depths[-1] / depths[0], 3)
     r["contraction_ratio_max_observed"] = round(max(ratios), 3) if ratios else None
-    if any(x > p.contraction_ratio_max for x in ratios):
-        r["reject"] = f"수축이 점점 좁아지지 않음(비율 {max(ratios):.2f})"
+    shape_ok = (all(x <= p.contraction_ratio_max for x in ratios)
+                if p.contraction_rule == "every_leg"
+                else (depths[-1] / depths[0]) <= p.contraction_ratio_max)
+    if not shape_ok:
+        r["reject"] = f"수축 형태 미달({p.contraction_rule}, 비율 {max(ratios):.2f})"
         r["reject_code"] = "contraction_not_tightening"
         return r
 
@@ -381,7 +390,9 @@ def evaluate_gates(bars, i, p: Params = None):
     g["6_contraction_count"] = len(depths) >= p.min_contractions
     if len(depths) >= 2:
         ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
-        g["7_contraction_tightening"] = all(x <= p.contraction_ratio_max for x in ratios)
+        g["7_contraction_tightening"] = (all(x <= p.contraction_ratio_max for x in ratios)
+                                         if p.contraction_rule == "every_leg"
+                                         else (depths[-1] / depths[0]) <= p.contraction_ratio_max)
     else:
         g["7_contraction_tightening"] = None
 
