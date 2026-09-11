@@ -49,6 +49,7 @@ BATCH = int(os.getenv("VCP_BATCH", "60"))
 RUN_DIAG = os.getenv("VCP_DIAG", "1") == "1"     # 조건별 탈락 진단 실행 여부
 RUN_GRID = os.getenv("VCP_GRID", "0") == "1"     # 파라미터 조합 그리드 실행 여부
 RUN_SWEEP = os.getenv("VCP_SWEEP", "0") == "1"   # 손절폭 상한 스윕 실행 여부
+RUN_EXITS = os.getenv("VCP_EXITS", "0") == "1"   # 청산 규칙 대안 테스트 실행 여부
 
 
 def fetch_text(url, tries=3):
@@ -362,6 +363,49 @@ def main():
                           f"MDD={sm.get('max_drawdown_r')} "
                           f"탈락(상한)={cnt.get('risk_above_cap')}")
 
+    # ── 7) 청산 규칙 대안 테스트 (9/11) ───────────────────────────────
+    # 9/11 실측: 추세이탈로 익절하고 나온 거래의 58.5%가 20일 안에, 71.8%가 40일 안에
+    # 청산가보다 1R 이상 더 올랐다(매칭 대조군 419건 / 원래 대조군 3,573건에서 거의 동일).
+    # 다만 MFE는 "최고점"이라 실제로 가질 수 있었던 값이 아니라 상한선이다.
+    # 그래서 여기서는 실제 청산 규칙을 바꿔 돌려서 진짜 얻어지는 값을 잰다.
+    exits = {}
+    if RUN_EXITS:
+        print("7) 청산 규칙 대안")
+        VARIANTS = [
+            ("ema10",              dict(exit_mode="ema10")),
+            ("ema20",              dict(exit_mode="ema20")),
+            ("ema50",              dict(exit_mode="ema50")),
+            ("atr2.5",             dict(exit_mode="atr_trail", atr_trail_mult=2.5)),
+            ("atr3.5",             dict(exit_mode="atr_trail", atr_trail_mult=3.5)),
+            ("atr5.0",             dict(exit_mode="atr_trail", atr_trail_mult=5.0)),
+            ("atr3.5_1R뒤",        dict(exit_mode="atr_trail", atr_trail_mult=3.5,
+                                        atr_trail_min_r=1.0)),
+            ("ema20_타임스탑없음",  dict(exit_mode="ema20", time_stop_days=100000)),
+            ("ema50_타임스탑없음",  dict(exit_mode="ema50", time_stop_days=100000)),
+            ("ema20_절반2R",       dict(exit_mode="ema20", partial_take_r=2.0)),
+            ("ema50_절반2R",       dict(exit_mode="ema50", partial_take_r=2.0)),
+            ("ema50_절반2R_본전",  dict(exit_mode="ema50", partial_take_r=2.0,
+                                        be_after_partial=True)),
+        ]
+        for name, kw in VARIANTS:
+            for label in ("MATCHED", "VCP"):
+                cfg = BTConfig(entry_mode="close_confirm", **kw)
+                trades = []
+                for s_, b in bars_by_sym.items():
+                    try:
+                        trades += (backtest_matched_control(s_, b, cfg, p)
+                                   if label == "MATCHED"
+                                   else backtest_symbol(s_, b, cfg, p))
+                    except Exception as e:
+                        print(f"   {s_} {label} {name} 오류: {e}")
+                key = f"{label}|{name}"
+                sm = summarize(trades)
+                sm["distinct_symbols"] = len({t["symbol"] for t in trades})
+                exits[key] = sm
+                print(f"   {key:<30} n={sm.get('n',0):<6} exp={sm.get('expectancy_r')} "
+                      f"avg%={sm.get('avg_ret_pct')} 보유={sm.get('avg_hold')} "
+                      f"총R={sm.get('total_r')} MDD={sm.get('max_drawdown_r')}")
+
     best = max((k for k in all_trades if not k.startswith("CONTROL")),
                key=lambda k: results[k].get("n", 0))
 
@@ -397,6 +441,7 @@ def main():
         "results": results,
         "grid": out_grid,
         "risk_cap_sweep": sweep or None,
+        "exit_variants": exits or None,
         "sample_trades": all_trades[best][:40],
     }
     with open("vcp_backtest_result.json", "w") as f:
