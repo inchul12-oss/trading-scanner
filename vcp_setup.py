@@ -206,6 +206,12 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
     r["contraction_ratios"] = [round(x, 3) for x in ratios]
+    # 판호 제안(9/11): 매 구간 비율을 엄격히 요구하는 것보다 "처음 대비 마지막이 얼마나
+    # 압축됐나"가 더 robust할 수 있다(예: 18→15→7은 중간이 안 줄었지만 최종 압축은 명확).
+    # 지금은 규칙을 바꾸지 않고 기록만 한다.
+    r["depth_first"], r["depth_final"] = round(depths[0], 4), round(depths[-1], 4)
+    r["depth_final_over_first"] = round(depths[-1] / depths[0], 3)
+    r["contraction_ratio_max_observed"] = round(max(ratios), 3) if ratios else None
     if any(x > p.contraction_ratio_max for x in ratios):
         r["reject"] = f"수축이 점점 좁아지지 않음(비율 {max(ratios):.2f})"
         r["reject_code"] = "contraction_not_tightening"
@@ -227,11 +233,15 @@ def evaluate_vcp(bars, i, p: Params = None):
         r["reject"] = "진입 피봇이 마지막 수축 저점보다 낮음"
         r["reject_code"] = "pivot_below_low"
         return r
-    # 이미 피봇을 넘어 마감한 상태면 돌파를 기다리는 셋업이 아니다(이미 터졌음)
-    if c > pivot:
-        r["reject"] = "이미 피봇 위에서 마감(돌파 종료)"
-        r["reject_code"] = "already_above_pivot"
-        return r
+    # 9/11 수정(판호 지적 채택): 종가가 이미 피봇 위인 경우를 "탈락"으로 처리하던 것을 철회한다.
+    # 이건 VCP 조건 불합격이 아니라 **상태**다 — 돌파가 이미 시작됐다는 뜻일 뿐이다.
+    # 피봇을 "마지막 수축의 고가"로 바꾼 뒤로는 종가가 그 위에 있는 경우가 흔해졌고,
+    # 이걸 전부 버리면 READY 구간이 "마지막 저점 이후 직전 고점을 넘기 전"이라는
+    # 아주 좁은 창으로 쪼그라든다. 신호가 극단적으로 적었던 주원인으로 의심된다.
+    # 어떻게 다룰지는 진입 방식이 정한다:
+    #   - 장중 스탑매수(A): 이미 놓친 돌파이므로 신규 주문을 걸지 않는다.
+    #   - 종가확인(B): 오히려 이게 신호 그 자체다.
+    r["late_breakout"] = c > pivot
 
     # ── 4. 타이트함 / 변동성 / 거래량 ──────────────────────────────
     r10 = (max(high[i - 9: i + 1]) - min(low[i - 9: i + 1])) / c
@@ -325,3 +335,86 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     r["ready"] = True
     return r
+
+
+# ─────────────────────── 진단 전용: 조건을 전부 독립 평가 ───────────────────────
+def evaluate_gates(bars, i, p: Params = None):
+    """evaluate_vcp는 첫 실패에서 바로 반환하므로 "뒤쪽 조건이 얼마나 걸러내는지"를 알 수 없다.
+    이 함수는 조기 반환 없이 모든 조건을 독립적으로 평가해서 {조건명: True/False/None}을 준다.
+    None = 선행 정보가 없어 평가 불가. 판정 로직을 바꾸지 않으며 오직 진단용이다.
+    (9/11 판호 제안: 단독 통과율 / 조건부 통과율 / 이 조건 하나 때문에만 탈락한 건수)"""
+    p = p or Params()
+    high, low, close, vol = bars["high"], bars["low"], bars["close"], bars["volume"]
+    g = {}
+    if i < p.max_base + p.atr_long + 5:
+        return None
+    c = close[i]
+
+    sma50 = _sma(close, p.sma_fast, i)
+    sma150 = _sma(close, p.sma_slow, i)
+    g["1_close_above_sma50"] = None if sma50 is None else c > sma50
+    g["2_sma50_above_sma150"] = True if sma150 is None else sma50 > sma150
+    if i + 1 >= p.high_52w_lookback:
+        h52 = max(high[i - p.high_52w_lookback + 1: i + 1])
+        g["3_near_52w_high"] = c >= h52 * p.high_52w_min_ratio
+    else:
+        g["3_near_52w_high"] = True
+
+    lo_idx = i - p.max_base + 1
+    seg_high = high[lo_idx: i + 1]
+    b0 = lo_idx + seg_high.index(max(seg_high))
+    anchor = high[b0]
+    g["4_base_long_enough"] = (i - b0) >= p.min_base
+
+    adv_lo = max(0, b0 - p.prior_advance_lookback)
+    if adv_lo < b0:
+        g["5_prior_advance"] = (anchor / min(low[adv_lo:b0]) - 1) >= p.prior_advance_min
+    else:
+        g["5_prior_advance"] = True
+
+    depths, kept, run = [], [], anchor
+    for j in _find_swing_lows(low, b0, i, p.swing_k):
+        run = max(run, max(high[b0: j + 1]))
+        d = (run - low[j]) / run
+        if d >= p.min_contraction_depth:
+            depths.append(d); kept.append(j)
+    g["6_contraction_count"] = len(depths) >= p.min_contractions
+    if len(depths) >= 2:
+        ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
+        g["7_contraction_tightening"] = all(x <= p.contraction_ratio_max for x in ratios)
+    else:
+        g["7_contraction_tightening"] = None
+
+    g["8_range10_tight"] = (max(high[i - 9:i + 1]) - min(low[i - 9:i + 1])) / c <= p.range10_max
+    g["9_range5_tight"] = (max(high[i - 4:i + 1]) - min(low[i - 4:i + 1])) / c <= p.range5_max
+
+    def _nm(center, span):
+        vs = []
+        for j in range(center - span + 1, center + 1):
+            a = _atr(high, low, close, p.atr_short, j)
+            if a and close[j]:
+                vs.append(a / close[j])
+        if not vs:
+            return None
+        vs.sort(); return vs[len(vs) // 2]
+    nb, nn = _nm(b0, p.natr_median_span_base), _nm(i, p.natr_median_span_now)
+    g["10_atr_contraction"] = None if not (nb and nn) else (nn / nb) <= p.atr_contraction_max
+
+    v_recent = sum(vol[i - p.vol_short + 1:i + 1]) / p.vol_short
+    lo_v = i - p.vol_short - p.vol_long + 1
+    v_base = sum(vol[lo_v:i - p.vol_short + 1]) / p.vol_long
+    g["11_volume_dry"] = None if v_base <= 0 else (v_recent / v_base) <= p.vol_ratio_max
+
+    if len(kept) >= 1:
+        seg_lo = kept[-2] if len(kept) >= 2 else b0
+        pivot = max(high[seg_lo: kept[-1] + 1])
+        fcl = low[kept[-1]]
+        atr_s = _atr(high, low, close, p.atr_short, i)
+        if atr_s and pivot > fcl:
+            stop = fcl - max(p.stop_atr_mult * atr_s, c * p.stop_min_pct)
+            g["12_risk_within_limit"] = stop > 0 and (pivot - stop) / pivot <= p.max_structural_risk
+        else:
+            g["12_risk_within_limit"] = None
+    else:
+        g["12_risk_within_limit"] = None
+    return g
