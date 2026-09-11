@@ -23,7 +23,7 @@ import urllib.request
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from vcp_setup import Params                                    # noqa: E402
+from vcp_setup import Params, evaluate_vcp, evaluate_gates      # noqa: E402
 from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
                           backtest_simple_breakout, summarize)
 
@@ -159,8 +159,57 @@ def main():
         json.dump({"error": "no_data", "coverage": cov}, open("vcp_backtest_result.json", "w"))
         return
 
-    print("3) 백테스트")
+    # ── 진단 (9/11, 판호 제안 방식) ────────────────────────────────────
+    # A. 퍼널 통과율: 조건을 순서대로 적용할 때 어디서 절벽이 생기는가
+    # B. 단독 통과율: 각 조건을 혼자 적용하면 몇 %가 통과하는가
+    # C. 구조 카운트: "이 조건 하나 때문에만 탈락"한 건수 (판호가 rescue count라 부른 것)
+    # 여기서는 어떤 임계값도 바꾸지 않는다. 오직 세기만 한다.
+    print("2.5) 조건별 탈락 진단")
     p = Params()
+    funnel, solo_pass, solo_eval, rescue = {}, {}, {}, {}
+    bars_evaluated = ready_bars = late_bk = 0
+    ready_syms = set()
+    for s_, b in bars_by_sym.items():
+        n = len(b["close"])
+        for i in range(p.max_base + p.atr_long + 6, n):
+            try:
+                r = evaluate_vcp(b, i, p)
+                g = evaluate_gates(b, i, p)
+            except Exception:
+                funnel["ERROR"] = funnel.get("ERROR", 0) + 1
+                continue
+            bars_evaluated += 1
+            if r.get("ready"):
+                ready_bars += 1
+                ready_syms.add(s_)
+                funnel["READY"] = funnel.get("READY", 0) + 1
+                if r.get("late_breakout"):
+                    late_bk += 1
+            else:
+                funnel[r.get("reject_code", "unknown")] = funnel.get(r.get("reject_code", "unknown"), 0) + 1
+            if g:
+                fails = [k for k, v in g.items() if v is False]
+                for k, v in g.items():
+                    if v is None:
+                        continue
+                    solo_eval[k] = solo_eval.get(k, 0) + 1
+                    if v:
+                        solo_pass[k] = solo_pass.get(k, 0) + 1
+                if len(fails) == 1:
+                    rescue[fails[0]] = rescue.get(fails[0], 0) + 1
+
+    print(f"   평가 일봉 {bars_evaluated:,} / READY {ready_bars:,} "
+          f"({ready_bars / max(bars_evaluated,1) * 100:.4f}%) / READY 종목 {len(ready_syms)} "
+          f"/ 그중 이미돌파(late_breakout) {late_bk:,}")
+    print("   [A] 순차 적용 시 최초 탈락 지점")
+    for code, cnt in sorted(funnel.items(), key=lambda kv: -kv[1]):
+        print(f"       {code:<28} {cnt:>9,}  ({cnt / max(bars_evaluated,1) * 100:6.2f}%)")
+    print("   [B] 조건 단독 통과율   [C] 이 조건 하나 때문에만 탈락(rescue)")
+    for k in sorted(solo_eval):
+        pr = solo_pass.get(k, 0) / solo_eval[k] * 100
+        print(f"       {k:<28} 단독통과 {pr:6.2f}%   rescue {rescue.get(k, 0):>7,}")
+
+    print("3) 백테스트")
     results, all_trades = {}, {}
     combos = [(e, x) for e in ("stop_buy", "close_confirm") for x in ("ema10", "ema20", "atr_trail")]
     for entry, exit_m in combos:
@@ -198,6 +247,15 @@ def main():
         "params": {"period": PERIOD, "max_symbols": MAX_SYMBOLS,
                    "min_price": MIN_PRICE, "min_dollar_vol": MIN_DOLLAR_VOL},
         "universe_stats": ustats,
+        "diagnostics": {
+            "bars_evaluated": bars_evaluated,
+            "ready_bars": ready_bars,
+            "ready_symbols": len(ready_syms),
+            "late_breakout_bars": late_bk,
+            "funnel_first_fail": dict(sorted(funnel.items(), key=lambda kv: -kv[1])),
+            "solo_pass_rate": {k: round(solo_pass.get(k, 0) / solo_eval[k], 4) for k in sorted(solo_eval)},
+            "rescue_count": dict(sorted(rescue.items(), key=lambda kv: -kv[1])),
+        },
         "coverage": cov,
         "results": results,
         "sample_trades": all_trades[best][:40],
