@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-11T14:01:28.012406+00:00",
+  "updated_at_utc": "2026-09-11T14:14:40.888960+00:00",
   "candidate_count": 5,
   "checked_count": 5,
   "error_count": 0,
@@ -8,17 +8,42 @@
     "HPE",
     "IBRX"
   ],
-  "entries": [],
+  "entries": [
+    {
+      "symbol": "INSP",
+      "price": 74.20500183105469,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 3,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 72.66451224354226,
+      "orb_high": 73.86000061035156,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": true
+      }
+    }
+  ],
   "all_results": [
     {
       "symbol": "AXSM",
-      "price": 226.19000244140625,
+      "price": 226.23500061035156,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 222.6794768901796,
+      "vwap": 223.04269187271382,
       "orb_high": 229.6199951171875,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -36,37 +61,37 @@
     },
     {
       "symbol": "INSP",
-      "price": 73.2300033569336,
-      "entry_signal": false,
-      "hard_gate_passed": false,
-      "action_trigger_count": 2,
+      "price": 74.20500183105469,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 3,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
-      "vwap": 72.41818783839521,
+      "volume_confirmed": true,
+      "vwap": 72.66451224354226,
       "orb_high": 73.86000061035156,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
         "3_vwap_break": true,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": true,
         "B_premarket_high_break": true,
-        "C_orb_high_break": false
+        "C_orb_high_break": true
       }
     },
     {
       "symbol": "WF",
-      "price": 78.9000015258789,
+      "price": 78.99500274658203,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": null,
-      "vwap": 79.41069912902381,
+      "volume_confirmed": false,
+      "vwap": 79.43836172009841,
       "orb_high": 80.1500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -84,13 +109,13 @@
     },
     {
       "symbol": "BBWI",
-      "price": 18.229999542236328,
+      "price": 18.209999084472656,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 18.37615482031555,
+      "vwap": 18.37463549601116,
       "orb_high": 18.6200008392334,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -108,25 +133,25 @@
     },
     {
       "symbol": "NAVN",
-      "price": 21.075000762939453,
+      "price": 20.75,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 1,
+      "action_trigger_count": 0,
       "action_trigger_passed": false,
-      "volume_confirmed": false,
-      "vwap": 21.18841353281838,
+      "volume_confirmed": true,
+      "vwap": 21.092951616425065,
       "orb_high": 21.575000762939453,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
       "action_trigger": {
         "A_prev_day_high_break": false,
-        "B_premarket_high_break": true,
+        "B_premarket_high_break": false,
         "C_orb_high_break": false
       }
     }
