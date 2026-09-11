@@ -32,7 +32,9 @@ from vcp_portfolio import (collect_entries, run_exit,            # noqa: E402
                            estimate_beta, add_alpha,
                            simulate_portfolio, bootstrap_mar,
                            extract_features, quantile_study,
-                           add_net_alpha, trend_test, holm, EXTRA_COST_PCT)
+                           add_net_alpha, trend_test, holm, EXTRA_COST_PCT,
+                           collect_pullback_entries)
+import random as _rnd                                            # noqa: E402
 
 # E단계: VCP 지표가 알파를 가르는가. 지표 목록은 결과를 보기 전에 고정한다.
 # (사후에 지표를 추가/제거하면 다중검정 문제가 걷잡을 수 없어진다)
@@ -71,6 +73,7 @@ RUN_GRID = os.getenv("VCP_GRID", "0") == "1"     # 파라미터 조합 그리드
 RUN_SWEEP = os.getenv("VCP_SWEEP", "0") == "1"   # 손절폭 상한 스윕 실행 여부
 RUN_EXITS = os.getenv("VCP_EXITS", "0") == "1"   # 청산 규칙 대안 테스트 실행 여부
 RUN_PF = os.getenv("VCP_PF", "0") == "1"         # 청산 최종검증(고정진입/베타/포트폴리오)
+RUN_PB = os.getenv("VCP_PB", "0") == "1"         # strategy D
 
 
 def fetch_text(url, tries=3):
@@ -435,8 +438,8 @@ def main():
     #          (2) 베타로 시장이 올려준 몫을 빼낸 초과수익을 같이 보고,
     #          (3) 5슬롯 포트폴리오 MAR을 블록 부트스트랩 분포로 낸다.
     pf_out = {}
-    if RUN_PF:
-        print("8) 청산 규칙 최종 검증 (고정 진입 / 베타보정 / 5슬롯 포트폴리오)")
+    primary = {}
+    if RUN_PF or RUN_PB:
         bench = {}
         for bsym in ("SPY", "QQQ"):
             try:
@@ -452,6 +455,8 @@ def main():
                 print(f"   벤치마크 {bsym} 실패: {e}")
         primary = bench.get("SPY") or bench.get("QQQ") or {}
 
+    if RUN_PF:
+        print("8) 청산 규칙 최종 검증 (고정 진입 / 베타보정 / 5슬롯 포트폴리오)")
         cfg0 = BTConfig(entry_mode="close_confirm")
         entries, ecnt = {}, new_counters()
         for s_, b in bars_by_sym.items():
@@ -541,6 +546,78 @@ def main():
                   f"부트MAR={sm['bootstrap'].get('mar_p05')}~{sm['bootstrap'].get('mar_p95')} "
                   f"체결/포기={sm['portfolio'].get('taken')}/{sm['portfolio'].get('skipped')}")
 
+    # ── 9) D전략: 돌파 후 첫 눌림 (9/11, 판호 제안) ────────────────────
+    # E단계 결론: 단순 돌파에 알파 없음 + 청산을 바꿔도 안 살아남 +
+    # VCP 지표 10개 전부 알파를 못 가름(홀름 통과 0). 남은 변수는 진입 시점뿐이다.
+    # A(즉시 돌파매수)와 D(눌림 후 재돌파)를 완전히 같은 조건으로 비교한다.
+    pb_out = {}
+    if RUN_PB:
+        print("9) D전략 — 돌파 후 첫 눌림 진입")
+        cfg0 = BTConfig(entry_mode="close_confirm")
+        pb_entries, pcnt, pstats = {}, new_counters(), {}
+        for s_, b in bars_by_sym.items():
+            try:
+                pb_entries[s_] = collect_pullback_entries(
+                    s_, b, cfg0, p, counters=pcnt, stats=pstats)
+            except Exception as e:
+                print(f"   {s_} 눌림수집 오류: {e}")
+                pb_entries[s_] = []
+        print(f"   진입 이벤트 {sum(len(x) for x in pb_entries.values()):,}건")
+        print(f"   깔때기: {pstats}")
+        print(f"   손절폭게이트: {pcnt}")
+        all_dates2 = sorted({d for b in bars_by_sym.values() for d in b["date"]})
+        for name, kw in [("ema10", dict(exit_mode="ema10")),
+                         ("ema20", dict(exit_mode="ema20")),
+                         ("ema50", dict(exit_mode="ema50")),
+                         ("atr3.5", dict(exit_mode="atr_trail", atr_trail_mult=3.5))]:
+            cfg = BTConfig(entry_mode="close_confirm", **kw)
+            trades = []
+            for s_, b in bars_by_sym.items():
+                for ev in pb_entries[s_]:
+                    try:
+                        t = run_exit(ev, b, cfg, p)
+                    except Exception:
+                        continue
+                    if not t:
+                        continue
+                    if primary:
+                        bt = estimate_beta(b["close"], primary, b["date"],
+                                           ev["entry_idx"])
+                        add_alpha(t, b, primary, bt)
+                    add_net_alpha(t)
+                    trades.append(t)
+            sm = summarize(trades)
+            al = [t["net_alpha_r"] for t in trades if "net_alpha_r" in t]
+            if al:
+                als = sorted(al)
+                sm["net_alpha_mean"] = round(sum(al) / len(al), 4)
+                sm["net_alpha_med"] = round(als[len(als) // 2], 4)
+                sm["net_alpha_n"] = len(al)
+                # 진입 월 블록 부트스트랩으로 평균 알파의 신뢰구간
+                bym = {}
+                for t in trades:
+                    if "net_alpha_r" in t:
+                        bym.setdefault(t["entry_date"][:7], []).append(t["net_alpha_r"])
+                ms = list(bym)
+                rnd = _rnd.Random(3)
+                bs = []
+                for _ in range(1000):
+                    vals = []
+                    for _ in range(len(ms)):
+                        vals += bym[ms[rnd.randrange(len(ms))]]
+                    bs.append(sum(vals) / len(vals))
+                bs.sort()
+                sm["net_alpha_ci"] = [round(bs[25], 4), round(bs[974], 4)]
+            sm["portfolio"] = simulate_portfolio(trades, 5, 0.01, all_dates2)
+            sm["bootstrap"] = bootstrap_mar(trades, all_dates2, iters=200)
+            for t in trades:
+                t.pop("r_path", None)
+            pb_out[name] = sm
+            print(f"   {name:<8} n={sm.get('n',0):<5} 기대R={sm.get('expectancy_r')} "
+                  f"순알파={sm.get('net_alpha_mean')} CI={sm.get('net_alpha_ci')} "
+                  f"보유={sm.get('avg_hold')} MAR={sm['portfolio'].get('mar')} "
+                  f"체결/포기={sm['portfolio'].get('taken')}/{sm['portfolio'].get('skipped')}")
+
     best = max((k for k in all_trades if not k.startswith("CONTROL")),
                key=lambda k: results[k].get("n", 0))
 
@@ -578,6 +655,7 @@ def main():
         "risk_cap_sweep": sweep or None,
         "exit_variants": exits or None,
         "exit_final": pf_out or None,
+        "pullback_strategy": pb_out or None,
         "sample_trades": all_trades[best][:40],
     }
     with open("vcp_backtest_result.json", "w") as f:
