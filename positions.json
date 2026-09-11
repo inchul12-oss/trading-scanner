@@ -744,6 +744,36 @@
       "peak_price": 420.62,
       "status": "open",
       "partial_profit_alerted": false
+    },
+    {
+      "symbol": "DELL",
+      "entry_price": 546.3400268554688,
+      "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
+      "entry_date_ny": "2026-09-11",
+      "breakout_candle_low": 522.989990234375,
+      "peak_price": 547.6899,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "HPE",
+      "entry_price": 59.875,
+      "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
+      "entry_date_ny": "2026-09-11",
+      "breakout_candle_low": 57.29999923706055,
+      "peak_price": 60.365,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "IBRX",
+      "entry_price": 8.274999618530273,
+      "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
+      "entry_date_ny": "2026-09-11",
+      "breakout_candle_low": 8.199999809265137,
+      "peak_price": 8.274999618530273,
+      "status": "open",
+      "partial_profit_alerted": false
     }
   ]
 }
