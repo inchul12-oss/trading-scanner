@@ -25,6 +25,10 @@ on:
         description: "손절폭 상한 스윕 실행 (1=실행, 0=건너뜀)"
         required: false
         default: "0"
+      exits:
+        description: "청산 규칙 대안 테스트 실행 (1=실행, 0=건너뜀)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -50,6 +54,7 @@ jobs:
           VCP_DIAG: ${{ github.event.inputs.diag }}
           VCP_GRID: ${{ github.event.inputs.grid }}
           VCP_SWEEP: ${{ github.event.inputs.sweep }}
+          VCP_EXITS: ${{ github.event.inputs.exits }}
         run: python run_vcp_backtest.py
 
       - name: 결과 커밋
