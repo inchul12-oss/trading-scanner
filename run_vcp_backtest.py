@@ -23,7 +23,8 @@ import urllib.request
 from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from vcp_setup import Params, evaluate_vcp, evaluate_gates      # noqa: E402
+from vcp_setup import (Params, evaluate_vcp, evaluate_gates,    # noqa: E402
+                       evaluate_variants)
 from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
                           backtest_simple_breakout, summarize)
 
@@ -169,6 +170,11 @@ def main():
     funnel, solo_pass, solo_eval, rescue = {}, {}, {}, {}
     bars_evaluated = ready_bars = late_bk = 0
     ready_syms = set()
+    # 대안 규칙별로 "그 규칙만 바꿨을 때 READY가 몇 개가 되는가"
+    VAR_GATE = {"contraction_shape": "7_contraction_tightening",
+                "volume_dry": "11_volume_dry",
+                "atr_contraction": "10_atr_contraction"}
+    ready_if = {grp: {} for grp in VAR_GATE}
     for s_, b in bars_by_sym.items():
         n = len(b["close"])
         for i in range(p.max_base + p.atr_long + 6, n):
@@ -197,6 +203,17 @@ def main():
                         solo_pass[k] = solo_pass.get(k, 0) + 1
                 if len(fails) == 1:
                     rescue[fails[0]] = rescue.get(fails[0], 0) + 1
+                try:
+                    vv = evaluate_variants(b, i, p)
+                except Exception:
+                    vv = None
+                if vv:
+                    for grp, gate_name in VAR_GATE.items():
+                        others_ok = all(v is not False for k, v in g.items() if k != gate_name)
+                        for vname, vpass in vv.get(grp, {}).items():
+                            ready_if[grp].setdefault(vname, 0)
+                            if others_ok and vpass:
+                                ready_if[grp][vname] += 1
 
     print(f"   평가 일봉 {bars_evaluated:,} / READY {ready_bars:,} "
           f"({ready_bars / max(bars_evaluated,1) * 100:.4f}%) / READY 종목 {len(ready_syms)} "
@@ -204,6 +221,11 @@ def main():
     print("   [A] 순차 적용 시 최초 탈락 지점")
     for code, cnt in sorted(funnel.items(), key=lambda kv: -kv[1]):
         print(f"       {code:<28} {cnt:>9,}  ({cnt / max(bars_evaluated,1) * 100:6.2f}%)")
+    print("   [D] 대안 규칙별 READY 수 (해당 규칙만 교체, 나머지 조건 동일)")
+    for grp, dd in ready_if.items():
+        print(f"       <{grp}>")
+        for vname, cnt in sorted(dd.items(), key=lambda kv: -kv[1]):
+            print(f"           {vname:<28} READY {cnt:>6,}")
     print("   [B] 조건 단독 통과율   [C] 이 조건 하나 때문에만 탈락(rescue)")
     for k in sorted(solo_eval):
         pr = solo_pass.get(k, 0) / solo_eval[k] * 100
@@ -255,6 +277,7 @@ def main():
             "funnel_first_fail": dict(sorted(funnel.items(), key=lambda kv: -kv[1])),
             "solo_pass_rate": {k: round(solo_pass.get(k, 0) / solo_eval[k], 4) for k in sorted(solo_eval)},
             "rescue_count": dict(sorted(rescue.items(), key=lambda kv: -kv[1])),
+            "ready_if_rule_replaced": ready_if,
         },
         "coverage": cov,
         "results": results,
