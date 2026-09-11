@@ -1,23 +1,22 @@
 {
-  "updated_at_utc": "2026-09-11T14:32:09.771093+00:00",
-  "open_position_count": 4,
+  "updated_at_utc": "2026-09-11T14:43:48.784677+00:00",
+  "open_position_count": 3,
   "new_exits": [
     {
-      "symbol": "IBRX",
-      "entry_price": 8.274999618530273,
-      "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
+      "symbol": "INSP",
+      "entry_price": 74.20500183105469,
+      "entry_time_utc": "2026-09-11T14:14:40.888960+00:00",
       "entry_date_ny": "2026-09-11",
-      "breakout_candle_low": 8.199999809265137,
-      "peak_price": 8.285,
+      "breakout_candle_low": 74.22000122070312,
+      "peak_price": 74.34,
       "status": "closed",
       "partial_profit_alerted": false,
-      "exit_price": 8.1002,
-      "exit_time_utc": "2026-09-11T14:32:09.771093+00:00",
+      "exit_price": 73.69,
+      "exit_time_utc": "2026-09-11T14:43:48.784677+00:00",
       "exit_reasons": [
-        "돌파캔들저점 이탈",
-        "VWAP 이탈"
+        "돌파캔들저점 이탈"
       ],
-      "pnl_pct": -0.02112382194421424,
+      "pnl_pct": -0.006940257642297668,
       "urgent": false
     }
   ],
