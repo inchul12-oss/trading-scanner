@@ -115,6 +115,7 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if i < p.max_base + p.atr_long + 5:
         r["reject"] = "히스토리 부족"
+        r["reject_code"] = "history_short"
         return r
 
     c = close[i]
@@ -127,15 +128,18 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if sma50 is None:
         r["reject"] = "SMA50 계산 불가"
+        r["reject_code"] = "sma50_calc"
         return r
     if c <= sma50:
         r["reject"] = "추세: 종가가 50일선 아래"
+        r["reject_code"] = "trend_below_sma50"
         return r
 
     if sma150 is None:
         r["skipped"].append("sma150")          # 신규상장주 — 스킵(자동 통과)
     elif sma50 <= sma150:
         r["reject"] = "추세: 50일선이 150일선 아래"
+        r["reject_code"] = "trend_sma50_below_sma150"
         return r
 
     if i + 1 >= p.high_52w_lookback:
@@ -143,6 +147,7 @@ def evaluate_vcp(bars, i, p: Params = None):
         r["pct_of_52w_high"] = c / h52
         if c < h52 * p.high_52w_min_ratio:
             r["reject"] = "추세: 52주 고가 대비 너무 낮음"
+            r["reject_code"] = "trend_below_52w"
             return r
     else:
         r["skipped"].append("high_52w")
@@ -164,6 +169,7 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if base_len < p.min_base:
         r["reject"] = f"베이스 길이 부족({base_len}일)"
+        r["reject_code"] = "base_too_short"
         return r
 
     # 베이스 진입 전 상승폭
@@ -174,6 +180,7 @@ def evaluate_vcp(bars, i, p: Params = None):
         r["prior_advance"] = prior_advance
         if prior_advance < p.prior_advance_min:
             r["reject"] = f"베이스 직전 상승 부족({prior_advance:.1%})"
+            r["reject_code"] = "prior_advance_low"
             return r
     else:
         r["skipped"].append("prior_advance")
@@ -194,12 +201,14 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if len(depths) < p.min_contractions:
         r["reject"] = f"수축 횟수 부족({len(depths)}회)"
+        r["reject_code"] = "contractions_few"
         return r
 
     ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
     r["contraction_ratios"] = [round(x, 3) for x in ratios]
     if any(x > p.contraction_ratio_max for x in ratios):
         r["reject"] = f"수축이 점점 좁아지지 않음(비율 {max(ratios):.2f})"
+        r["reject_code"] = "contraction_not_tightening"
         return r
 
     final_contraction_low = low[kept[-1]]
@@ -216,10 +225,12 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if pivot <= final_contraction_low:
         r["reject"] = "진입 피봇이 마지막 수축 저점보다 낮음"
+        r["reject_code"] = "pivot_below_low"
         return r
     # 이미 피봇을 넘어 마감한 상태면 돌파를 기다리는 셋업이 아니다(이미 터졌음)
     if c > pivot:
         r["reject"] = "이미 피봇 위에서 마감(돌파 종료)"
+        r["reject_code"] = "already_above_pivot"
         return r
 
     # ── 4. 타이트함 / 변동성 / 거래량 ──────────────────────────────
@@ -228,9 +239,11 @@ def evaluate_vcp(bars, i, p: Params = None):
     r["range10"], r["range5"] = r10, r5
     if r10 > p.range10_max:
         r["reject"] = f"최근10일 변동폭 과대({r10:.1%})"
+        r["reject_code"] = "range10_wide"
         return r
     if r5 > p.range5_max:
         r["reject"] = f"최근5일 변동폭 과대({r5:.1%})"
+        r["reject_code"] = "range5_wide"
         return r
 
     atr_s = _atr(high, low, close, p.atr_short, i)
@@ -238,6 +251,7 @@ def evaluate_vcp(bars, i, p: Params = None):
     r["atr5"], r["atr20"] = atr_s, atr_l
     if atr_s is None or atr_l is None or atr_l == 0:
         r["reject"] = "ATR 계산 불가"
+        r["reject_code"] = "atr_calc"
         return r
     r["atr_ratio_5_20"] = atr_s / atr_l   # 참고용 기록 (하드 조건 아님 — 아래 주석 참고)
 
@@ -270,6 +284,7 @@ def evaluate_vcp(bars, i, p: Params = None):
         r["atr_contraction"] = atr_contraction
         if atr_contraction > p.atr_contraction_max:
             r["reject"] = f"변동성 수축 부족(베이스 시작 대비 {atr_contraction:.2f})"
+            r["reject_code"] = "atr_contraction_weak"
             return r
 
     # 거래량: 최근 5일 vs 그 이전 20일 (구간이 겹치지 않게)
@@ -279,11 +294,13 @@ def evaluate_vcp(bars, i, p: Params = None):
     r["vol5"], r["vol20_prior"] = v_recent, v_base
     if v_base <= 0:
         r["reject"] = "거래량 기준 계산 불가"
+        r["reject_code"] = "vol_calc"
         return r
     vol_ratio = v_recent / v_base
     r["vol_ratio"] = vol_ratio
     if vol_ratio > p.vol_ratio_max:
         r["reject"] = f"거래량 고갈 부족(비율 {vol_ratio:.2f})"
+        r["reject_code"] = "vol_not_dry"
         return r
 
     # ── 5. 손절 / 진입 상한 ───────────────────────────────────────
@@ -293,6 +310,7 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if stop <= 0 or stop >= pivot:
         r["reject"] = "손절가 계산 이상"
+        r["reject_code"] = "stop_calc"
         return r
 
     # 주문 한 번으로 "추격 +2% 제한"과 "구조적 리스크 5% 제한"을 동시에 만족시키는 상한
@@ -302,6 +320,7 @@ def evaluate_vcp(bars, i, p: Params = None):
 
     if max_entry < pivot:
         r["reject"] = f"피봇 진입 시 리스크 과대({r['risk_at_pivot']:.1%})"
+        r["reject_code"] = "risk_too_big"
         return r
 
     r["ready"] = True
