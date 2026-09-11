@@ -21,6 +21,10 @@ on:
         description: "파라미터 조합 그리드 실행 (1=실행, 0=건너뜀)"
         required: false
         default: "0"
+      sweep:
+        description: "손절폭 상한 스윕 실행 (1=실행, 0=건너뜀)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -45,13 +49,14 @@ jobs:
           VCP_PERIOD: ${{ github.event.inputs.period }}
           VCP_DIAG: ${{ github.event.inputs.diag }}
           VCP_GRID: ${{ github.event.inputs.grid }}
+          VCP_SWEEP: ${{ github.event.inputs.sweep }}
         run: python run_vcp_backtest.py
 
       - name: 결과 커밋
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add vcp_backtest_result.json
+          git add vcp_backtest_result.json vcp_trades.json
           git diff --staged --quiet || git commit -m "VCP 백테스트 결과 갱신"
           for i in 1 2 3; do
             git pull --rebase origin main && git push origin main && break
