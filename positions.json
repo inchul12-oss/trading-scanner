@@ -751,7 +751,7 @@
       "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 522.989990234375,
-      "peak_price": 561.745,
+      "peak_price": 563.92,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -772,8 +772,16 @@
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 8.199999809265137,
       "peak_price": 8.285,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 8.1002,
+      "exit_time_utc": "2026-09-11T14:32:09.771093+00:00",
+      "exit_reasons": [
+        "돌파캔들저점 이탈",
+        "VWAP 이탈"
+      ],
+      "pnl_pct": -0.02112382194421424,
+      "urgent": false
     },
     {
       "symbol": "INSP",
