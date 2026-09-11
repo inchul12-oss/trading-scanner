@@ -1,0 +1,49 @@
+name: VCP Backtest
+
+# 수동 실행 전용. 기존 스캐너 워크플로우와 완전히 분리돼 있어서
+# 이 파일이 실패해도 지금 돌아가는 봇에는 아무 영향이 없다.
+on:
+  workflow_dispatch:
+    inputs:
+      max_symbols:
+        description: "백테스트할 종목 수 상한 (처음엔 300 정도로 작게)"
+        required: false
+        default: "300"
+      period:
+        description: "일봉 기간 (2y / 5y / 10y)"
+        required: false
+        default: "5y"
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 패키지 설치
+        run: pip install --quiet yfinance pandas
+
+      - name: 백테스트 실행
+        env:
+          VCP_MAX_SYMBOLS: ${{ github.event.inputs.max_symbols }}
+          VCP_PERIOD: ${{ github.event.inputs.period }}
+        run: python run_vcp_backtest.py
+
+      - name: 결과 커밋
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add vcp_backtest_result.json
+          git diff --staged --quiet || git commit -m "VCP 백테스트 결과 갱신"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin main && break
+            sleep 5
+          done
