@@ -418,3 +418,75 @@ def evaluate_gates(bars, i, p: Params = None):
     else:
         g["12_risk_within_limit"] = None
     return g
+
+
+# ─────────────── 진단 전용: 병목 조건의 대안 규칙들을 나란히 평가 ───────────────
+def evaluate_variants(bars, i, p: Params = None):
+    """9/11 진단에서 `수축이 매 구간 20%씩 좁아져야 한다`는 규칙의 단독 통과율이 1.83%로
+    다른 조건보다 8배 이상 빡세고, 이 조건 하나 때문에만 탈락한 건이 158건(현 READY 50건의 3배)
+    으로 나왔다. 규칙을 바꾸기 전에 '어떤 형태의 규칙이 몇 개를 살리는지'를 먼저 측정한다.
+
+    반환: {규칙그룹: {대안이름: True/False/None}}. 판정 로직은 건드리지 않는다."""
+    p = p or Params()
+    high, low, close, vol = bars["high"], bars["low"], bars["close"], bars["volume"]
+    if i < p.max_base + p.atr_long + 5:
+        return None
+    c = close[i]
+    out = {"contraction_shape": {}, "volume_dry": {}, "atr_contraction": {}}
+
+    lo_idx = i - p.max_base + 1
+    seg_high = high[lo_idx: i + 1]
+    b0 = lo_idx + seg_high.index(max(seg_high))
+    anchor = high[b0]
+
+    depths, run = [], anchor
+    for j in _find_swing_lows(low, b0, i, p.swing_k):
+        run = max(run, max(high[b0: j + 1]))
+        d = (run - low[j]) / run
+        if d >= p.min_contraction_depth:
+            depths.append(d)
+
+    if len(depths) >= 2:
+        ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
+        fof = depths[-1] / depths[0]
+        out["contraction_shape"] = {
+            "A_every_leg_080(현행)": all(x <= 0.80 for x in ratios),
+            "B_every_leg_090": all(x <= 0.90 for x in ratios),
+            "C_final_over_first_080": fof <= 0.80,
+            "D_final_over_first_070": fof <= 0.70,
+            "E_final_depth_under_5pct": depths[-1] <= 0.05,
+            "F_no_shape_rule": True,
+        }
+    else:
+        out["contraction_shape"] = {k: None for k in
+                                    ["A_every_leg_080(현행)", "B_every_leg_090",
+                                     "C_final_over_first_080", "D_final_over_first_070",
+                                     "E_final_depth_under_5pct", "F_no_shape_rule"]}
+
+    v_recent = sum(vol[i - p.vol_short + 1:i + 1]) / p.vol_short
+    lo_v = i - p.vol_short - p.vol_long + 1
+    v_base = sum(vol[lo_v:i - p.vol_short + 1]) / p.vol_long
+    if v_base > 0:
+        vr = v_recent / v_base
+        out["volume_dry"] = {"A_070(현행)": vr <= 0.70, "B_080": vr <= 0.80,
+                             "C_090": vr <= 0.90, "D_none": True}
+    else:
+        out["volume_dry"] = {k: None for k in ["A_070(현행)", "B_080", "C_090", "D_none"]}
+
+    def _nm(center, span):
+        vs = []
+        for j in range(center - span + 1, center + 1):
+            a = _atr(high, low, close, p.atr_short, j)
+            if a and close[j]:
+                vs.append(a / close[j])
+        if not vs:
+            return None
+        vs.sort(); return vs[len(vs) // 2]
+    nb, nn = _nm(b0, p.natr_median_span_base), _nm(i, p.natr_median_span_now)
+    if nb and nn:
+        ac = nn / nb
+        out["atr_contraction"] = {"A_075(현행)": ac <= 0.75, "B_085": ac <= 0.85,
+                                  "C_095": ac <= 0.95, "D_none": True}
+    else:
+        out["atr_contraction"] = {k: None for k in ["A_075(현행)", "B_085", "C_095", "D_none"]}
+    return out
