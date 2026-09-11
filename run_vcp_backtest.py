@@ -30,7 +30,24 @@ from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
                           backtest_matched_control, new_counters)
 from vcp_portfolio import (collect_entries, run_exit,            # noqa: E402
                            estimate_beta, add_alpha,
-                           simulate_portfolio, bootstrap_mar)
+                           simulate_portfolio, bootstrap_mar,
+                           extract_features, quantile_study,
+                           add_net_alpha, trend_test, holm, EXTRA_COST_PCT)
+
+# E단계: VCP 지표가 알파를 가르는가. 지표 목록은 결과를 보기 전에 고정한다.
+# (사후에 지표를 추가/제거하면 다중검정 문제가 걷잡을 수 없어진다)
+FEATURES = [
+    "vol_ratio",              # 거래량 고갈
+    "atr_contraction",        # 변동성 수축 (베이스 시작 대비)
+    "depth_final_over_first", # 마지막 수축 / 첫 수축
+    "contraction_ratio_max",  # 매 구간 수축비 중 최악값
+    "n_contractions",         # 수축 횟수
+    "range10",                # 최근 10일 변동폭
+    "pct_of_52w_high",        # 52주 고가 대비 위치
+    "prior_advance",          # 베이스 직전 상승폭
+    "base_len",               # 베이스 길이
+    "px_over_sma50",          # 50일선 대비 위치
+]
 
 NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt"
 OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
@@ -482,8 +499,40 @@ def main():
                     t["beta"] for t in trades if "beta" in t)[len(al_s) // 2], 3)
             sm["portfolio"] = simulate_portfolio(trades, 5, 0.01, all_dates)
             sm["bootstrap"] = bootstrap_mar(trades, all_dates, iters=200)
+            # 지표 분위 분석(E단계)은 대표 청산 하나로만 한다.
+            # 목적이 "청산 고르기"가 아니라 "VCP 지표에 정보가 있는가"이기 때문이다.
+            if name == "ema20":
+                for t in trades:
+                    t["feat"] = extract_features(bars_by_sym[t["symbol"]],
+                                                 t["setup_idx"], p)
+                    add_net_alpha(t)
+                # (1) 읽기용 분위표 — train 경계를 test에 그대로 적용
+                sm["quantile_study"] = quantile_study(trades, FEATURES,
+                                                      target="net_alpha_r")
+                # (2) 판정용 검정 — 지표당 순서추세 가설 1개만. test에서만 판정.
+                ts = sorted([t for t in trades if t.get("entry_date")
+                             and t.get("net_alpha_r") is not None],
+                            key=lambda t: t["entry_date"])
+                cutn = int(len(ts) * 0.6)
+                tr_rows, te_rows = ts[:cutn], ts[cutn:]
+                tr_res = {f: trend_test(tr_rows, f) for f in FEATURES}
+                te_res = {f: trend_test(te_rows, f) for f in FEATURES}
+                te_p = {f: (v or {}).get("p") for f, v in te_res.items()}
+                sm["trend_train"] = tr_res
+                sm["trend_test"] = te_res
+                sm["holm_test"] = holm(te_p)
+                sm["cost_assumption_pct"] = EXTRA_COST_PCT
+                print("   ── 지표별 순서추세 (종속변수: 비용차감 알파R) ──")
+                for f in FEATURES:
+                    a, b = tr_res.get(f), te_res.get(f)
+                    hh = sm["holm_test"].get(f, {})
+                    print(f"      {f:<24} train rho={(a or {}).get('rho')} "
+                          f"| test rho={(b or {}).get('rho')} "
+                          f"p={(b or {}).get('p')} holm={hh.get('holm_p')} "
+                          f"{'채택' if hh.get('reject') else ''}")
             for t in trades:
                 t.pop("r_path", None)          # 결과 파일에는 경로를 남기지 않는다
+                t.pop("feat", None)
             pf_out[name] = sm
             print(f"   {name:<8} n={sm.get('n',0):<6} 기대R={sm.get('expectancy_r')} "
                   f"alphaR={sm.get('alpha_r_mean')} "
