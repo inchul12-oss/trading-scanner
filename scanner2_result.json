@@ -1,27 +1,24 @@
 {
-  "updated_at_utc": "2026-09-10T21:03:17.612912+00:00",
-  "candidate_count": 2,
-  "checked_count": 2,
+  "updated_at_utc": "2026-09-11T13:45:46.896293+00:00",
+  "candidate_count": 8,
+  "checked_count": 8,
   "error_count": 0,
-  "cooldown_excluded": [
-    "ELV"
-  ],
-  "entries": [],
-  "all_results": [
+  "cooldown_excluded": [],
+  "entries": [
     {
-      "symbol": "MOH",
-      "price": 200.28,
-      "entry_signal": false,
-      "hard_gate_passed": false,
+      "symbol": "DELL",
+      "price": 546.3400268554688,
+      "entry_signal": true,
+      "hard_gate_passed": true,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 200.6094115830328,
-      "orb_high": 207.5,
+      "vwap": 534.5508444407308,
+      "orb_high": null,
       "hard_gate": {
-        "1_ma20_above_ma50": false,
-        "2_ma50_slope_up": false,
-        "3_vwap_break": false,
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
         "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
@@ -33,26 +30,244 @@
       }
     },
     {
-      "symbol": "AVAV",
-      "price": 147.99,
+      "symbol": "HPE",
+      "price": 59.875,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 58.54754704423624,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "IBRX",
+      "price": 8.274999618530273,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 8.127124370934228,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    }
+  ],
+  "all_results": [
+    {
+      "symbol": "AXSM",
+      "price": 226.30999755859375,
       "entry_signal": false,
       "hard_gate_passed": false,
-      "action_trigger_count": 0,
-      "action_trigger_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
       "volume_confirmed": null,
-      "vwap": 152.35132478159474,
-      "orb_high": 154.5,
+      "vwap": 221.6930327771646,
+      "orb_high": null,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
+        "3_vwap_break": true,
+        "4_volume_confirmed": false,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "INSP",
+      "price": 73.37999725341797,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": null,
+      "vwap": 72.70917435233551,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": false,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "DELL",
+      "price": 546.3400268554688,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 534.5508444407308,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "WF",
+      "price": 78.9000015258789,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": null,
+      "vwap": 79.35446811597018,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
         "3_vwap_break": false,
         "4_volume_confirmed": false,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "HPE",
+      "price": 59.875,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 58.54754704423624,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "BBWI",
+      "price": 18.56999969482422,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 18.381149626720813,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": false,
+        "2_ma50_slope_up": false,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": false
       },
       "ma200_available": true,
       "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "IBRX",
+      "price": 8.274999618530273,
+      "entry_signal": true,
+      "hard_gate_passed": true,
+      "action_trigger_count": 2,
+      "action_trigger_passed": true,
+      "volume_confirmed": true,
+      "vwap": 8.127124370934228,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": true,
+        "3_vwap_break": true,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
+        "A_prev_day_high_break": true,
+        "B_premarket_high_break": true,
+        "C_orb_high_break": false
+      }
+    },
+    {
+      "symbol": "NAVN",
+      "price": 20.809999465942383,
+      "entry_signal": false,
+      "hard_gate_passed": false,
+      "action_trigger_count": 1,
+      "action_trigger_passed": false,
+      "volume_confirmed": true,
+      "vwap": 21.269220994290958,
+      "orb_high": null,
+      "hard_gate": {
+        "1_ma20_above_ma50": true,
+        "2_ma50_slope_up": false,
+        "3_vwap_break": false,
+        "4_volume_confirmed": true,
+        "5_ma200_trend_or_skip": true
+      },
+      "ma200_available": true,
+      "action_trigger": {
         "A_prev_day_high_break": false,
-        "B_premarket_high_break": false,
+        "B_premarket_high_break": true,
         "C_orb_high_break": false
       }
     }
