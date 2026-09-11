@@ -303,6 +303,10 @@ def _finalize(pos, cfg, bars=None):
         "giveback_r": round(peak_r - r_mult, 3),
         "holding_days": pos.get("holding_days", 0), "reason": pos["reason"],
         "ambiguous": bool(pos.get("ambiguous", False)),
+        "entry_date": (bars["date"][pos["entry_idx"]]
+                       if bars and "date" in bars else None),
+        "exit_date": (bars["date"][pos["exit_idx"]]
+                      if bars and "date" in bars else None),
         # 청산 이후에도 더 갔는가. 진입가 기준 R.
         "post_mfe": (_post_exit_mfe(pos["entry"], risk, bars, pos["exit_idx"],
                                     cfg.post_exit_horizons) if bars else None),
@@ -434,8 +438,28 @@ def summarize(trades):
         "avg_ret_pct": round(sum(t["ret_pct"] for t in trades) / len(trades) * 100, 3),
         "ambiguous_pct": round(
             sum(1 for t in trades if t.get("ambiguous")) / len(trades) * 100, 2),
+        **portfolio_stats(trades),
         **_post_exit_summary(trades),
     }
+
+
+def portfolio_stats(trades):
+    """청산일 기준으로 R을 누적해서 포트폴리오 관점의 낙폭을 구한다.
+    거래별 min_r(최악의 한 건)과 달리, 연달아 지는 구간의 크기를 본다.
+    한 번에 한 종목만 들고 있다고 가정한 단순 누적이라 실제 계좌와 정확히 같진 않다.
+    날짜가 없으면(합성데이터 등) None."""
+    ts = [t for t in trades if t.get("exit_date")]
+    if not ts:
+        return {}
+    ts.sort(key=lambda t: t["exit_date"])
+    eq = peak = 0.0
+    mdd = 0.0
+    for t in ts:
+        eq += t["r"]
+        peak = max(peak, eq)
+        mdd = min(mdd, eq - peak)
+    return {"total_r": round(eq, 1), "max_drawdown_r": round(mdd, 1),
+            "first_exit": ts[0]["exit_date"], "last_exit": ts[-1]["exit_date"]}
 
 
 def _post_exit_summary(trades):
