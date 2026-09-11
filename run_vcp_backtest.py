@@ -28,6 +28,9 @@ from vcp_setup import (Params, evaluate_vcp, evaluate_gates,    # noqa: E402
 from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
                           backtest_simple_breakout, summarize,
                           backtest_matched_control, new_counters)
+from vcp_portfolio import (collect_entries, run_exit,            # noqa: E402
+                           estimate_beta, add_alpha,
+                           simulate_portfolio, bootstrap_mar)
 
 NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt"
 OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
@@ -50,6 +53,7 @@ RUN_DIAG = os.getenv("VCP_DIAG", "1") == "1"     # 조건별 탈락 진단 실�
 RUN_GRID = os.getenv("VCP_GRID", "0") == "1"     # 파라미터 조합 그리드 실행 여부
 RUN_SWEEP = os.getenv("VCP_SWEEP", "0") == "1"   # 손절폭 상한 스윕 실행 여부
 RUN_EXITS = os.getenv("VCP_EXITS", "0") == "1"   # 청산 규칙 대안 테스트 실행 여부
+RUN_PF = os.getenv("VCP_PF", "0") == "1"         # 청산 최종검증(고정진입/베타/포트폴리오)
 
 
 def fetch_text(url, tries=3):
@@ -406,6 +410,88 @@ def main():
                       f"avg%={sm.get('avg_ret_pct')} 보유={sm.get('avg_hold')} "
                       f"총R={sm.get('total_r')} MDD={sm.get('max_drawdown_r')}")
 
+    # ── 8) 청산 규칙 최종 검증 (9/11, 판호 자문 반영) ─────────────────
+    # 7)의 청산 비교에는 결함이 있었다: 청산 규칙마다 거래 수가 달랐다(1,621~1,958).
+    # 한 종목은 한 번에 하나만 보유하므로 빨리 파는 규칙이 다음 신호를 더 잡는다.
+    # 즉 "청산의 차이"가 아니라 "청산 + 거래목록의 차이"를 비교하고 있었다.
+    # 여기서는 (1) 진입 목록을 고정하고 청산만 갈아끼우며,
+    #          (2) 베타로 시장이 올려준 몫을 빼낸 초과수익을 같이 보고,
+    #          (3) 5슬롯 포트폴리오 MAR을 블록 부트스트랩 분포로 낸다.
+    pf_out = {}
+    if RUN_PF:
+        print("8) 청산 규칙 최종 검증 (고정 진입 / 베타보정 / 5슬롯 포트폴리오)")
+        bench = {}
+        for bsym in ("SPY", "QQQ"):
+            try:
+                bdf = yf.download(bsym, period=PERIOD, interval="1d",
+                                  auto_adjust=False, progress=False)
+                bdf = bdf.dropna()
+                col = bdf["Close"]
+                if hasattr(col, "columns"):
+                    col = col.iloc[:, 0]
+                bench[bsym] = {str(d)[:10]: float(v) for d, v in zip(bdf.index, col)}
+                print(f"   벤치마크 {bsym}: {len(bench[bsym])}일")
+            except Exception as e:
+                print(f"   벤치마크 {bsym} 실패: {e}")
+        primary = bench.get("SPY") or bench.get("QQQ") or {}
+
+        cfg0 = BTConfig(entry_mode="close_confirm")
+        entries, ecnt = {}, new_counters()
+        for s_, b in bars_by_sym.items():
+            try:
+                entries[s_] = collect_entries(s_, b, cfg0, p, counters=ecnt)
+            except Exception as e:
+                print(f"   {s_} 진입수집 오류: {e}")
+                entries[s_] = []
+        n_ev = sum(len(v) for v in entries.values())
+        print(f"   고정 진입 이벤트 {n_ev:,}건  (게이트: {ecnt})")
+
+        # 종목별 베타는 진입시점마다 진입 직전 126일로 추정한다(미래 미사용)
+        all_dates = sorted({d for b in bars_by_sym.values() for d in b["date"]})
+        PF_VARIANTS = [
+            ("ema10",  dict(exit_mode="ema10")),
+            ("ema20",  dict(exit_mode="ema20")),
+            ("ema50",  dict(exit_mode="ema50")),
+            ("atr2.5", dict(exit_mode="atr_trail", atr_trail_mult=2.5)),
+            ("atr3.5", dict(exit_mode="atr_trail", atr_trail_mult=3.5)),
+            ("atr5.0", dict(exit_mode="atr_trail", atr_trail_mult=5.0)),
+        ]
+        for name, kw in PF_VARIANTS:
+            cfg = BTConfig(entry_mode="close_confirm", **kw)
+            trades = []
+            for s_, b in bars_by_sym.items():
+                for ev in entries[s_]:
+                    try:
+                        t = run_exit(ev, b, cfg, p)
+                    except Exception:
+                        continue
+                    if not t:
+                        continue
+                    if primary:
+                        bt = estimate_beta(b["close"], primary, b["date"], ev["entry_idx"])
+                        add_alpha(t, b, primary, bt)
+                    trades.append(t)
+            sm = summarize(trades)
+            al = [t["alpha_r"] for t in trades if "alpha_r" in t]
+            if al:
+                al_s = sorted(al)
+                sm["alpha_r_mean"] = round(sum(al) / len(al), 4)
+                sm["alpha_r_med"] = round(al_s[len(al_s) // 2], 4)
+                sm["alpha_n"] = len(al)
+                sm["beta_med"] = round(sorted(
+                    t["beta"] for t in trades if "beta" in t)[len(al_s) // 2], 3)
+            sm["portfolio"] = simulate_portfolio(trades, 5, 0.01, all_dates)
+            sm["bootstrap"] = bootstrap_mar(trades, all_dates, iters=200)
+            for t in trades:
+                t.pop("r_path", None)          # 결과 파일에는 경로를 남기지 않는다
+            pf_out[name] = sm
+            print(f"   {name:<8} n={sm.get('n',0):<6} 기대R={sm.get('expectancy_r')} "
+                  f"alphaR={sm.get('alpha_r_mean')} "
+                  f"CAGR={sm['portfolio'].get('cagr')} MDD={sm['portfolio'].get('mdd')} "
+                  f"MAR={sm['portfolio'].get('mar')} "
+                  f"부트MAR={sm['bootstrap'].get('mar_p05')}~{sm['bootstrap'].get('mar_p95')} "
+                  f"체결/포기={sm['portfolio'].get('taken')}/{sm['portfolio'].get('skipped')}")
+
     best = max((k for k in all_trades if not k.startswith("CONTROL")),
                key=lambda k: results[k].get("n", 0))
 
@@ -442,6 +528,7 @@ def main():
         "grid": out_grid,
         "risk_cap_sweep": sweep or None,
         "exit_variants": exits or None,
+        "exit_final": pf_out or None,
         "sample_trades": all_trades[best][:40],
     }
     with open("vcp_backtest_result.json", "w") as f:
