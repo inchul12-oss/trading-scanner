@@ -272,3 +272,160 @@ def bootstrap_mar(trades, all_dates, slots=5, risk_frac=0.01,
     return {"n_iter": len(mars),
             "mar_p05": pct(mars, 0.05), "mar_med": pct(mars, 0.5), "mar_p95": pct(mars, 0.95),
             "cagr_med": pct(cagrs, 0.5), "mdd_med": pct(mdds, 0.5), "mdd_p05": pct(mdds, 0.05)}
+
+
+# ───────────────────── 6) VCP 지표 원값 추출 ─────────────────────
+# 왜 evaluate_vcp를 그대로 못 쓰나: 그 함수는 조건을 AND로 엮어서 하나라도 걸리면
+# 즉시 return 한다. 그래서 대부분의 봉에서는 뒤쪽 지표값이 아예 계산되지 않는다.
+# 여기서는 "통과/탈락" 판정 없이 각 지표의 원값만 독립적으로 뽑는다.
+# 값이 정의되지 않으면 None을 넣고, 뒤의 분위 분석에서 그 건만 제외한다.
+from vcp_setup import _atr        # noqa: E402
+
+
+def extract_features(bars, i, p: Params = None):
+    p = p or Params()
+    high, low, close, vol = bars["high"], bars["low"], bars["close"], bars["volume"]
+    c = close[i]
+    f = {}
+    if i < 60 or c <= 0:
+        return f
+
+    # 추세 위치
+    if i + 1 >= p.sma_fast:
+        sma50 = sum(close[i - p.sma_fast + 1:i + 1]) / p.sma_fast
+        f["px_over_sma50"] = c / sma50 if sma50 else None
+    if i + 1 >= p.sma_slow:
+        sma150 = sum(close[i - p.sma_slow + 1:i + 1]) / p.sma_slow
+        f["px_over_sma150"] = c / sma150 if sma150 else None
+    if i + 1 >= p.high_52w_lookback:
+        h52 = max(high[i - p.high_52w_lookback + 1:i + 1])
+        f["pct_of_52w_high"] = c / h52 if h52 else None
+
+    # 베이스
+    lo_idx = i - p.max_base + 1
+    if lo_idx < 0:
+        return f
+    seg = high[lo_idx:i + 1]
+    b_idx = lo_idx + seg.index(max(seg))
+    anchor = high[b_idx]
+    f["base_len"] = i - b_idx
+
+    adv_lo = max(0, b_idx - p.prior_advance_lookback)
+    if adv_lo < b_idx:
+        pl = min(low[adv_lo:b_idx])
+        f["prior_advance"] = anchor / pl - 1 if pl else None
+
+    # 수축 구조
+    swings = _find_swing_lows(low, b_idx, i, p.swing_k)
+    depths, kept, run = [], [], anchor
+    for j in swings:
+        run = max(run, max(high[b_idx:j + 1]))
+        d = (run - low[j]) / run if run else 0
+        if d >= p.min_contraction_depth:
+            depths.append(d)
+            kept.append(j)
+    f["n_contractions"] = len(depths)
+    if depths:
+        f["depth_first"] = depths[0]
+        f["depth_final"] = depths[-1]
+        if depths[0] > 0:
+            f["depth_final_over_first"] = depths[-1] / depths[0]
+        if len(depths) >= 2:
+            ratios = [depths[k + 1] / depths[k] for k in range(len(depths) - 1)]
+            f["contraction_ratio_max"] = max(ratios)
+
+    # 타이트함
+    f["range10"] = (max(high[i - 9:i + 1]) - min(low[i - 9:i + 1])) / c
+    f["range5"] = (max(high[i - 4:i + 1]) - min(low[i - 4:i + 1])) / c
+
+    # 변동성 수축 (NATR 중앙값 비교)
+    def _natr_med(center, span):
+        vals = []
+        for j in range(max(0, center - span + 1), center + 1):
+            a = _atr(high, low, close, p.atr_short, j)
+            if a and close[j]:
+                vals.append(a / close[j])
+        if not vals:
+            return None
+        vals.sort()
+        return vals[len(vals) // 2]
+
+    nb, nn = _natr_med(b_idx, p.natr_median_span_base), _natr_med(i, p.natr_median_span_now)
+    f["natr_now"] = nn
+    if nb and nn:
+        f["atr_contraction"] = nn / nb
+
+    # 거래량 고갈
+    lo_v = i - p.vol_short - p.vol_long + 1
+    if lo_v >= 0:
+        v_rec = sum(vol[i - p.vol_short + 1:i + 1]) / p.vol_short
+        v_base = sum(vol[lo_v:i - p.vol_short + 1]) / p.vol_long
+        if v_base > 0:
+            f["vol_ratio"] = v_rec / v_base
+    return f
+
+
+# ───────────────────── 7) 분위 분석 (train 경계 → test 적용) ─────────────────────
+def quantile_study(trades, feature_names, target="alpha_r",
+                   train_frac=0.6, buckets=5, min_per_bucket=30):
+    """판호 권고 방식:
+      - 전반 train_frac 기간에서 분위 경계를 정한다
+      - 그 경계를 그대로 후반(test)에 적용한다 (test를 다시 분위분할하지 않는다.
+        다시 나누면 시장 분포 변화까지 정규화돼서 임계값 안정성을 볼 수 없다)
+      - train에서 단조성이 보이고 test에서 재현되는 지표만 채택
+    """
+    ts = [t for t in trades if t.get("entry_date") and t.get(target) is not None]
+    if not ts:
+        return {}
+    ts.sort(key=lambda t: t["entry_date"])
+    cut = int(len(ts) * train_frac)
+    train, test = ts[:cut], ts[cut:]
+    out = {"n_train": len(train), "n_test": len(test),
+           "split_date": test[0]["entry_date"] if test else None, "features": {}}
+
+    for fn in feature_names:
+        tv = sorted(t["feat"][fn] for t in train
+                    if t.get("feat", {}).get(fn) is not None)
+        if len(tv) < buckets * min_per_bucket:
+            continue
+        edges = [tv[int(len(tv) * k / buckets)] for k in range(1, buckets)]
+
+        def bucketize(rows):
+            bs = [[] for _ in range(buckets)]
+            for t in rows:
+                v = t.get("feat", {}).get(fn)
+                if v is None:
+                    continue
+                k = 0
+                while k < buckets - 1 and v > edges[k]:
+                    k += 1
+                bs[k].append(t[target])
+            return bs
+
+        def stat(bs):
+            o = []
+            for b in bs:
+                if len(b) < min_per_bucket:
+                    o.append(None)
+                    continue
+                b2 = sorted(b)
+                o.append({"n": len(b), "mean": round(sum(b) / len(b), 4),
+                          "med": round(b2[len(b2) // 2], 4)})
+            return o
+
+        st_tr, st_te = stat(bucketize(train)), stat(bucketize(test))
+
+        def mono(st):
+            """분위 번호와 평균 사이의 스피어만 상관. +1/-1에 가까울수록 계단."""
+            pts = [(k, s["mean"]) for k, s in enumerate(st) if s]
+            if len(pts) < 4:
+                return None
+            n = len(pts)
+            rk = {v: r for r, (_, v) in enumerate(sorted(pts, key=lambda x: x[1]))}
+            d2 = sum((k - rk[v]) ** 2 for k, v in pts)
+            return round(1 - 6 * d2 / (n * (n * n - 1)), 3)
+
+        out["features"][fn] = {"edges": [round(e, 5) for e in edges],
+                               "train": st_tr, "test": st_te,
+                               "mono_train": mono(st_tr), "mono_test": mono(st_te)}
+    return out
