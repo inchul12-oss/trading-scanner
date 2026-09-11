@@ -741,7 +741,7 @@
       "entry_time_utc": "2026-09-10T16:50:08.249426+00:00",
       "entry_date_ny": "2026-09-10",
       "breakout_candle_low": 417.81500244140625,
-      "peak_price": 424.2801,
+      "peak_price": 425.37,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -751,7 +751,7 @@
       "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 522.989990234375,
-      "peak_price": 557.345,
+      "peak_price": 561.745,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -761,7 +761,7 @@
       "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 57.29999923706055,
-      "peak_price": 61.21,
+      "peak_price": 61.385,
       "status": "open",
       "partial_profit_alerted": false
     },
@@ -772,6 +772,16 @@
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 8.199999809265137,
       "peak_price": 8.285,
+      "status": "open",
+      "partial_profit_alerted": false
+    },
+    {
+      "symbol": "INSP",
+      "entry_price": 74.20500183105469,
+      "entry_time_utc": "2026-09-11T14:14:40.888960+00:00",
+      "entry_date_ny": "2026-09-11",
+      "breakout_candle_low": 74.22000122070312,
+      "peak_price": 74.34,
       "status": "open",
       "partial_profit_alerted": false
     }
