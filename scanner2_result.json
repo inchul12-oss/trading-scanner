@@ -1,94 +1,25 @@
 {
-  "updated_at_utc": "2026-09-11T13:45:46.896293+00:00",
-  "candidate_count": 8,
-  "checked_count": 8,
+  "updated_at_utc": "2026-09-11T14:00:06.564713+00:00",
+  "candidate_count": 5,
+  "checked_count": 5,
   "error_count": 0,
-  "cooldown_excluded": [],
-  "entries": [
-    {
-      "symbol": "DELL",
-      "price": 546.3400268554688,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 534.5508444407308,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "HPE",
-      "price": 59.875,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 58.54754704423624,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "IBRX",
-      "price": 8.274999618530273,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 8.127124370934228,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    }
+  "cooldown_excluded": [
+    "DELL",
+    "HPE",
+    "IBRX"
   ],
+  "entries": [],
   "all_results": [
     {
       "symbol": "AXSM",
-      "price": 226.30999755859375,
+      "price": 226.52000427246094,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": null,
-      "vwap": 221.6930327771646,
-      "orb_high": null,
+      "volume_confirmed": false,
+      "vwap": 222.63919605470969,
+      "orb_high": 229.6199951171875,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
@@ -105,43 +36,19 @@
     },
     {
       "symbol": "INSP",
-      "price": 73.37999725341797,
+      "price": 73.2300033569336,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": null,
-      "vwap": 72.70917435233551,
-      "orb_high": null,
+      "volume_confirmed": false,
+      "vwap": 72.3944918567782,
+      "orb_high": 73.86000061035156,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
         "3_vwap_break": true,
         "4_volume_confirmed": false,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
-      "symbol": "DELL",
-      "price": 546.3400268554688,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 534.5508444407308,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
@@ -153,14 +60,14 @@
     },
     {
       "symbol": "WF",
-      "price": 78.9000015258789,
+      "price": 78.80500030517578,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": null,
-      "vwap": 79.35446811597018,
-      "orb_high": null,
+      "vwap": 79.47702876950599,
+      "orb_high": 80.1500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
@@ -176,44 +83,20 @@
       }
     },
     {
-      "symbol": "HPE",
-      "price": 59.875,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 58.54754704423624,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
       "symbol": "BBWI",
-      "price": 18.56999969482422,
+      "price": 18.280000686645508,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 18.381149626720813,
-      "orb_high": null,
+      "volume_confirmed": false,
+      "vwap": 18.389612607923382,
+      "orb_high": 18.6200008392334,
       "hard_gate": {
         "1_ma20_above_ma50": false,
         "2_ma50_slope_up": false,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
+        "3_vwap_break": false,
+        "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": false
       },
       "ma200_available": true,
@@ -224,44 +107,20 @@
       }
     },
     {
-      "symbol": "IBRX",
-      "price": 8.274999618530273,
-      "entry_signal": true,
-      "hard_gate_passed": true,
-      "action_trigger_count": 2,
-      "action_trigger_passed": true,
-      "volume_confirmed": true,
-      "vwap": 8.127124370934228,
-      "orb_high": null,
-      "hard_gate": {
-        "1_ma20_above_ma50": true,
-        "2_ma50_slope_up": true,
-        "3_vwap_break": true,
-        "4_volume_confirmed": true,
-        "5_ma200_trend_or_skip": true
-      },
-      "ma200_available": true,
-      "action_trigger": {
-        "A_prev_day_high_break": true,
-        "B_premarket_high_break": true,
-        "C_orb_high_break": false
-      }
-    },
-    {
       "symbol": "NAVN",
-      "price": 20.809999465942383,
+      "price": 21.110000610351562,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
       "action_trigger_passed": false,
-      "volume_confirmed": true,
-      "vwap": 21.269220994290958,
-      "orb_high": null,
+      "volume_confirmed": false,
+      "vwap": 21.189593266627107,
+      "orb_high": 21.575000762939453,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": true,
+        "4_volume_confirmed": false,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
