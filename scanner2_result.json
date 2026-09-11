@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-11T18:20:21.898039+00:00",
+  "updated_at_utc": "2026-09-11T18:39:53.356850+00:00",
   "candidate_count": 4,
   "checked_count": 4,
   "error_count": 0,
@@ -13,13 +13,13 @@
   "all_results": [
     {
       "symbol": "AXSM",
-      "price": 222.88499450683594,
+      "price": 222.3300018310547,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 223.861839927267,
+      "vwap": 223.82361942657624,
       "orb_high": 229.6199951171875,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -37,19 +37,19 @@
     },
     {
       "symbol": "WF",
-      "price": 78.875,
+      "price": 78.80000305175781,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
-      "volume_confirmed": false,
-      "vwap": 79.00577328006696,
+      "volume_confirmed": true,
+      "vwap": 78.9679675977174,
       "orb_high": 80.1500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": true,
         "3_vwap_break": false,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
@@ -61,13 +61,13 @@
     },
     {
       "symbol": "BBWI",
-      "price": 18.19499969482422,
+      "price": 18.264999389648438,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 18.332374545253643,
+      "vwap": 18.326335273369608,
       "orb_high": 18.6200008392334,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -85,19 +85,19 @@
     },
     {
       "symbol": "NAVN",
-      "price": 20.6299991607666,
+      "price": 20.56999969482422,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
-      "volume_confirmed": false,
-      "vwap": 20.888838517782737,
+      "volume_confirmed": true,
+      "vwap": 20.8776338607651,
       "orb_high": 21.575000762939453,
       "hard_gate": {
         "1_ma20_above_ma50": true,
         "2_ma50_slope_up": false,
         "3_vwap_break": false,
-        "4_volume_confirmed": false,
+        "4_volume_confirmed": true,
         "5_ma200_trend_or_skip": true
       },
       "ma200_available": true,
