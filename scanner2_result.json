@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-11T15:12:47.816968+00:00",
+  "updated_at_utc": "2026-09-11T15:30:18.765040+00:00",
   "candidate_count": 4,
   "checked_count": 4,
   "error_count": 0,
@@ -13,13 +13,13 @@
   "all_results": [
     {
       "symbol": "AXSM",
-      "price": 224.55499267578125,
+      "price": 224.88999938964844,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 224.15666568737066,
+      "vwap": 224.18081694646403,
       "orb_high": 229.6199951171875,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -37,13 +37,13 @@
     },
     {
       "symbol": "WF",
-      "price": 78.5,
+      "price": 78.52999877929688,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 79.2144889170883,
+      "vwap": 79.17770608284133,
       "orb_high": 80.1500015258789,
       "hard_gate": {
         "1_ma20_above_ma50": true,
@@ -61,13 +61,13 @@
     },
     {
       "symbol": "BBWI",
-      "price": 18.184999465942383,
+      "price": 18.25189971923828,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": false,
-      "vwap": 18.30851792228511,
+      "vwap": 18.308154331065783,
       "orb_high": 18.6200008392334,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -85,13 +85,13 @@
     },
     {
       "symbol": "NAVN",
-      "price": 20.65999984741211,
+      "price": 20.655000686645508,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 0,
       "action_trigger_passed": false,
       "volume_confirmed": false,
-      "vwap": 20.938837312832142,
+      "vwap": 20.909425261607122,
       "orb_high": 21.575000762939453,
       "hard_gate": {
         "1_ma20_above_ma50": true,
