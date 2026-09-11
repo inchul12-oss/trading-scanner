@@ -110,6 +110,10 @@ def backtest_symbol(symbol, bars, cfg: BTConfig, p: Params = None):
             if cfg.market_filter and not _market_ok(cfg.market_filter, i):
                 continue
             r = evaluate_vcp(bars, i, p)
+            # 9/11(판호 지적 반영): 종가가 이미 피봇 위인 셋업(late_breakout)은 탈락이 아니라 상태다.
+            # 장중 스탑매수는 이미 놓친 돌파이므로 주문을 걸지 않고, 종가확인 방식은 그게 곧 신호다.
+            if r.get("ready") and r.get("late_breakout") and cfg.entry_mode == "stop_buy":
+                continue
             if r.get("ready"):
                 order = {"setup_idx": i, "pivot": r["pivot"], "stop": r["structural_stop"],
                          "max_entry": r["max_entry"],
