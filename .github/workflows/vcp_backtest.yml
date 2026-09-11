@@ -29,6 +29,10 @@ on:
         description: "청산 규칙 대안 테스트 실행 (1=실행, 0=건너뜀)"
         required: false
         default: "0"
+      pf:
+        description: "청산 최종검증(고정진입/베타보정/5슬롯 포트폴리오) (1=실행)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -55,6 +59,7 @@ jobs:
           VCP_GRID: ${{ github.event.inputs.grid }}
           VCP_SWEEP: ${{ github.event.inputs.sweep }}
           VCP_EXITS: ${{ github.event.inputs.exits }}
+          VCP_PF: ${{ github.event.inputs.pf }}
         run: python run_vcp_backtest.py
 
       - name: 결과 커밋
