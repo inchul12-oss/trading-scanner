@@ -26,7 +26,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from vcp_setup import (Params, evaluate_vcp, evaluate_gates,    # noqa: E402
                        evaluate_variants)
 from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
-                          backtest_simple_breakout, summarize)
+                          backtest_simple_breakout, summarize,
+                          backtest_matched_control, new_counters)
 
 NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt"
 OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
@@ -268,23 +269,27 @@ def main():
         out_grid = None
 
     print("3) 백테스트")
-    results, all_trades = {}, {}
+    results, all_trades, all_counters = {}, {}, {}
     combos = [(e, x) for e in ("stop_buy", "close_confirm") for x in ("ema10", "ema20", "atr_trail")]
     for entry, exit_m in combos:
         cfg = BTConfig(entry_mode=entry, exit_mode=exit_m)
-        trades = []
+        trades, cnt = [], new_counters()
         for s, b in bars_by_sym.items():
             try:
-                trades += backtest_symbol(s, b, cfg, p)
+                trades += backtest_symbol(s, b, cfg, p, counters=cnt)
             except Exception as e:
                 print(f"   {s} 백테스트 오류: {e}")
         key = f"{entry}|{exit_m}"
         results[key] = summarize(trades)
         results[key]["distinct_symbols"] = len({t["symbol"] for t in trades})
         all_trades[key] = trades
+        all_counters[key] = cnt
         print(f"   VCP {key}: {results[key]}")
+        print(f"        손절폭게이트: {cnt}")
 
-    print("4) 대조군 (단순 20일 신고가 종가돌파)")
+    print("4) 대조군 A — 원래 버전 (손절 = 진입가-2*ATR14, 리스크 제한 없음)")
+    print("   ※ VCP와 R의 분모 정의가 달라서 R 직접 비교는 성립하지 않는다.")
+    print("     거래당 평균 %수익률(avg_ret_pct)로만 비교할 것.")
     for exit_m in ("ema10", "ema20", "atr_trail"):
         cfg = BTConfig(exit_mode=exit_m)
         trades = []
@@ -296,9 +301,41 @@ def main():
         key = f"CONTROL|{exit_m}"
         results[key] = summarize(trades)
         results[key]["distinct_symbols"] = len({t["symbol"] for t in trades})
+        all_trades[key] = trades
         print(f"   {key}: {results[key]}")
 
-    best = max(all_trades, key=lambda k: results[k].get("n", 0))
+    print("5) 대조군 B — 매칭 버전 (손절·리스크제한·슬리피지·청산을 VCP와 완전 동일)")
+    print("   ※ 이게 진짜 비교다. VCP 셋업 필터만 켜고 끈 차이만 남는다.")
+    for exit_m in ("ema10", "ema20", "atr_trail"):
+        cfg = BTConfig(exit_mode=exit_m)
+        trades, cnt = [], new_counters()
+        for s, b in bars_by_sym.items():
+            try:
+                trades += backtest_matched_control(s, b, cfg, p, counters=cnt)
+            except Exception as e:
+                print(f"   {s} 매칭대조군 오류: {e}")
+        key = f"CONTROL_MATCHED|{exit_m}"
+        results[key] = summarize(trades)
+        results[key]["distinct_symbols"] = len({t["symbol"] for t in trades})
+        all_trades[key] = trades
+        all_counters[key] = cnt
+        print(f"   {key}: {results[key]}")
+        print(f"        손절폭게이트: {cnt}")
+
+    best = max((k for k in all_trades if not k.startswith("CONTROL")),
+               key=lambda k: results[k].get("n", 0))
+
+    # 거래 원본 전체를 따로 저장한다.
+    # 지금까지는 요약만 남아서 뭔가 더 보고 싶을 때마다 6분짜리 실행을 다시 돌려야 했다.
+    # 원본이 있으면 부트스트랩이든 구간별 분석이든 다시 돌리지 않고 바로 할 수 있다.
+    with open("vcp_trades.json", "w") as f:
+        json.dump({"run_at_utc": datetime.now(timezone.utc).isoformat(),
+                   "counters": all_counters,
+                   "trades": {k: v for k, v in all_trades.items()}},
+                  f, ensure_ascii=False, separators=(",", ":"))
+    print(f"   거래 원본 저장: vcp_trades.json "
+          f"({sum(len(v) for v in all_trades.values()):,}건)")
+
     out = {
         "run_at_utc": datetime.now(timezone.utc).isoformat(),
         "elapsed_sec": round(time.time() - t0, 1),
@@ -316,6 +353,7 @@ def main():
             "ready_if_rule_replaced": ready_if,
         },
         "coverage": cov,
+        "risk_gate_counters": all_counters,
         "results": results,
         "grid": out_grid,
         "sample_trades": all_trades[best][:40],
