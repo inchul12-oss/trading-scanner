@@ -13,6 +13,14 @@ on:
         description: "일봉 기간 (2y / 5y / 10y)"
         required: false
         default: "5y"
+      diag:
+        description: "조건별 탈락 진단 실행 (1=실행, 0=건너뜀)"
+        required: false
+        default: "1"
+      grid:
+        description: "파라미터 조합 그리드 실행 (1=실행, 0=건너뜀)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -35,6 +43,8 @@ jobs:
         env:
           VCP_MAX_SYMBOLS: ${{ github.event.inputs.max_symbols }}
           VCP_PERIOD: ${{ github.event.inputs.period }}
+          VCP_DIAG: ${{ github.event.inputs.diag }}
+          VCP_GRID: ${{ github.event.inputs.grid }}
         run: python run_vcp_backtest.py
 
       - name: 결과 커밋
