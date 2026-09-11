@@ -39,8 +39,15 @@ def atr_series(high, low, close, n):
 class BTConfig:
     def __init__(self,
                  entry_mode="stop_buy",       # stop_buy | close_confirm | close_confirm_2day
-                 exit_mode="ema10",           # ema10 | ema20 | atr_trail
+                 exit_mode="ema10",           # ema10 | ema20 | ema50 | atr_trail
                  atr_trail_mult=2.5,
+                 # 9/11 추가(청산 대안 테스트). 청산 후 MFE 실측 결과
+                 # "익절하고 나온 거래의 58%가 20일 안에 1R 이상 더 올랐다"가 나와서
+                 # 실제로 얼마나 건질 수 있는지 재기 위한 손잡이들.
+                 atr_trail_min_r=0.0,         # +N R 넘기 전엔 ATR추적을 켜지 않는다
+                 partial_take_r=None,         # +N R에서 일부 익절 (지정가 주문)
+                 partial_frac=0.5,            # 그때 파는 비중
+                 be_after_partial=False,      # 일부 익절 후 손절을 본전으로 올린다
                  order_valid_days=30,         # 조건주문 유효기간(증권사 30일 감시 가정)
                  early_fail_days=2,           # 돌파 후 N일 안에 종가가 피봇 아래면 조기청산
                  time_stop_days=25,           # 보유 N일 경과 + 조건 미달이면 청산
@@ -116,6 +123,7 @@ def backtest_symbol(symbol, bars, cfg: BTConfig, p: Params = None, counters=None
 
     ema10 = ema_series(c, 10)
     ema20 = ema_series(c, 20)
+    ema50 = ema_series(c, 50)
     atr14 = atr_series(h, l, c, 14)
 
     trades, order, pos = [], None, None
@@ -125,7 +133,8 @@ def backtest_symbol(symbol, bars, cfg: BTConfig, p: Params = None, counters=None
         # ── 보유 중이면 청산 판정 ──────────────────────────────
         if pos:
             j = i
-            exited = _check_exit(pos, j, bars, ema10, ema20, atr14, cfg)
+            exited = _check_exit(pos, j, bars, ema10, ema20, ema50, atr14, cfg)
+            _check_partial(pos, j, bars, cfg, exited)
             if exited:
                 pos.update(exited)
                 pos["holding_days"] = j - pos["entry_idx"]
@@ -244,7 +253,24 @@ def _check_fill(order, i, bars, cfg):
     return px * (1 + cfg.slippage_pct)
 
 
-def _check_exit(pos, j, bars, ema10, ema20, atr14, cfg):
+def _check_partial(pos, j, bars, cfg, exited):
+    """일부 익절. 증권사에 +N R 지정가 매도를 걸어두는 것과 같다.
+    같은 봉에서 손절에도 닿았으면 순서를 알 수 없으므로 익절을 인정하지 않는다(보수적)."""
+    if not cfg.partial_take_r or pos.get("partial_done"):
+        return
+    if exited and str(exited.get("reason", "")).startswith("구조적손절"):
+        return
+    tgt = pos["entry"] + cfg.partial_take_r * pos["risk"]
+    if bars["high"][j] < tgt:
+        return
+    pos["partial_done"] = True
+    pos["partial_px"] = tgt * (1 - cfg.slippage_pct)
+    pos["partial_idx"] = j
+    if cfg.be_after_partial and pos["stop"] < pos["entry"]:
+        pos["stop"] = pos["entry"]      # 남은 물량 손절을 본전으로
+
+
+def _check_exit(pos, j, bars, ema10, ema20, ema50, atr14, cfg):
     """청산 판정. 우선순위: 장중 손절(자동주문) → 조기실패 → 추세이탈 → 타임스탑."""
     o, h, l, c = bars["open"], bars["high"], bars["low"], bars["close"]
 
@@ -266,8 +292,14 @@ def _check_exit(pos, j, bars, ema10, ema20, atr14, cfg):
         trend_break = c[j] < ema10[j]
     elif cfg.exit_mode == "ema20":
         trend_break = c[j] < ema20[j]
+    elif cfg.exit_mode == "ema50":
+        trend_break = c[j] < ema50[j]
     elif cfg.exit_mode == "atr_trail" and atr14[j]:
-        trend_break = c[j] < pos["peak"] - cfg.atr_trail_mult * atr14[j]
+        # +N R 넘기 전에는 ATR추적을 켜지 않는다(초반에 구조적 손절보다 위에서
+        # 걸려 조기 청산되는 걸 막기 위한 변형).
+        peak_r = (pos["peak"] - pos["entry"]) / pos["risk"]
+        if peak_r >= cfg.atr_trail_min_r:
+            trend_break = c[j] < pos["peak"] - cfg.atr_trail_mult * atr14[j]
     if trend_break and j + 1 < len(c):
         return {"exit_idx": j + 1, "exit": o[j + 1] * (1 - cfg.slippage_pct),
                 "reason": f"추세이탈({cfg.exit_mode})"}
@@ -288,8 +320,16 @@ def _finalize(pos, cfg, bars=None):
     risk = pos["risk"]
     if risk <= 0:
         raise ValueError(f"risk<=0 이 _finalize 까지 도달함: {pos['symbol']} {pos['entry_idx']}")
-    ret_pct = pos["exit"] / pos["entry"] - 1 - cfg.commission_pct
-    r_mult = (pos["exit"] - pos["entry"]) / risk
+    # 일부 익절이 있었으면 두 번의 매도를 비중대로 섞는다.
+    if pos.get("partial_done"):
+        f = cfg.partial_frac
+        ret_pct = (f * (pos["partial_px"] / pos["entry"] - 1)
+                   + (1 - f) * (pos["exit"] / pos["entry"] - 1)) - cfg.commission_pct
+        r_mult = (f * (pos["partial_px"] - pos["entry"])
+                  + (1 - f) * (pos["exit"] - pos["entry"])) / risk
+    else:
+        ret_pct = pos["exit"] / pos["entry"] - 1 - cfg.commission_pct
+        r_mult = (pos["exit"] - pos["entry"]) / risk
     peak_r = (pos["peak"] - pos["entry"]) / risk
     mae_r = (pos["trough"] - pos["entry"]) / risk
     return {
@@ -303,6 +343,7 @@ def _finalize(pos, cfg, bars=None):
         "giveback_r": round(peak_r - r_mult, 3),
         "holding_days": pos.get("holding_days", 0), "reason": pos["reason"],
         "ambiguous": bool(pos.get("ambiguous", False)),
+        "partial": bool(pos.get("partial_done", False)),
         "entry_date": (bars["date"][pos["entry_idx"]]
                        if bars and "date" in bars else None),
         "exit_date": (bars["date"][pos["exit_idx"]]
@@ -330,11 +371,13 @@ def backtest_matched_control(symbol, bars, cfg: BTConfig, p: Params = None,
     atr14 = atr_series(h, l, c, 14)
     atr_s = atr_series(h, l, c, p.atr_short)
     ema10, ema20 = ema_series(c, 10), ema_series(c, 20)
+    ema50 = ema_series(c, 50)
     trades, pos = [], None
 
     for i in range(max(lookback, sma_trend) + 2, n - 1):
         if pos:
-            ex = _check_exit(pos, i, bars, ema10, ema20, atr14, cfg)
+            ex = _check_exit(pos, i, bars, ema10, ema20, ema50, atr14, cfg)
+            _check_partial(pos, i, bars, cfg, ex)
             if ex:
                 pos.update(ex)
                 pos["holding_days"] = i - pos["entry_idx"]
@@ -379,11 +422,13 @@ def backtest_simple_breakout(symbol, bars, cfg: BTConfig, lookback=20, sma_trend
     n = len(c)
     atr14 = atr_series(h, l, c, 14)
     ema10, ema20 = ema_series(c, 10), ema_series(c, 20)
+    ema50 = ema_series(c, 50)
     trades, pos = [], None
 
     for i in range(max(lookback, sma_trend) + 2, n - 1):
         if pos:
-            ex = _check_exit(pos, i, bars, ema10, ema20, atr14, cfg)
+            ex = _check_exit(pos, i, bars, ema10, ema20, ema50, atr14, cfg)
+            _check_partial(pos, i, bars, cfg, ex)
             if ex:
                 pos.update(ex)
                 pos["holding_days"] = i - pos["entry_idx"]
@@ -438,6 +483,8 @@ def summarize(trades):
         "avg_ret_pct": round(sum(t["ret_pct"] for t in trades) / len(trades) * 100, 3),
         "ambiguous_pct": round(
             sum(1 for t in trades if t.get("ambiguous")) / len(trades) * 100, 2),
+        "partial_pct": round(
+            sum(1 for t in trades if t.get("partial")) / len(trades) * 100, 1),
         **portfolio_stats(trades),
         **_post_exit_summary(trades),
     }
