@@ -48,6 +48,7 @@ MIN_DOLLAR_VOL = float(os.getenv("VCP_MIN_DOLLAR_VOL", "10000000"))
 BATCH = int(os.getenv("VCP_BATCH", "60"))
 RUN_DIAG = os.getenv("VCP_DIAG", "1") == "1"     # 조건별 탈락 진단 실행 여부
 RUN_GRID = os.getenv("VCP_GRID", "0") == "1"     # 파라미터 조합 그리드 실행 여부
+RUN_SWEEP = os.getenv("VCP_SWEEP", "0") == "1"   # 손절폭 상한 스윕 실행 여부
 
 
 def fetch_text(url, tries=3):
@@ -105,6 +106,10 @@ def to_bars(df):
         "low": [float(x) for x in df["Low"]],
         "close": [float(x) for x in df["Close"]],
         "volume": [float(x) for x in df["Volume"]],
+        # 9/11 추가: 날짜를 같이 들고 간다.
+        # 이게 없으면 (1) 포트폴리오 기준 최대낙폭을 못 구하고
+        # (2) 전반부/후반부 분할 검증(판호 제안 4번)을 못 한다.
+        "date": [str(x)[:10] for x in df.index],
     }
 
 
@@ -322,6 +327,41 @@ def main():
         print(f"   {key}: {results[key]}")
         print(f"        손절폭게이트: {cnt}")
 
+    # ── 6) 손절폭 상한 스윕 (9/11) ────────────────────────────────────
+    # 9/11 실측: 매칭 대조군 신호 29,887건 중 27,591건(92.3%)이 "손절폭 5% 초과"로
+    # 탈락했다. VCP 조건 전부를 합친 것보다 이 숫자 하나가 훨씬 크게 작용한다.
+    # 5%는 근거 없이 정해둔 값이므로, 여기서 최적값을 고르려는 게 아니라
+    # "우리가 이 규칙으로 무엇을 얼마나 버리고 있는지" 크기를 재는 것이다.
+    sweep = {}
+    if RUN_SWEEP:
+        print("6) 손절폭 상한 스윕")
+        for cap in (0.03, 0.05, 0.07, 0.10, 1.00):
+            for label, fn in (("MATCHED", "m"), ("VCP", "v")):
+                for exit_m in ("ema10", "ema20"):
+                    cfg = BTConfig(entry_mode="close_confirm", exit_mode=exit_m,
+                                   max_risk_pct=cap)
+                    pc = Params(max_structural_risk=min(cap, 0.99))
+                    trades, cnt = [], new_counters()
+                    for s_, b in bars_by_sym.items():
+                        try:
+                            if fn == "m":
+                                trades += backtest_matched_control(
+                                    s_, b, cfg, pc, counters=cnt)
+                            else:
+                                trades += backtest_symbol(s_, b, cfg, pc, counters=cnt)
+                        except Exception:
+                            pass
+                    key = f"{label}|cap{int(cap*100)}|{exit_m}"
+                    sm = summarize(trades)
+                    sm["distinct_symbols"] = len({t["symbol"] for t in trades})
+                    sm["gate"] = cnt
+                    sweep[key] = sm
+                    print(f"   {key:<26} n={sm.get('n',0):<6} "
+                          f"exp={sm.get('expectancy_r')} "
+                          f"avg%={sm.get('avg_ret_pct')} "
+                          f"MDD={sm.get('max_drawdown_r')} "
+                          f"탈락(상한)={cnt.get('risk_above_cap')}")
+
     best = max((k for k in all_trades if not k.startswith("CONTROL")),
                key=lambda k: results[k].get("n", 0))
 
@@ -356,6 +396,7 @@ def main():
         "risk_gate_counters": all_counters,
         "results": results,
         "grid": out_grid,
+        "risk_cap_sweep": sweep or None,
         "sample_trades": all_trades[best][:40],
     }
     with open("vcp_backtest_result.json", "w") as f:
