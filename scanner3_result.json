@@ -1,7 +1,25 @@
 {
-  "updated_at_utc": "2026-09-11T15:00:21.399861+00:00",
-  "open_position_count": 3,
-  "new_exits": [],
+  "updated_at_utc": "2026-09-11T15:11:37.210729+00:00",
+  "open_position_count": 2,
+  "new_exits": [
+    {
+      "symbol": "HPE",
+      "entry_price": 59.875,
+      "entry_time_utc": "2026-09-11T13:45:46.896293+00:00",
+      "entry_date_ny": "2026-09-11",
+      "breakout_candle_low": 57.29999923706055,
+      "peak_price": 61.385,
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 60.5,
+      "exit_time_utc": "2026-09-11T15:11:37.210729+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": 0.010438413361169102,
+      "urgent": false
+    }
+  ],
   "partial_profit_alerts": [],
   "errors": []
 }

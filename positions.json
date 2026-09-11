@@ -762,8 +762,15 @@
       "entry_date_ny": "2026-09-11",
       "breakout_candle_low": 57.29999923706055,
       "peak_price": 61.385,
-      "status": "open",
-      "partial_profit_alerted": false
+      "status": "closed",
+      "partial_profit_alerted": false,
+      "exit_price": 60.5,
+      "exit_time_utc": "2026-09-11T15:11:37.210729+00:00",
+      "exit_reasons": [
+        "VWAP 이탈"
+      ],
+      "pnl_pct": 0.010438413361169102,
+      "urgent": false
     },
     {
       "symbol": "IBRX",
