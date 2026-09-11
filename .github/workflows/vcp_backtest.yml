@@ -33,6 +33,10 @@ on:
         description: "청산 최종검증(고정진입/베타보정/5슬롯 포트폴리오) (1=실행)"
         required: false
         default: "0"
+      pb:
+        description: "D전략 — 돌파 후 첫 눌림 진입 검증 (1=실행)"
+        required: false
+        default: "0"
 
 permissions:
   contents: write
@@ -60,6 +64,7 @@ jobs:
           VCP_SWEEP: ${{ github.event.inputs.sweep }}
           VCP_EXITS: ${{ github.event.inputs.exits }}
           VCP_PF: ${{ github.event.inputs.pf }}
+          VCP_PB: ${{ github.event.inputs.pb }}
         run: python run_vcp_backtest.py
 
       - name: 결과 커밋
