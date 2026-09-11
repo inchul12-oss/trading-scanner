@@ -429,3 +429,107 @@ def quantile_study(trades, feature_names, target="alpha_r",
                                "train": st_tr, "test": st_te,
                                "mono_train": mono(st_tr), "mono_test": mono(st_te)}
     return out
+
+
+# ───────────────────── 8) 비용 차감 (판호 권고) ─────────────────────
+# 백테스트는 이미 진입/청산가에 편도 0.05% 슬리피지를 반영하고 있다.
+# 여기서 추가로 빼는 건 모델에 없던 비용(호가 스프레드, 체결 충격)이다.
+# 핵심: 비용을 R로 환산하면 손절폭에 반비례한다. 같은 0.1%라도
+#   손절폭 1% → 0.10R,  손절폭 5% → 0.02R.
+# 그래서 거래별 실제 risk_pct로 나눠야 한다. 고정 R 숫자를 빼면 틀린다.
+EXTRA_COST_PCT = 0.0010      # 왕복 0.10% (스프레드+충격 가정). 근거 없는 값이 아니라
+                             # ADV 1천만달러 이상 종목 기준의 보수적 가정임을 명시한다.
+
+
+def add_net_alpha(trade, extra_cost_pct=EXTRA_COST_PCT):
+    rp = trade.get("risk_pct") or 0.0
+    if "alpha_r" not in trade or rp <= 0:
+        return
+    trade["cost_r"] = round(extra_cost_pct / rp, 4)
+    trade["net_alpha_r"] = round(trade["alpha_r"] - trade["cost_r"], 3)
+
+
+# ───────────────────── 9) 순서추세 검정 + 다중검정 보정 ─────────────────────
+def _spearman(xs, ys):
+    n = len(xs)
+    if n < 20:
+        return None
+    def rank(v):
+        order = sorted(range(len(v)), key=lambda k: v[k])
+        r = [0.0] * len(v)
+        k = 0
+        while k < len(order):
+            j = k
+            while j + 1 < len(order) and v[order[j + 1]] == v[order[k]]:
+                j += 1
+            avg = (k + j) / 2.0 + 1
+            for m in range(k, j + 1):
+                r[order[m]] = avg
+            k = j + 1
+        return r
+    rx, ry = rank(xs), rank(ys)
+    mx, my = sum(rx) / n, sum(ry) / n
+    num = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    dx = sum((a - mx) ** 2 for a in rx) ** 0.5
+    dy = sum((b - my) ** 2 for b in ry) ** 0.5
+    return num / (dx * dy) if dx > 0 and dy > 0 else None
+
+
+def trend_test(rows, feature, target="net_alpha_r", iters=1000, seed=11):
+    """feature와 성과의 순서추세를 검정한다.
+
+    판호는 Jonckheere-Terpstra를 권했는데, 여기서는 스피어만 순위상관을 쓴다.
+    이유: (1) 둘 다 단조 순서 대립가설을 보는 검정이고, (2) 분위로 묶지 않고
+    원값을 그대로 써서 정보 손실이 없으며, (3) 구현이 단순해 검증하기 쉽다.
+    p값은 이론식으로 내지 않는다 — 우리 거래는 같은 시장 시기에 몰려 있어서
+    독립 가정이 깨지기 때문이다. 대신 진입 월 단위 블록 부트스트랩으로 낸다.
+    """
+    data = [(t["feat"][feature], t[target], t["entry_date"][:7])
+            for t in rows
+            if t.get("feat", {}).get(feature) is not None and t.get(target) is not None]
+    if len(data) < 100:
+        return None
+    rho = _spearman([d[0] for d in data], [d[1] for d in data])
+    if rho is None:
+        return None
+    by_month = {}
+    for d in data:
+        by_month.setdefault(d[2], []).append(d)
+    months = list(by_month)
+    rnd = random.Random(seed)
+    boots = []
+    for _ in range(iters):
+        samp = []
+        for _ in range(len(months)):
+            samp += by_month[months[rnd.randrange(len(months))]]
+        r = _spearman([s[0] for s in samp], [s[1] for s in samp])
+        if r is not None:
+            boots.append(r)
+    if len(boots) < iters // 2:
+        return {"n": len(data), "rho": round(rho, 4)}
+    boots.sort()
+    lo = boots[int(0.025 * len(boots))]
+    hi = boots[int(0.975 * len(boots))]
+    # 양측 p: 부트스트랩 분포가 0을 넘는 비율 × 2
+    side = min(sum(1 for b in boots if b <= 0), sum(1 for b in boots if b >= 0))
+    p = min(1.0, 2.0 * side / len(boots))
+    return {"n": len(data), "rho": round(rho, 4),
+            "ci_low": round(lo, 4), "ci_high": round(hi, 4), "p": round(p, 4)}
+
+
+def holm(pvals, alpha=0.05):
+    """Holm step-down. 지표를 여러 개 보면 그중 하나가 우연히 유의해 보일 확률이
+    커진다. BH(발견 최대화)가 아니라 Holm(오탐 1건의 비용이 큼)을 쓴다 — 여기서
+    잘못 채택한 지표는 실제 매매 규칙에 들어가기 때문이다."""
+    items = sorted(pvals.items(), key=lambda kv: (kv[1] is None, kv[1]))
+    m = sum(1 for _, v in items if v is not None)
+    out, prev, k = {}, 0.0, 0
+    for name, p in items:
+        if p is None:
+            out[name] = {"p": None, "holm_p": None, "reject": False}
+            continue
+        k += 1
+        adj = max(prev, min(1.0, (m - k + 1) * p))
+        prev = adj
+        out[name] = {"p": p, "holm_p": round(adj, 4), "reject": adj <= alpha}
+    return out
