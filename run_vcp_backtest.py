@@ -45,6 +45,8 @@ PERIOD = os.getenv("VCP_PERIOD", "5y")
 MIN_PRICE = float(os.getenv("VCP_MIN_PRICE", "5"))
 MIN_DOLLAR_VOL = float(os.getenv("VCP_MIN_DOLLAR_VOL", "10000000"))
 BATCH = int(os.getenv("VCP_BATCH", "60"))
+RUN_DIAG = os.getenv("VCP_DIAG", "1") == "1"     # 조건별 탈락 진단 실행 여부
+RUN_GRID = os.getenv("VCP_GRID", "0") == "1"     # 파라미터 조합 그리드 실행 여부
 
 
 def fetch_text(url, tries=3):
@@ -167,6 +169,8 @@ def main():
     # 여기서는 어떤 임계값도 바꾸지 않는다. 오직 세기만 한다.
     print("2.5) 조건별 탈락 진단")
     p = Params()
+    if not RUN_DIAG:
+        print("   (VCP_DIAG=0 — 건너뜀)")
     funnel, solo_pass, solo_eval, rescue = {}, {}, {}, {}
     bars_evaluated = ready_bars = late_bk = 0
     ready_syms = set()
@@ -175,7 +179,7 @@ def main():
                 "volume_dry": "11_volume_dry",
                 "atr_contraction": "10_atr_contraction"}
     ready_if = {grp: {} for grp in VAR_GATE}
-    for s_, b in bars_by_sym.items():
+    for s_, b in (bars_by_sym.items() if RUN_DIAG else []):
         n = len(b["close"])
         for i in range(p.max_base + p.atr_long + 6, n):
             try:
@@ -231,6 +235,38 @@ def main():
         pr = solo_pass.get(k, 0) / solo_eval[k] * 100
         print(f"       {k:<28} 단독통과 {pr:6.2f}%   rescue {rescue.get(k, 0):>7,}")
 
+    # ── 파라미터 조합 그리드 (9/11, 판호 권고 방식) ──────────────────────
+    # 최고 수치 하나를 고르는 게 목적이 아니다. 주변 조합까지 함께 괜찮은 "고원"이
+    # 있는지 보기 위한 것이다. 한 조합만 유독 튀면 그건 curve fitting 신호다.
+    if RUN_GRID:
+        print("3-G) 파라미터 그리드")
+        grid = []
+        for rule in ("every_leg", "final_over_first"):
+            for vol in (0.70, 0.85):
+                for atr in (0.75, 0.90):
+                    for entry in ("stop_buy", "close_confirm"):
+                        for exit_m in ("ema10", "ema20", "atr_trail"):
+                            grid.append((rule, vol, atr, entry, exit_m))
+        grid_results = {}
+        for gi, (rule, vol, atr, entry, exit_m) in enumerate(grid, 1):
+            pg = Params(contraction_rule=rule, vol_ratio_max=vol, atr_contraction_max=atr)
+            cfg = BTConfig(entry_mode=entry, exit_mode=exit_m)
+            trades = []
+            for s_, b in bars_by_sym.items():
+                try:
+                    trades += backtest_symbol(s_, b, cfg, pg)
+                except Exception:
+                    pass
+            key = f"{rule}|vol{vol}|atr{atr}|{entry}|{exit_m}"
+            sm = summarize(trades)
+            sm["distinct_symbols"] = len({t["symbol"] for t in trades})
+            grid_results[key] = sm
+            print(f"   [{gi}/{len(grid)}] {key}  n={sm['n']} "
+                  f"exp={sm.get('expectancy_r')} PF={sm.get('profit_factor')}")
+        out_grid = grid_results
+    else:
+        out_grid = None
+
     print("3) 백테스트")
     results, all_trades = {}, {}
     combos = [(e, x) for e in ("stop_buy", "close_confirm") for x in ("ema10", "ema20", "atr_trail")]
@@ -281,6 +317,7 @@ def main():
         },
         "coverage": cov,
         "results": results,
+        "grid": out_grid,
         "sample_trades": all_trades[best][:40],
     }
     with open("vcp_backtest_result.json", "w") as f:
