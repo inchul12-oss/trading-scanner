@@ -1,25 +1,7 @@
 {
-  "updated_at_utc": "2026-09-11T14:43:48.784677+00:00",
+  "updated_at_utc": "2026-09-11T14:53:53.364065+00:00",
   "open_position_count": 3,
-  "new_exits": [
-    {
-      "symbol": "INSP",
-      "entry_price": 74.20500183105469,
-      "entry_time_utc": "2026-09-11T14:14:40.888960+00:00",
-      "entry_date_ny": "2026-09-11",
-      "breakout_candle_low": 74.22000122070312,
-      "peak_price": 74.34,
-      "status": "closed",
-      "partial_profit_alerted": false,
-      "exit_price": 73.69,
-      "exit_time_utc": "2026-09-11T14:43:48.784677+00:00",
-      "exit_reasons": [
-        "돌파캔들저점 이탈"
-      ],
-      "pnl_pct": -0.006940257642297668,
-      "urgent": false
-    }
-  ],
+  "new_exits": [],
   "partial_profit_alerts": [],
   "errors": []
 }
