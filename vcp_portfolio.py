@@ -533,3 +533,104 @@ def holm(pvals, alpha=0.05):
         prev = adj
         out[name] = {"p": p, "holm_p": round(adj, 4), "reject": adj <= alpha}
     return out
+
+
+# ───────────────────── 10) D전략: 돌파 후 첫 눌림 진입 ─────────────────────
+# 배경 (9/11):
+#   - 단순 20일 돌파는 베타 보정 후 알파가 음수였다 (-0.004 ~ -0.092R).
+#   - 청산을 ema10에서 ema50/ATR5.0까지 크게 바꿔도 알파가 살아나지 않았다.
+#   - VCP 지표 10개 전부 알파를 가르지 못했다 (전부 p>0.05, 홀름 통과 0개).
+#   → 남은 변수는 "언제 사느냐" 하나다. 돌파 순간을 추격하는 대신
+#     첫 눌림을 기다렸다가 재돌파에서 들어간다.
+#
+# 파라미터는 결과를 보기 전에 고정한다. 아래 숫자를 결과에 맞춰 조정하면
+# 그 순간 이 검정은 무효가 된다.
+PULLBACK_MIN_BARS = 2        # 눌림 최소 길이
+PULLBACK_MAX_BARS = 5        # 눌림 최대 길이 (이 안에 안 끝나면 포기)
+PULLBACK_MIN_DEPTH = 0.01    # 돌파 종가 대비 최소 1%는 눌려야 "눌림"으로 본다
+PULLBACK_MAX_BREAK = 0.02    # 피봇을 2% 넘게 깨면 돌파 무효로 보고 포기
+ENTRY_WINDOW_BARS = 5        # 눌림 끝난 뒤 재돌파를 기다리는 최대 봉 수
+RETRIGGER_BUFFER = 0.003     # 재돌파 트리거 = 구조 고가 * (1 + 0.3%)
+CHASE_LIMIT = 0.02           # 트리거 대비 2% 넘게 갭뜨면 미체결 처리
+
+
+def collect_pullback_entries(symbol, bars, cfg: BTConfig, p: Params = None,
+                             lookback=20, sma_trend=50, counters=None, stats=None):
+    """20일 신고가 돌파 → 2~5일 첫 눌림(거래량 감소 동반) → 재돌파에서 진입.
+
+    대조군(collect_entries)과 반환 형식이 같아서 뒤의 도구들이 그대로 돌아간다.
+    손절이 눌림 저점 기준이라 구조적으로 돌파 추격보다 타이트하다 —
+    이게 이 전략의 핵심 논리다.
+    """
+    p = p or Params()
+    if counters is None:
+        counters = new_counters()
+    if stats is None:
+        stats = {}
+    o, h, l, c, v = (bars["open"], bars["high"], bars["low"],
+                     bars["close"], bars["volume"])
+    n = len(c)
+    atr14 = atr_series(h, l, c, 14)
+    atr_s = atr_series(h, l, c, p.atr_short)
+    out = []
+
+    def bump(k):
+        stats[k] = stats.get(k, 0) + 1
+
+    for b in range(max(lookback, sma_trend) + 2, n - 10):
+        sma = sum(c[b - sma_trend + 1:b + 1]) / sma_trend
+        pivot = max(h[b - lookback:b])
+        if not (c[b] > pivot and c[b] > sma):
+            continue
+        bump("breakouts")
+
+        vol_pre = sum(v[b - 4:b + 1]) / 5.0
+        found = None
+        for pe in range(b + PULLBACK_MIN_BARS, b + PULLBACK_MAX_BARS + 1):
+            if pe >= n - 1:
+                break
+            pb_low = min(l[b + 1:pe + 1])
+            if pb_low < pivot * (1 - PULLBACK_MAX_BREAK):
+                bump("broke_down")
+                break
+            if pb_low > c[b] * (1 - PULLBACK_MIN_DEPTH):
+                continue                      # 아직 충분히 안 눌렸다
+            vol_pb = sum(v[b + 1:pe + 1]) / (pe - b)
+            if vol_pre <= 0 or vol_pb >= vol_pre:
+                bump("no_vol_dryup")
+                continue                      # 눌림 중 거래량이 안 줄었다
+            found = (pe, pb_low, max(h[b:pe + 1]))
+            break
+        if not found:
+            continue
+        pe, pb_low, struct_high = found
+        bump("pullback_ok")
+
+        trig = struct_high * (1 + RETRIGGER_BUFFER)
+        cap = trig * (1 + CHASE_LIMIT)
+        for e in range(pe + 1, min(pe + 1 + ENTRY_WINDOW_BARS, n)):
+            if c[e] < pb_low:
+                bump("failed_before_retrigger")
+                break
+            if h[e] < trig:
+                continue
+            px = max(o[e], trig)
+            if px > cap:
+                bump("gap_too_far")
+                break
+            entry = px * (1 + cfg.slippage_pct)
+            buf = max(p.stop_atr_mult * (atr_s[e] or c[e] * 0.01), c[e] * p.stop_min_pct)
+            stop = pb_low - buf
+            verdict, risk = risk_gate(entry, stop, atr14[e - 1], cfg)
+            counters[verdict] = counters.get(verdict, 0) + 1
+            if verdict != "ok":
+                break
+            counters["entries"] += 1
+            bump("entries")
+            out.append({"symbol": symbol, "setup_idx": pe, "entry_idx": e,
+                        "entry": entry, "stop": stop, "pivot": struct_high,
+                        "risk": risk})
+            break
+        else:
+            bump("no_retrigger")
+    return out
