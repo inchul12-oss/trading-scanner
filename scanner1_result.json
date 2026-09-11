@@ -1,38 +1,182 @@
 {
-  "updated_at_utc": "2026-09-10T13:37:06.519429+00:00",
+  "updated_at_utc": "2026-09-11T12:06:06.077857+00:00",
   "conditions": {
     "min_change_pct": 5.0,
     "min_price": 3.0,
     "min_premarket_dollar_volume": 300000
   },
-  "candidate_count": 20,
+  "candidate_count": 145,
   "error_count": 0,
   "matches": [
     {
-      "symbol": "MOH",
-      "price": 205.605,
-      "prev_close": 194.01,
-      "change_pct": 5.98,
+      "symbol": "SWKS",
+      "price": 84.1,
+      "prev_close": 76.54,
+      "change_pct": 9.88,
       "premarket_volume": null,
-      "is_premarket_data": false,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "QRVO",
+      "price": 113.42,
+      "prev_close": 105.24,
+      "change_pct": 7.77,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "XP",
+      "price": 20.4551,
+      "prev_close": 19.04,
+      "change_pct": 7.43,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "VEON",
+      "price": 69.76,
+      "prev_close": 65.0,
+      "change_pct": 7.32,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "CHTR",
+      "price": 143.0,
+      "prev_close": 133.89,
+      "change_pct": 6.8,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "RDDT",
+      "price": 156.1289,
+      "prev_close": 146.44,
+      "change_pct": 6.62,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "BSP",
+      "price": 40.2401,
+      "prev_close": 37.75,
+      "change_pct": 6.6,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "INTR",
+      "price": 5.84,
+      "prev_close": 5.48,
+      "change_pct": 6.57,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "ASO",
+      "price": 54.5,
+      "prev_close": 51.15,
+      "change_pct": 6.55,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "PAGS",
+      "price": 10.2,
+      "prev_close": 9.61,
+      "change_pct": 6.14,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "CRUS",
+      "price": 117.143,
+      "prev_close": 110.72,
+      "change_pct": 5.8,
+      "premarket_volume": null,
+      "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "ELV",
-      "price": 417.12,
-      "prev_close": 395.53,
-      "change_pct": 5.46,
+      "price": 418.0,
+      "prev_close": 395.18,
+      "change_pct": 5.77,
       "premarket_volume": null,
-      "is_premarket_data": false,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "OII",
+      "price": 51.25,
+      "prev_close": 48.49,
+      "change_pct": 5.69,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "BAH",
+      "price": 76.0,
+      "prev_close": 72.2,
+      "change_pct": 5.26,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "NTSK",
+      "price": 15.21,
+      "prev_close": 14.46,
+      "change_pct": 5.19,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "PAYP",
+      "price": 18.48,
+      "prev_close": 17.58,
+      "change_pct": 5.12,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "STNE",
+      "price": 10.3207,
+      "prev_close": 9.82,
+      "change_pct": 5.1,
+      "premarket_volume": null,
+      "is_premarket_data": true,
+      "extreme_gap": false
+    },
+    {
+      "symbol": "SNAP",
+      "price": 5.58,
+      "prev_close": 5.31,
+      "change_pct": 5.08,
+      "premarket_volume": null,
+      "is_premarket_data": true,
       "extreme_gap": false
     },
     {
       "symbol": "AVAV",
-      "price": 148.3,
+      "price": 147.8843,
       "prev_close": 140.8,
-      "change_pct": 5.33,
+      "change_pct": 5.03,
       "premarket_volume": null,
-      "is_premarket_data": false,
+      "is_premarket_data": true,
       "extreme_gap": false
     }
   ]
