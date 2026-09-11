@@ -1,0 +1,211 @@
+"""
+VCP 백테스트 실행기 — GitHub Actions에서 돌아간다.
+
+형배 작업공간과 인철님 맥북 모두 시세 사이트 접근이 막혀 있어서(9/11 실측),
+실제 데이터를 쓰는 건 이 스크립트가 유일하다. 여기서만 인터넷을 쓴다.
+
+동작
+1. 나스닥트레이더 공개 파일로 미국 상장종목 목록을 만든다.
+2. 이름/플래그 기반으로 ETF·워런트·우선주 등을 걸러 보통주만 남긴다.
+3. yfinance로 일봉을 배치 다운로드하고 유동성 필터를 건다.
+4. 같은 데이터에 대해 진입/청산 조합과 대조군을 전부 돌린다.
+5. 결과와 데이터 커버리지를 JSON으로 남긴다.
+
+주의: 성과 숫자보다 먼저 볼 것은 커버리지다. 몇 종목을 요청해서 몇 개가 실제로
+데이터를 반환했는지 기록하지 않으면 생존편향의 크기를 알 수 없다.
+"""
+import io
+import json
+import os
+import sys
+import time
+import urllib.request
+from datetime import datetime, timezone
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from vcp_setup import Params                                    # noqa: E402
+from vcp_backtest import (BTConfig, backtest_symbol,            # noqa: E402
+                          backtest_simple_breakout, summarize)
+
+NASDAQ_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt"
+OTHER_LISTED = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
+
+# 보통주가 아닌 것을 이름으로 걸러낸다. assetType/ETF 플래그만 믿으면 안 된다는 걸
+# 알파밴티지 데이터에서 확인했다(ETF가 Stock으로 분류된 사례 존재).
+NAME_EXCLUDE = (
+    " warrant", " warrants", " right", " rights", " unit", " units",
+    "preferred", "depositary", " notes", " note due", "% note",
+    "debenture", " trust preferred", "closed end", "acquisition corp",
+)
+SYMBOL_EXCLUDE_CHARS = ("$", ".W", ".U", ".R", "-P-", "-W", "-U", "-R")
+
+MAX_SYMBOLS = int(os.getenv("VCP_MAX_SYMBOLS", "300"))
+PERIOD = os.getenv("VCP_PERIOD", "5y")
+MIN_PRICE = float(os.getenv("VCP_MIN_PRICE", "5"))
+MIN_DOLLAR_VOL = float(os.getenv("VCP_MIN_DOLLAR_VOL", "10000000"))
+BATCH = int(os.getenv("VCP_BATCH", "60"))
+
+
+def fetch_text(url, tries=3):
+    for k in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except Exception as e:
+            print(f"  다운로드 실패({k+1}/{tries}) {url}: {e}")
+            time.sleep(3 * (k + 1))
+    return None
+
+
+def build_universe():
+    """나스닥트레이더 공개 파일 → 미국 보통주 심볼 목록."""
+    out, stats = [], {"raw": 0, "after_flags": 0, "after_name": 0}
+    for url, is_nasdaq in ((NASDAQ_LISTED, True), (OTHER_LISTED, False)):
+        txt = fetch_text(url)
+        if not txt:
+            continue
+        lines = [l for l in txt.splitlines() if l and not l.startswith("File Creation")]
+        header = lines[0].split("|")
+        idx = {h.strip(): n for n, h in enumerate(header)}
+        for line in lines[1:]:
+            f = line.split("|")
+            if len(f) < len(header):
+                continue
+            stats["raw"] += 1
+            sym = f[idx.get("Symbol", idx.get("ACT Symbol", 0))].strip()
+            name = f[idx.get("Security Name", 1)].strip()
+            test = f[idx["Test Issue"]].strip() if "Test Issue" in idx else "N"
+            etf = f[idx["ETF"]].strip() if "ETF" in idx else "N"
+            if test == "Y" or etf == "Y" or not sym:
+                continue
+            stats["after_flags"] += 1
+            low = name.lower()
+            if any(x in low for x in NAME_EXCLUDE):
+                continue
+            if any(x in sym for x in SYMBOL_EXCLUDE_CHARS):
+                continue
+            stats["after_name"] += 1
+            out.append(sym.replace(".", "-"))     # yfinance 표기(BRK.B → BRK-B)
+    return sorted(set(out)), stats
+
+
+def to_bars(df):
+    """yfinance DataFrame → 순수 파이썬 dict(백테스트 엔진 입력 형식)."""
+    df = df.dropna()
+    if len(df) < 300:
+        return None
+    return {
+        "open": [float(x) for x in df["Open"]],
+        "high": [float(x) for x in df["High"]],
+        "low": [float(x) for x in df["Low"]],
+        "close": [float(x) for x in df["Close"]],
+        "volume": [float(x) for x in df["Volume"]],
+    }
+
+
+def main():
+    import yfinance as yf
+    import pandas as pd
+
+    t0 = time.time()
+    print("1) 유니버스 구성")
+    universe, ustats = build_universe()
+    print(f"   원본 {ustats['raw']} → 플래그필터 {ustats['after_flags']} → 이름필터 {ustats['after_name']}")
+    if not universe:
+        print("   유니버스 구성 실패 — 중단")
+        json.dump({"error": "universe_empty"}, open("vcp_backtest_result.json", "w"))
+        return
+    universe = universe[:MAX_SYMBOLS]
+    print(f"   이번 실행 대상: {len(universe)}종목 (상한 {MAX_SYMBOLS})")
+
+    print(f"2) 일봉 다운로드 ({PERIOD})")
+    bars_by_sym, cov = {}, {"requested": len(universe), "downloaded": 0,
+                            "too_short": 0, "illiquid": 0, "failed": 0}
+    for k in range(0, len(universe), BATCH):
+        chunk = universe[k:k + BATCH]
+        try:
+            data = yf.download(chunk, period=PERIOD, interval="1d",
+                               auto_adjust=False, group_by="ticker",
+                               threads=False, progress=False)
+        except Exception as e:
+            print(f"   배치 실패 {k}: {e}")
+            cov["failed"] += len(chunk)
+            continue
+        multi = isinstance(data.columns, pd.MultiIndex)
+        for s in chunk:
+            try:
+                df = data[s] if multi else data
+            except Exception:
+                cov["failed"] += 1
+                continue
+            b = to_bars(df)
+            if b is None:
+                cov["too_short"] += 1
+                continue
+            px = b["close"][-1]
+            adv = sum(b["close"][j] * b["volume"][j] for j in range(-20, 0)) / 20
+            if px < MIN_PRICE or adv < MIN_DOLLAR_VOL:
+                cov["illiquid"] += 1
+                continue
+            bars_by_sym[s] = b
+            cov["downloaded"] += 1
+        print(f"   {k + len(chunk)}/{len(universe)}  확보 {cov['downloaded']}")
+        time.sleep(1)
+
+    print(f"   커버리지: 요청 {cov['requested']} / 사용가능 {cov['downloaded']} "
+          f"/ 데이터짧음 {cov['too_short']} / 유동성미달 {cov['illiquid']} / 실패 {cov['failed']}")
+    if not bars_by_sym:
+        json.dump({"error": "no_data", "coverage": cov}, open("vcp_backtest_result.json", "w"))
+        return
+
+    print("3) 백테스트")
+    p = Params()
+    results, all_trades = {}, {}
+    combos = [(e, x) for e in ("stop_buy", "close_confirm") for x in ("ema10", "ema20", "atr_trail")]
+    for entry, exit_m in combos:
+        cfg = BTConfig(entry_mode=entry, exit_mode=exit_m)
+        trades = []
+        for s, b in bars_by_sym.items():
+            try:
+                trades += backtest_symbol(s, b, cfg, p)
+            except Exception as e:
+                print(f"   {s} 백테스트 오류: {e}")
+        key = f"{entry}|{exit_m}"
+        results[key] = summarize(trades)
+        results[key]["distinct_symbols"] = len({t["symbol"] for t in trades})
+        all_trades[key] = trades
+        print(f"   VCP {key}: {results[key]}")
+
+    print("4) 대조군 (단순 20일 신고가 종가돌파)")
+    for exit_m in ("ema10", "ema20", "atr_trail"):
+        cfg = BTConfig(exit_mode=exit_m)
+        trades = []
+        for s, b in bars_by_sym.items():
+            try:
+                trades += backtest_simple_breakout(s, b, cfg)
+            except Exception as e:
+                print(f"   {s} 대조군 오류: {e}")
+        key = f"CONTROL|{exit_m}"
+        results[key] = summarize(trades)
+        results[key]["distinct_symbols"] = len({t["symbol"] for t in trades})
+        print(f"   {key}: {results[key]}")
+
+    best = max(all_trades, key=lambda k: results[k].get("n", 0))
+    out = {
+        "run_at_utc": datetime.now(timezone.utc).isoformat(),
+        "elapsed_sec": round(time.time() - t0, 1),
+        "params": {"period": PERIOD, "max_symbols": MAX_SYMBOLS,
+                   "min_price": MIN_PRICE, "min_dollar_vol": MIN_DOLLAR_VOL},
+        "universe_stats": ustats,
+        "coverage": cov,
+        "results": results,
+        "sample_trades": all_trades[best][:40],
+    }
+    with open("vcp_backtest_result.json", "w") as f:
+        json.dump(out, f, indent=2, ensure_ascii=False)
+    print(f"\n완료 — {out['elapsed_sec']}초")
+
+
+if __name__ == "__main__":
+    main()
