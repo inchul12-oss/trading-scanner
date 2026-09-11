@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-09-11T20:19:23.471575+00:00",
+  "updated_at_utc": "2026-09-11T20:36:38.345275+00:00",
   "candidate_count": 4,
   "checked_count": 4,
   "error_count": 0,
@@ -67,7 +67,7 @@
       "action_trigger_count": 2,
       "action_trigger_passed": true,
       "volume_confirmed": true,
-      "vwap": 18.411759993687372,
+      "vwap": 18.43613425480157,
       "orb_high": 18.6200008392334,
       "hard_gate": {
         "1_ma20_above_ma50": false,
@@ -85,7 +85,7 @@
     },
     {
       "symbol": "NAVN",
-      "price": 20.99,
+      "price": 21.0,
       "entry_signal": false,
       "hard_gate_passed": false,
       "action_trigger_count": 1,
