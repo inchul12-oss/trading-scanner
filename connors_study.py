@@ -248,21 +248,21 @@ def main():
             ("[참고]Double7_저비용", weights_double7(cl), COST_ONE_WAY, 0.0),
             ("[참고]RSI25_저비용", weights_rsi25(cl, UNIT), COST_ONE_WAY, 0.0),
         ]
-        for label, per, st, en in (("TRAIN", first, M.TRAIN_END),
+        for label, st, en in (("TRAIN", first, M.TRAIN_END),
                                    ("TEST", M.TEST_START, "2100-01-01"),
                                    ("FULL", first, "2100-01-01")):
             key = f"{t}_{label}"
-            print(f"\n{'='*96}\n[{key}]  {per} ~ {en}   "
+            print(f"\n{'='*96}\n[{key}]  {st} ~ {en}   "
                   f"(SPY매수보유 기준, 워밍업 이후 동일 출발선)\n{'='*96}")
             block = {}
-            bs = M.summarize(M.slice_period(rdates, bh, per, en)[1])
+            bs = M.summarize(M.slice_period(rdates, bh, st, en)[1])
             print(f"  {'BH_'+t:26s} CAGR {M.fmt(bs['cagr'])} MDD {M.fmt(bs['mdd'])} "
                   f"MAR {(bs['mar'] if bs['mar'] is not None else float('nan')):5.2f} "
                   f"노출 100.0%")
             block["BH"] = {"stats": bs}
             for name, w, c1, s1 in variants:
                 _eval(name, rdates, returns_from_weights(cl, w, c1, s1),
-                      rdates, bh, per, en, w, block)
+                      rdates, bh, st, en, w, block)
             out[key] = block
 
         # FULL MDD feasibility 별도 표시
