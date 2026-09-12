@@ -1,0 +1,46 @@
+name: 실행계측 수확 (exec harvest)
+
+# 수동 실행 전용. 첫 실행이 정상 동작하는 걸 확인한 뒤에 스케줄을 붙인다.
+# (붙일 때는 21:30 UTC 권장 — 기존 스캐너1/2/3은 12:00~20:55 UTC 에만 돌므로
+#  커밋 충돌이 나지 않는 시간대다.)
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: exec-harvest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃 (전체 히스토리 필요)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # 과거 스냅샷을 git show 로 꺼내야 하므로 필수
+
+      - name: 파이썬 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 수확 실행
+        run: python exec_harvest.py
+
+      - name: 결과 커밋
+        run: |
+          git config user.name "scanner-bot"
+          git config user.email "scanner-bot@users.noreply.github.com"
+          git add exec_log
+          git diff --staged --quiet || git commit -m "실행계측 로그 갱신 $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              break
+            fi
+            echo "push 실패(다른 스캐너 워크플로우와 동시 커밋 충돌 가능성) - pull --rebase 후 재시도 $i/5"
+            git pull --rebase origin main
+            sleep $((RANDOM % 5 + 1))
+          done
