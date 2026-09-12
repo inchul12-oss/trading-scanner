@@ -1,0 +1,41 @@
+name: Connors 평균회귀 2종 검증
+
+# 수동 실행 전용. 사전등록 상수는 connors_study.py 안에 동결돼 있다.
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: connors-study
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  connors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+      - name: 파이썬 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 라이브러리 설치
+        run: pip install yfinance
+      - name: 연구 실행
+        run: python connors_study.py
+      - name: 결과 커밋
+        run: |
+          git config user.name "scanner-bot"
+          git config user.email "scanner-bot@users.noreply.github.com"
+          git add connors_result.json
+          git diff --staged --quiet || git commit -m "connors result $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              break
+            fi
+            echo "push 실패(다른 워크플로우와 동시 커밋 충돌 가능성) - pull --rebase 후 재시도 $i/5"
+            git pull --rebase origin main
+            sleep $((RANDOM % 5 + 1))
+          done
