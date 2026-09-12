@@ -1,0 +1,884 @@
+{
+ "run_at_utc": "2026-09-12T06:05:50.598274+00:00",
+ "preregistered": {
+  "seed": 20260911,
+  "n": 100,
+  "min_bars_ok": 250,
+  "gap_days_ok": 10
+ },
+ "coverage_all": {
+  "n": 100,
+  "OK": 3,
+  "TRUNCATED": 8,
+  "SHORT": 5,
+  "NO_DATA": 84,
+  "ERROR": 0,
+  "coverage_pct": 3.0,
+  "any_data_pct": 16.0,
+  "adj_effective_pct": 6.0,
+  "actions_present_pct": 7.0,
+  "with_jump_down50": 3,
+  "with_tail_zero_vol": 2
+ },
+ "coverage_excl_suspicious": {
+  "n": 92,
+  "OK": 3,
+  "TRUNCATED": 7,
+  "SHORT": 5,
+  "NO_DATA": 77,
+  "ERROR": 0,
+  "coverage_pct": 3.3,
+  "any_data_pct": 16.3,
+  "adj_effective_pct": 6.5,
+  "actions_present_pct": 7.6,
+  "with_jump_down50": 2,
+  "with_tail_zero_vol": 2
+ },
+ "records": [
+  {
+   "symbol": "TNAV",
+   "delisting_date": "2021-02-17",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AERO",
+   "delisting_date": "2021-02-26",
+   "suspicious": false,
+   "bars": 212,
+   "first": "2025-11-06",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 2023,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "SHORT"
+  },
+  {
+   "symbol": "OXFD",
+   "delisting_date": "2021-03-08",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "COWNZ",
+   "delisting_date": "2021-04-22",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "RBY",
+   "delisting_date": "2021-05-20",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "NEWP",
+   "delisting_date": "2021-05-21",
+   "suspicious": false,
+   "bars": 4470,
+   "first": "2008-12-03",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 1939,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "GLOG",
+   "delisting_date": "2021-06-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "DTJ",
+   "delisting_date": "2021-06-29",
+   "suspicious": false,
+   "bars": 1272,
+   "first": "2016-06-10",
+   "last": "2021-06-29",
+   "gap_days_to_delisting": 0,
+   "adj_diff_bars": 1240,
+   "auto_adjust_effective": true,
+   "actions": 15,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "OK"
+  },
+  {
+   "symbol": "BWL-A",
+   "delisting_date": "2021-08-16",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SYKE",
+   "delisting_date": "2021-08-27",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AEB",
+   "delisting_date": "2021-09-14",
+   "suspicious": false,
+   "bars": 3978,
+   "first": "2005-11-23",
+   "last": "2021-09-14",
+   "gap_days_to_delisting": 0,
+   "adj_diff_bars": 3587,
+   "auto_adjust_effective": true,
+   "actions": 53,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "OK"
+  },
+  {
+   "symbol": "GPR",
+   "delisting_date": "2021-10-05",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "QADA",
+   "delisting_date": "2021-11-05",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ZGYH",
+   "delisting_date": "2021-11-19",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "CAI",
+   "delisting_date": "2021-11-22",
+   "suspicious": false,
+   "bars": 310,
+   "first": "2025-06-18",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 1754,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "INOV",
+   "delisting_date": "2021-11-24",
+   "suspicious": false,
+   "bars": 717,
+   "first": "2023-11-01",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 1752,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "LMRK",
+   "delisting_date": "2021-12-22",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "STFC",
+   "delisting_date": "2022-03-01",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "DISCB",
+   "delisting_date": "2022-04-08",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PSB",
+   "delisting_date": "2022-07-20",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PBIP",
+   "delisting_date": "2022-09-07",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SHI",
+   "delisting_date": "2022-09-07",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "TUFN",
+   "delisting_date": "2022-09-07",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "REGI",
+   "delisting_date": "2022-09-08",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ZNGA",
+   "delisting_date": "2022-09-08",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "XENT",
+   "delisting_date": "2022-09-16",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "NMMC",
+   "delisting_date": "2022-09-30",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "LMAO",
+   "delisting_date": "2022-10-28",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "TMX",
+   "delisting_date": "2022-10-28",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "CTXS",
+   "delisting_date": "2022-11-02",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "BSKY",
+   "delisting_date": "2022-12-12",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PCPC",
+   "delisting_date": "2022-12-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "EMCF",
+   "delisting_date": "2022-12-30",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "RZA",
+   "delisting_date": "2023-01-09",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "IBER",
+   "delisting_date": "2023-03-01",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ALBO",
+   "delisting_date": "2023-03-02",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "FSTX",
+   "delisting_date": "2023-03-09",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AGGR",
+   "delisting_date": "2023-03-10",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "LEGA",
+   "delisting_date": "2023-03-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SMIH",
+   "delisting_date": "2023-03-16",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AVYA",
+   "delisting_date": "2023-05-01",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GBRGR",
+   "delisting_date": "2023-05-17",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SIRE",
+   "delisting_date": "2023-05-26",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GTXAP",
+   "delisting_date": "2023-06-12",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "HHR",
+   "delisting_date": "2023-06-20",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "BGCP",
+   "delisting_date": "2023-06-30",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PCGU",
+   "delisting_date": "2023-08-15",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GECCN",
+   "delisting_date": "2023-09-06",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "WMC",
+   "delisting_date": "2023-12-06",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "NM",
+   "delisting_date": "2023-12-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GDNR",
+   "delisting_date": "2023-12-27",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "RPT",
+   "delisting_date": "2024-01-02",
+   "suspicious": false,
+   "bars": 2911,
+   "first": "2015-02-13",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 983,
+   "adj_diff_bars": 2863,
+   "auto_adjust_effective": true,
+   "actions": 63,
+   "jump_down_50": 1,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "ESMT",
+   "delisting_date": "2024-01-25",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "NGMS",
+   "delisting_date": "2024-04-25",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SWAV",
+   "delisting_date": "2024-05-31",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "TDCX",
+   "delisting_date": "2024-06-18",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SCCB",
+   "delisting_date": "2024-06-28",
+   "suspicious": false,
+   "bars": 1259,
+   "first": "2019-06-28",
+   "last": "2024-06-28",
+   "gap_days_to_delisting": 0,
+   "adj_diff_bars": 1249,
+   "auto_adjust_effective": true,
+   "actions": 17,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "OK"
+  },
+  {
+   "symbol": "WRK",
+   "delisting_date": "2024-07-05",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ETRN",
+   "delisting_date": "2024-07-22",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "IFIN",
+   "delisting_date": "2024-08-21",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "HA",
+   "delisting_date": "2024-09-18",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "DOMA",
+   "delisting_date": "2024-09-27",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AUGX",
+   "delisting_date": "2024-10-02",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "CHK",
+   "delisting_date": "2024-10-04",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "LLAP",
+   "delisting_date": "2024-10-30",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "TELLL",
+   "delisting_date": "2024-10-31",
+   "suspicious": true,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PRMW",
+   "delisting_date": "2024-11-08",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "THCP",
+   "delisting_date": "2024-12-10",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "AZPN",
+   "delisting_date": "2025-03-12",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "NVRO",
+   "delisting_date": "2025-04-02",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SKGR",
+   "delisting_date": "2025-04-10",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "PYCR",
+   "delisting_date": "2025-04-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ALLK",
+   "delisting_date": "2025-05-15",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "LSBK",
+   "delisting_date": "2025-07-18",
+   "suspicious": false,
+   "bars": 5141,
+   "first": "2006-04-05",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 420,
+   "adj_diff_bars": 5112,
+   "auto_adjust_effective": true,
+   "actions": 75,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "VIGL",
+   "delisting_date": "2025-08-05",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "LUX",
+   "delisting_date": "2025-08-06",
+   "suspicious": false,
+   "bars": 1,
+   "first": "2025-08-08",
+   "last": "2025-08-08",
+   "gap_days_to_delisting": 2,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 1,
+   "result": "SHORT"
+  },
+  {
+   "symbol": "QUSA",
+   "delisting_date": "2025-08-06",
+   "suspicious": false,
+   "bars": 340,
+   "first": "2025-05-06",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 401,
+   "adj_diff_bars": 326,
+   "auto_adjust_effective": true,
+   "actions": 16,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "STR",
+   "delisting_date": "2025-08-18",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "DNB",
+   "delisting_date": "2025-08-25",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "MAG",
+   "delisting_date": "2025-09-03",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GMS",
+   "delisting_date": "2025-09-04",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "OLO",
+   "delisting_date": "2025-09-12",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "WOLF",
+   "delisting_date": "2025-09-26",
+   "suspicious": false,
+   "bars": 240,
+   "first": "2025-09-29",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 350,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "SHORT"
+  },
+  {
+   "symbol": "BEDU",
+   "delisting_date": "2025-12-15",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "GES",
+   "delisting_date": "2026-01-22",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "RNA",
+   "delisting_date": "2026-02-26",
+   "suspicious": false,
+   "bars": 136,
+   "first": "2026-02-27",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 197,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 0,
+   "result": "SHORT"
+  },
+  {
+   "symbol": "RNAM",
+   "delisting_date": "2026-03-03",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SGN",
+   "delisting_date": "2026-03-16",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "CMLSQ",
+   "delisting_date": "2026-03-20",
+   "suspicious": true,
+   "bars": 2035,
+   "first": "2018-08-07",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 175,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 6,
+   "jump_up_100": 5,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "HOLX",
+   "delisting_date": "2026-04-07",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SWKH",
+   "delisting_date": "2026-04-07",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "SEE",
+   "delisting_date": "2026-04-09",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "UDMY",
+   "delisting_date": "2026-05-11",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "APLS",
+   "delisting_date": "2026-05-14",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "ECCX",
+   "delisting_date": "2026-05-19",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "MCW",
+   "delisting_date": "2026-05-19",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "CNGL",
+   "delisting_date": "2026-05-28",
+   "suspicious": false,
+   "bars": 9,
+   "first": "2026-07-17",
+   "last": "2026-08-13",
+   "gap_days_to_delisting": 77,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 1,
+   "jump_down_50": 0,
+   "jump_up_100": 0,
+   "tail_zero_volume_days": 9,
+   "result": "SHORT"
+  },
+  {
+   "symbol": "LTCH",
+   "delisting_date": "2026-05-28",
+   "suspicious": false,
+   "bars": 1430,
+   "first": "2020-12-31",
+   "last": "2026-09-11",
+   "gap_days_to_delisting": 106,
+   "adj_diff_bars": 0,
+   "auto_adjust_effective": false,
+   "actions": 0,
+   "jump_down_50": 2,
+   "jump_up_100": 2,
+   "tail_zero_volume_days": 0,
+   "result": "TRUNCATED"
+  },
+  {
+   "symbol": "LEGT",
+   "delisting_date": "2026-06-09",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  },
+  {
+   "symbol": "FCRX",
+   "delisting_date": "2026-06-12",
+   "suspicious": false,
+   "bars": 0,
+   "result": "NO_DATA"
+  }
+ ],
+ "elapsed_sec": 65.044656
+}
