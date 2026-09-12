@@ -1,0 +1,60 @@
+name: yf-fetch-test
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -q yfinance pandas lxml
+      - name: fetch test
+        run: |
+          python - <<'PY'
+          import time, pandas as pd, yfinance as yf
+
+          print("=== 1) S&P500 list from Wikipedia ===")
+          t0=time.time()
+          try:
+              tb = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")[0]
+              syms = [s.replace(".","-") for s in tb.Symbol.tolist()]
+              print(f"OK {len(syms)} tickers in {time.time()-t0:.1f}s  sample={syms[:5]}")
+          except Exception as e:
+              syms = []
+              print("FAIL:", repr(e)[:200])
+
+          if not syms:
+              raise SystemExit("cannot build universe")
+
+          print()
+          print("=== 2) bulk download 2y daily, batches of 100 ===")
+          t0=time.time(); frames={}; nfail=0
+          for i in range(0, len(syms), 100):
+              b = syms[i:i+100]
+              d = yf.download(b, period="2y", interval="1d", auto_adjust=False,
+                              group_by="ticker", threads=True, progress=False)
+              got = 0
+              for s in b:
+                  try:
+                      c = d[s]["Close"].dropna()
+                      if len(c) > 200: frames[s]=c; got+=1
+                  except Exception: pass
+              nfail += len(b)-got
+              print(f"  batch {i//100+1}: {got}/{len(b)} ok  누적 {time.time()-t0:.0f}s")
+          el = time.time()-t0
+          print(f"\ntotal ok={len(frames)}  fail={nfail}  seconds={el:.0f}")
+
+          print()
+          print("=== 3) freshness ===")
+          for s in ["AAPL","NVDA","RSP"]:
+              if s in frames:
+                  c=frames[s]; print(f"  {s}: last={c.index[-1].date()} close={c.iloc[-1]:.2f} rows={len(c)}")
+
+          print()
+          print("=== 4) VERDICT ===")
+          if len(frames) >= len(syms)*0.9 and el < 600:
+              print(f"PASS - {len(frames)} tickers in {el:.0f}s")
+          else:
+              print(f"FAIL - only {len(frames)}/{len(syms)} in {el:.0f}s")
+          PY
