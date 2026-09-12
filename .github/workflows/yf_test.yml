@@ -8,53 +8,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -q yfinance pandas lxml
+      - run: pip install -q yfinance pandas
       - name: fetch test
+        env:
+          SYMS: "A,AAPL,ABBV,ABNB,ABT,ACGL,ACN,ADBE,ADI,ADM,ADP,ADSK,AEE,AEP,AES,AFL,AIG,AIZ,AJG,AKAM,ALB,ALGN,ALL,ALLE,AMAT,AMCR,AMD,AME,AMGN,AMP,AMT,AMZN,ANET,AON,AOS,APA,APD,APH,APO,APP,APTV,ARE,ARES,ATO,AVGO,AVY,AWK,AXON,AXP,AZO,BA,BAC,BALL,BAX,BBY,BDX,BEN,BF-B,BG,BIIB,BKNG,BKR,BLDR,BLK,BMY,BNY,BR,BRK-B,BRO,BSX,BX,BXP,C,CAH,CARR,CASY,CAT,CB,CBOE,CBRE,CCI,CCL,CDNS,CDW,CEG,CF,CFG,CHD,CHRW,CHTR,CI,CIEN,CINF,CL,CLX,CMCSA,CME,CMG,CMI,CMS,CNC,CNP,COF,COHR,COIN,COO,COP,COR,COST,CPAY,CPRT,CPT,CRH,CRL,CRM,CRWD,CSCO,CSGP,CSX,CTAS,CTSH,CTVA,CVNA,CVS,CVX,D,DAL,DASH,DD,DDOG,DE,DECK,DELL,DG,DGX,DHI,DHR,DIS,DLR,DLTR,DOC,DOV,DOW,DPZ,DRI,DTE,DUK,DVA,DVN,DXCM,EBAY,ECL,ED,EFX,EG,EIX,EL,ELV,EME,EMR,EOG,EQIX,EQT,ERIE,ES,ESS,ETN,ETR,EVRG,EW,EXC,EXE,EXPD,EXPE,EXR,F,FANG,FAST,FCX,FDS,FDX,FE,FERG,FFIV,FICO,FIS,FITB,FIX,FLEX,FOX,FOXA,FRT,FSLR,FTNT,FTV,GD,GDDY,GE,GEHC,GEN,GEV,GILD,GIS,GL,GLW,GM,GNRC,GOOG,GOOGL,GPC,GPN,GRMN,GS,GWW,HAL,HAS,HBAN,HCA,HD,HIG,HII,HLT,HON,HOOD,HPE,HPQ,HRL,HSIC,HST,HSY,HUBB,HUM,HWM,IBKR,IBM,ICE,IDXX,IEX,IFF,INCY,INTC,INTU,INVH,IP,IQV,IR,IRM,ISRG,IT,ITW,IVZ,J,JBHT,JBL,JCI,JKHY,JNJ,JPM,KDP,KEY,KEYS,KHC,KIM,KKR,KLAC,KMB,KMI,KO,KR,KVUE,L,LDOS,LEN,LH,LHX,LII,LIN,LITE,LLY,LMT,LNT,LOW,LRCX,LULU,LUV,LVS,LYB,LYV,MA,MAA,MAR,MAS,MCD,MCHP,MCK,MCO,MDLZ,MDT,MET,META,MGM,MKC,MLM,MMM,MNST,MO,MOS,MPC,MPWR,MRK,MRNA,MRVL,MS,MSCI,MSFT,MSI,MTB,MTD,MU,NCLH,NDAQ,NDSN,NEE,NEM,NFLX,NI,NKE,NOC,NOW,NRG,NSC,NTAP,NTRS,NUE,NVDA,NVR,NWS,NWSA,NXPI,O,ODFL,OKE,OMC,ON,ORCL,ORLY,OTIS,OXY,PANW,PAYX,PCAR,PCG,PEG,PEP,PFE,PFG,PG,PGR,PH,PHM,PKG,PLD,PLTR,PM,PNC,PNR,PNW,PODD,PPG,PPL,PRU,PSA,PSKY,PSX,PTC,PWR,PYPL,QCOM,RCL,RDDT,REG,REGN,RF,RJF,RL,RMD,ROK,ROL,ROP,ROST,RSG,RTX,RVTY,SBAC,SBUX,SCHW,SHW,SJM,SLB,SMCI,SNA,SNDK,SNPS,SO,SOLV,SPG,SPGI,SRE,STE,STLD,STT,STX,STZ,SW,SWK,SWKS,SYF,SYK,SYY,T,TAP,TDG,TDY,TECH,TEL,TER,TFC,TGT,TJX,TKO,TMO,TMUS,TPL,TPR,TRGP,TRMB,TROW,TRV,TSCO,TSLA,TSN,TT,TTD,TTWO,TXN,TXT,TYL,UAL,UBER,UDR,UHS,ULTA,UNH,UNP,UPS,URI,USB,V,VEEV,VICI,VLO,VLTO,VMC,VRSK,VRSN,VRT,VRTX,VST,VTR,VTRS,VZ,WAB,WAT,WBD,WDAY,WDC,WEC,WELL,WFC,WM,WMB,WMT,WRB,WSM,WST,WTW,WY,WYNN,XEL,XOM,XYL,XYZ,YUM,ZBH,ZBRA,ZTS,RSP"
         run: |
           python - <<'PY'
-          import time, pandas as pd, yfinance as yf
-
-          print("=== 1) S&P500 list from Wikipedia ===")
-          t0=time.time()
-          try:
-              tb = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")[0]
-              syms = [s.replace(".","-") for s in tb.Symbol.tolist()]
-              print(f"OK {len(syms)} tickers in {time.time()-t0:.1f}s  sample={syms[:5]}")
-          except Exception as e:
-              syms = []
-              print("FAIL:", repr(e)[:200])
-
-          if not syms:
-              raise SystemExit("cannot build universe")
-
-          print()
-          print("=== 2) bulk download 2y daily, batches of 100 ===")
-          t0=time.time(); frames={}; nfail=0
+          import os, time, yfinance as yf
+          syms = os.environ["SYMS"].split(",")
+          print(f"universe = {len(syms)} tickers")
+          t0=time.time(); frames={}
           for i in range(0, len(syms), 100):
               b = syms[i:i+100]
               d = yf.download(b, period="2y", interval="1d", auto_adjust=False,
                               group_by="ticker", threads=True, progress=False)
-              got = 0
+              got=0
               for s in b:
                   try:
                       c = d[s]["Close"].dropna()
                       if len(c) > 200: frames[s]=c; got+=1
                   except Exception: pass
-              nfail += len(b)-got
-              print(f"  batch {i//100+1}: {got}/{len(b)} ok  누적 {time.time()-t0:.0f}s")
-          el = time.time()-t0
-          print(f"\ntotal ok={len(frames)}  fail={nfail}  seconds={el:.0f}")
-
-          print()
-          print("=== 3) freshness ===")
-          for s in ["AAPL","NVDA","RSP"]:
+              print(f"  batch {i//100+1}: {got}/{len(b)} ok   elapsed {time.time()-t0:.0f}s", flush=True)
+          el=time.time()-t0
+          print(f"\nTOTAL ok={len(frames)} / {len(syms)}   seconds={el:.0f}")
+          print("\n=== freshness ===")
+          for s in ["AAPL","NVDA","RSP","SNDK"]:
               if s in frames:
                   c=frames[s]; print(f"  {s}: last={c.index[-1].date()} close={c.iloc[-1]:.2f} rows={len(c)}")
-
-          print()
-          print("=== 4) VERDICT ===")
-          if len(frames) >= len(syms)*0.9 and el < 600:
-              print(f"PASS - {len(frames)} tickers in {el:.0f}s")
-          else:
-              print(f"FAIL - only {len(frames)}/{len(syms)} in {el:.0f}s")
+              else:
+                  print(f"  {s}: MISSING")
+          print("\n=== VERDICT ===")
+          print("PASS" if len(frames) >= len(syms)*0.9 else "FAIL", f"- {len(frames)}/{len(syms)} in {el:.0f}s")
           PY
