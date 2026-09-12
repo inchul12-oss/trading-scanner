@@ -1,0 +1,31 @@
+name: stooq-fetch-test
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check
+        run: |
+          echo "=== 1) single ticker ==="
+          for s in aapl.us msft.us nvda.us rsp.us; do
+            code=$(curl -s -o /tmp/$s.csv -w "%{http_code}" --max-time 20 "https://stooq.com/q/d/l/?s=$s&i=d")
+            lines=$(wc -l < /tmp/$s.csv 2>/dev/null || echo 0)
+            echo "$s HTTP=$code lines=$lines first=$(head -1 /tmp/$s.csv 2>/dev/null | cut -c1-60)"
+            echo "   last=$(tail -1 /tmp/$s.csv 2>/dev/null | cut -c1-60)"
+          done
+          echo "=== 2) 30 in a row ==="
+          ok=0; fail=0; start=$(date +%s)
+          for s in a aal aap abbv abnb abt acgl acn adbe adi adm adp adsk aee aep aes afl aig aiz akam alb algn all alle amat amcr amd ame amgn amp; do
+            code=$(curl -s -o /tmp/t.csv -w "%{http_code}" --max-time 15 "https://stooq.com/q/d/l/?s=$s.us&i=d")
+            n=$(wc -l < /tmp/t.csv 2>/dev/null || echo 0)
+            if [ "$code" = "200" ] && [ "$n" -gt 100 ]; then ok=$((ok+1)); else fail=$((fail+1)); echo "  FAIL $s HTTP=$code lines=$n"; fi
+          done
+          end=$(date +%s)
+          echo "ok=$ok fail=$fail seconds=$((end-start))"
+          echo "=== 3) VERDICT ==="
+          if [ "$ok" -ge 28 ]; then
+            echo "PASS - 500 tickers approx $(( (end-start) * 500 / 30 / 60 )) minutes"
+          else
+            echo "FAIL - use Twelve Data instead"
+          fi
