@@ -9,7 +9,7 @@ import numpy as np, pandas as pd, yfinance as yf
 
 KST = timezone(timedelta(hours=9))
 CHAT_ID = "-5569815780"
-UNIV_FILE, POS_FILE = "sp500_current.txt", "positions.json"
+UNIV_FILE, POS_FILE = "sp500_current.txt", "s1_positions.json"
 SLOTS, HOLD_DAYS, STOP_PCT = 20, 60, 0.15
 MIN_M6, MAX_A20, MIN_A50 = 0.30, 0.12, -0.08
 PULL_RSI2, PULL_D5, PULL_A20 = 25, -0.04, -0.02
@@ -42,8 +42,15 @@ def tg(method, **kw):
 
 def load_state():
     if os.path.exists(POS_FILE):
-        try: return json.load(open(POS_FILE))
-        except Exception: pass
+        try:
+            st = json.load(open(POS_FILE))
+            if (isinstance(st, dict) and isinstance(st.get("positions"), list)
+                    and all(isinstance(p, dict) and "t" in p for p in st["positions"])):
+                st.setdefault("closed", []); st.setdefault("last_update_id", 0)
+                return st
+            print("positions 파일 형식이 달라서 새로 시작함")
+        except Exception as e:
+            print("positions 읽기 실패:", repr(e)[:100])
     return {"last_update_id": 0, "positions": [], "closed": []}
 
 
