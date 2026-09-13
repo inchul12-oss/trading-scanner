@@ -11,6 +11,7 @@ KST = timezone(timedelta(hours=9))
 CHAT_ID = "-5569815780"
 UNIV_FILE, POS_FILE = "sp500_current.txt", "s1_positions.json"
 SLOTS, HOLD_DAYS, STOP_PCT = 20, 60, 0.15
+USE_STOP = False   # 인철님 결정(9/13): 무손절 운용. 손절가는 참고용으로만 표시
 MIN_M6, MAX_A20, MIN_A50 = 0.30, 0.12, -0.08
 PULL_RSI2, PULL_D5, PULL_A20 = 25, -0.04, -0.02
 SHOW_MIN = 5
@@ -130,7 +131,7 @@ def main():
         held_days = max(0, len(after) - 1)
         low_min = float(after.Low.min()) if len(after) else float("inf")
         px = float(df.Close.iloc[-1])
-        if low_min <= p["stop"]:
+        if USE_STOP and low_min <= p["stop"]:
             alerts.append("\U0001f534 <b>%s</b> 손절  -15.0%%   %d일차\n     %.2f \u2192 %.2f"
                           % (t, held_days, p["entry_px"], p["stop"]))
             p["exit_date"] = asof; p["exit_px"] = p["stop"]; p["why"] = "손절"
@@ -141,7 +142,9 @@ def main():
             p["exit_date"] = asof; p["exit_px"] = px; p["why"] = "만기"
             state["closed"].append(p)
         else:
-            p["_d"] = held_days; p["_px"] = px; keep.append(p)
+            p["_d"] = held_days; p["_px"] = px
+            p["_low"] = low_min if low_min < float("inf") else px
+            keep.append(p)
     live = keep
     state["positions"] = [dict((k, v) for k, v in p.items() if not k.startswith("_")) for p in keep]
 
@@ -175,15 +178,16 @@ def main():
 
     L += ["", "<b>\u2501\u2501 보유 %d / %d \u2501\u2501</b>" % (len(live), SLOTS)]
     if live:
-        h2 = "SYMB     PRICE      P/L     STOP   DAYS"
+        h2 = "SYMB     PRICE      P/L    LOW%     STOP   DAYS"
         rows_ = [h2, "-" * len(h2)]
         for p in sorted(live, key=lambda x: -x.get("_d", 0)):
             if not p["entry_px"]:
                 rows_.append("%-5s  진입가 확인중" % p["t"][:5]); continue
             r_ = (p["_px"]/p["entry_px"]-1)*100
-            near = "  \u26a0" if p["_px"] <= p["stop"]*1.05 else ""
-            rows_.append("%-5s%9.2f%8.1f%%%9.2f  %2d/%d%s"
-                         % (p["t"][:5], p["_px"], r_, p["stop"], p["_d"], HOLD_DAYS, near))
+            near = "  \u26a0" if r_ <= -15 else ""
+            dd_ = (p.get("_low", p["_px"])/p["entry_px"]-1)*100
+            rows_.append("%-5s%9.2f%8.1f%%%8.1f%%%9.2f  %2d/%d%s"
+                         % (p["t"][:5], p["_px"], r_, dd_, p["stop"], p["_d"], HOLD_DAYS, near))
         L.append("<pre>" + "\n".join(rows_) + "</pre>")
     else:
         L.append("<i>없음</i>")
@@ -208,7 +212,8 @@ def main():
 
     if added:
         L += ["", "\u2705 기록됨 \u2014 매수 " + ", ".join(added)]
-    L += ["", "<b>손절가는 어제 종가 기준. 실제로는 산 가격의 -15%로</b>",
+    L += ["", "<b>무손절 운용 \u2014 60거래일 꽉 보유하고 만기 청산</b>",
+          "STOP은 참고선(-15%). \u26a0 는 그 선을 이미 넘긴 종목",
           "<code>매수 PANW</code> / <code>매도 PANW</code> / <code>매수 없음</code>"]
     msg = "\n".join(L)
     print(msg)
