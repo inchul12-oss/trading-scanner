@@ -121,7 +121,7 @@ def main():
         if t in orders["sell"]:
             px = float(frames[t].Close.iloc[-1]) if t in frames else (p["entry_px"] or 0.0)
             rr = ((px/p["entry_px"]-1)*100) if p["entry_px"] else 0.0
-            alerts.append("[수동매도] %s  %+.1f%%" % (t, rr))
+            alerts.append("\u26aa <b>%s</b> 수동매도  %+.1f%%" % (t, rr))
             p["exit_date"] = asof; p["exit_px"] = px; p["why"] = "수동"
             state["closed"].append(p); continue
         if t not in frames or p["entry_px"] is None:
@@ -131,13 +131,13 @@ def main():
         low_min = float(after.Low.min()) if len(after) else float("inf")
         px = float(df.Close.iloc[-1])
         if low_min <= p["stop"]:
-            alerts.append("[손절] %s  진입 %.2f -> 손절선 %.2f 이탈 (%d일차)"
-                          % (t, p["entry_px"], p["stop"], held_days))
+            alerts.append("\U0001f534 <b>%s</b> 손절  -15.0%%   %d일차\n     %.2f \u2192 %.2f"
+                          % (t, held_days, p["entry_px"], p["stop"]))
             p["exit_date"] = asof; p["exit_px"] = p["stop"]; p["why"] = "손절"
             state["closed"].append(p)
         elif held_days >= HOLD_DAYS:
-            alerts.append("[만기청산] %s  진입 %.2f -> 현재 %.2f  (%+.1f%%, %d일)"
-                          % (t, p["entry_px"], px, (px/p["entry_px"]-1)*100, held_days))
+            alerts.append("\U0001f7e2 <b>%s</b> 만기청산  %+.1f%%   %d일\n     %.2f \u2192 %.2f"
+                          % (t, (px/p["entry_px"]-1)*100, held_days, p["entry_px"], px))
             p["exit_date"] = asof; p["exit_px"] = px; p["why"] = "만기"
             state["closed"].append(p)
         else:
@@ -167,35 +167,49 @@ def main():
     free = max(0, SLOTS - len(live))
     show = cand.head(max(free, SHOW_MIN)) if len(cand) else cand
 
-    L = ["눌림목 - %s 종가" % asof]
-    if alerts: L += ["", "[정리할 것]"] + ["  " + x for x in alerts]
-    L += ["", "[보유 %d/%d종목]" % (len(live), SLOTS)]
+    WD = "월화수목금토일"[datetime.strptime(asof, "%Y-%m-%d").weekday()]
+    L = ["\U0001f4c9 <b>눌림목</b>  %s(%s) 종가 기준" % (asof[5:].replace("-", "/"), WD)]
+
+    if alerts:
+        L += ["", "<b>\u2501\u2501 정리할 것 \u2501\u2501</b>"] + alerts
+
+    L += ["", "<b>\u2501\u2501 보유 %d / %d \u2501\u2501</b>" % (len(live), SLOTS)]
     if live:
+        rows_ = []
         for p in sorted(live, key=lambda x: -x.get("_d", 0)):
-            if p["entry_px"]:
-                L.append("  %-6s %9.2f  %+6.1f%%  %d/%d일  손절 %.2f"
-                         % (p["t"], p["_px"], (p["_px"]/p["entry_px"]-1)*100,
-                            p["_d"], HOLD_DAYS, p["stop"]))
-            else:
-                L.append("  %-6s 진입가 확인중" % p["t"])
+            if not p["entry_px"]:
+                rows_.append("%-5s  진입가 확인중" % p["t"][:5]); continue
+            r_ = (p["_px"]/p["entry_px"]-1)*100
+            near = "  \u26a0" if p["_px"] <= p["stop"]*1.05 else ""
+            rows_.append("%-5s %+7.1f%%  %2d/%d일%s" % (p["t"][:5], r_, p["_d"], HOLD_DAYS, near))
+        L.append("<pre>" + "\n".join(rows_) + "</pre>")
     else:
-        L.append("  없음")
-    L += ["", "[신규 후보] 빈자리 %d개" % free]
+        L.append("<i>없음</i>")
+
+    L += ["", "<b>\u2501\u2501 신규 후보  (빈자리 %d) \u2501\u2501</b>" % free]
     if not len(show):
-        L.append("  오늘은 조건 통과 종목 없음")
+        L.append("<i>오늘은 조건 통과 종목 없음</i>")
     else:
-        if free == 0: L.append("  * 자리 없음 - 참고용")
+        if free == 0:
+            L.append("<i>자리 없음 \u2014 참고용</i>")
+        hdr = " #  종목     현재가   6개월   눌림"
+        rows_ = [hdr, "-" * len(hdr)]
         n = 0
         for _, x in show.iterrows():
             n += 1
-            L.append("  %d. %s  %.2f  (손절 %.2f)" % (n, x["t"], x["px"], x["stop"]))
-            L.append("     6개월 %+.0f%%  RSI2 %.0f  20일선 %+.1f%%  52주고점 %.0f%%"
-                     % (x["m6"]*100, x["rsi2"], x["a20"]*100, x["frhi"]*100))
-    if added: L += ["", "기록됨: 매수 " + ", ".join(added)]
-    L += ["", "산 종목은 '매수 XXX', 판 종목은 '매도 XXX' 로 남기면 자동 기록"]
+            rows_.append("%2d  %-5s %8.2f  %+5.0f%%  %+5.1f%%"
+                         % (n, str(x["t"])[:5], x["px"], x["m6"]*100, x["a20"]*100))
+        L.append("<pre>" + "\n".join(rows_) + "</pre>")
+        L.append("<i>눌림 = 20일 평균가 대비 위치</i>")
+
+    if added:
+        L += ["", "\u2705 기록됨 \u2014 매수 " + ", ".join(added)]
+    L += ["", "<b>손절선은 실제 산 가격의 -15%</b>",
+          "<code>매수 PANW</code> / <code>매도 PANW</code> / <code>매수 없음</code>"]
     msg = "\n".join(L)
     print(msg)
-    tg("sendMessage", chat_id=CHAT_ID, text=msg)
+    tg("sendMessage", chat_id=CHAT_ID, text=msg, parse_mode="HTML",
+       disable_web_page_preview="true")
 
     state["asof"] = asof
     state["updated_kst"] = datetime.now(KST).isoformat(timespec="seconds")
