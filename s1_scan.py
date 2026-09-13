@@ -175,13 +175,15 @@ def main():
 
     L += ["", "<b>\u2501\u2501 보유 %d / %d \u2501\u2501</b>" % (len(live), SLOTS)]
     if live:
-        rows_ = []
+        h2 = " 종목    현재가   수익률    손절가   경과"
+        rows_ = [h2, "-" * len(h2)]
         for p in sorted(live, key=lambda x: -x.get("_d", 0)):
             if not p["entry_px"]:
                 rows_.append("%-5s  진입가 확인중" % p["t"][:5]); continue
             r_ = (p["_px"]/p["entry_px"]-1)*100
             near = "  \u26a0" if p["_px"] <= p["stop"]*1.05 else ""
-            rows_.append("%-5s %+7.1f%%  %2d/%d일%s" % (p["t"][:5], r_, p["_d"], HOLD_DAYS, near))
+            rows_.append("%-5s %8.2f %+7.1f%%  %8.2f  %2d/%d%s"
+                         % (p["t"][:5], p["_px"], r_, p["stop"], p["_d"], HOLD_DAYS, near))
         L.append("<pre>" + "\n".join(rows_) + "</pre>")
     else:
         L.append("<i>없음</i>")
@@ -192,19 +194,21 @@ def main():
     else:
         if free == 0:
             L.append("<i>자리 없음 \u2014 참고용</i>")
-        hdr = " #  종목     현재가   6개월   눌림"
+        hdr = " #  종목     현재가    손절가   6M   3M RSI  20MA   52W"
         rows_ = [hdr, "-" * len(hdr)]
         n = 0
         for _, x in show.iterrows():
             n += 1
-            rows_.append("%2d  %-5s %8.2f  %+5.0f%%  %+5.1f%%"
-                         % (n, str(x["t"])[:5], x["px"], x["m6"]*100, x["a20"]*100))
+            rows_.append("%2d  %-5s %8.2f %8.2f %+4.0f %+4.0f %3.0f %+5.1f %+5.0f"
+                         % (n, str(x["t"])[:5], x["px"], x["stop"], x["m6"]*100,
+                            x["m3"]*100, x["rsi2"], x["a20"]*100, x["frhi"]*100))
         L.append("<pre>" + "\n".join(rows_) + "</pre>")
-        L.append("<i>눌림 = 20일 평균가 대비 위치</i>")
+        L.append("6M/3M=6개월·3개월 상승률 | RSI=단기과매도(낮을수록 깊이눌림)")
+        L.append("20MA=20일평균가 대비 | 52W=52주 최고가 대비 | 전부 %")
 
     if added:
         L += ["", "\u2705 기록됨 \u2014 매수 " + ", ".join(added)]
-    L += ["", "<b>손절선은 실제 산 가격의 -15%</b>",
+    L += ["", "<b>손절가는 어제 종가 기준. 실제로는 산 가격의 -15%로</b>",
           "<code>매수 PANW</code> / <code>매도 PANW</code> / <code>매수 없음</code>"]
     msg = "\n".join(L)
     print(msg)
