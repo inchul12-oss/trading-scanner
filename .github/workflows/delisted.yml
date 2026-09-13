@@ -1,0 +1,64 @@
+name: 상폐종목 데이터 확보
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -q yfinance pandas
+      - name: 다운로드
+        env:
+          MISS: "AABA,ABC,ABMD,ADS,AET,AGN,ALTR,ALXN,ANDV,ANSS,ANTM,ARG,ARNC,ATVI,AVB,BBBY,BCR,BHGE,BK,BLL,BRCM,BXLT,CA,CBS,CCE,CDAY,CELG,CERN,CHK,CMA,CMCSK,COG,COL,CPGX,CTL,CTLT,CTRA,CTXS,CVC,CXO,DAY,DFS,DISCA,DISCK,DISH,DNB,DO,DRE,DTV,DWDP,ENDP,EQR,ESRX,ESV,ETFC,EVHC,FBHS,FDO,FI,FL,FLIR,FLT,FRC,FTR,GAS,GGP,GMCR,GPS,HAR,HBI,HCBK,HCP,HES,HFC,HOLX,HOT,HRS,HSP,IPG,JEC,JNPR,JOY,JWN,K,KORS,KRFT,KSU,LLL,LLTC,LM,LO,LVLT,MJN,MMC,MNK,MON,MRO,MWV,MXIM,MYL,NBL,NLOK,NLSN,PBCT,PCP,PDCO,PEAK,PKI,PLL,PX,PXD,QEP,RAI,RE,RHT,RTN,SBNY,SCG,SEE,SIAL,SIVB,SNI,SRCL,STJ,SWN,SYMC,TEG,TGNA,TIF,TMK,TSS,TWC,TWTR,TWX,UTX,VAR,VIAB,VIAC,WBA,WCG,WFM,WLTW,WRK,WYND,XEC,XL,XLNX"
+        run: |
+          python - <<'PY'
+          import os, time, pandas as pd, yfinance as yf
+          syms = os.environ["MISS"].split(",")
+          print("대상 %d종목" % len(syms))
+          got = {}; t0 = time.time()
+          for i in range(0, len(syms), 50):
+              b = syms[i:i+50]
+              d = yf.download(b, start="2014-01-01", end="2026-09-12", interval="1d",
+                              auto_adjust=False, group_by="ticker", threads=True, progress=False)
+              for s in b:
+                  try:
+                      sub = d[s][["Open","High","Low","Close","Volume"]].dropna()
+                      if len(sub) > 100: got[s] = sub
+                  except Exception: pass
+              print("  batch %d: 누적 %d  %.0fs" % (i//50+1, len(got), time.time()-t0), flush=True)
+          print()
+          print("확보 %d / %d (%.0f%%)" % (len(got), len(syms), 100*len(got)/len(syms)))
+          miss = [s for s in syms if s not in got]
+          print("실패:", ",".join(miss))
+          print()
+          print("표본 확인 (상폐/피인수 종목의 마지막 거래일):")
+          for s in ["BBBY","WFM","TWX","FRC","SIVB","PCP","ATVI","SWN","FTR","MNK"]:
+              if s in got:
+                  g = got[s]
+                  print("  %-6s %s ~ %s  (%d행, 마지막 종가 %.2f)"
+                        % (s, g.index[0].date(), g.index[-1].date(), len(g), g.Close.iloc[-1]))
+              else:
+                  print("  %-6s 없음" % s)
+          if got:
+              out = []
+              for s, g in got.items():
+                  x = g.reset_index(); x.columns = ["date","open","high","low","close","volume"]
+                  x.insert(0, "ticker", s); out.append(x)
+              df = pd.concat(out, ignore_index=True)
+              df["date"] = pd.to_datetime(df.date).dt.strftime("%Y%m%d")
+              df.to_csv("delisted.csv.gz", index=False, compression="gzip")
+              print()
+              print("delisted.csv.gz 저장: %d행 %d종목" % (len(df), df.ticker.nunique()))
+          PY
+      - name: 커밋
+        run: |
+          git config user.name "scanner-bot"
+          git config user.email "scanner-bot@users.noreply.github.com"
+          git add delisted.csv.gz
+          git diff --staged --quiet || git commit -m "상폐/피인수 종목 일봉 데이터"
+          git push || (git pull --rebase origin main && git push)
